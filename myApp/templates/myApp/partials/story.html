@@ -10,120 +10,112 @@
             </p>
         </div>
         
-        <!-- Flow Steps -->
-        <div class="space-y-8 md:space-y-0">
-            <!-- Step 1: Business Owner -->
-            <div class="flex flex-col md:flex-row items-center gap-6 md:gap-8">
-                <div class="flex-shrink-0">
-                    <div class="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-slate-900 border border-slate-700">
-                        <i class="fa-solid fa-user-tie text-cyan-400 text-2xl"></i>
-                    </div>
-                </div>
-                <div class="flex-1 text-center md:text-left">
-                    <h3 class="text-xl font-bold text-slate-100 mb-2">Business Owner</h3>
-                    <p class="text-slate-400">You define your goals: more leads, better follow-up, higher reviews.</p>
-                </div>
-                <div class="hidden md:block">
-                    <i class="fa-solid fa-arrow-right text-cyan-400 text-2xl"></i>
-                </div>
-            </div>
+        <!-- Flow Steps - Vertical Timeline -->
+        <div class="relative max-w-4xl mx-auto">
+            <!-- Vertical Connecting Line (Desktop) -->
+            <div class="hidden md:block absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-cyan-500/50 via-violet-500/50 to-pink-500/50"></div>
             
-            <!-- Connecting Line -->
-            <div class="hidden md:block h-px bg-gradient-to-r from-cyan-500/50 via-violet-500/50 to-pink-500/50 mx-16"></div>
-            
-            <!-- Step 2: KaTek AI CRM -->
-            <div class="flex flex-col md:flex-row items-center gap-6 md:gap-8">
-                <div class="flex-shrink-0">
-                    <div class="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-slate-900 border border-slate-700">
-                        <i class="fa-solid fa-database text-violet-400 text-2xl"></i>
-                    </div>
-                </div>
-                <div class="flex-1 text-center md:text-left">
-                    <h3 class="text-xl font-bold text-slate-100 mb-2">KaTek AI CRM (Core)</h3>
-                    <p class="text-slate-400">All your contacts, affiliates, and conversations live in one intelligent hub.</p>
-                </div>
-                <div class="hidden md:block">
-                    <i class="fa-solid fa-arrow-right text-cyan-400 text-2xl"></i>
-                </div>
-            </div>
-            
-            <!-- Connecting Line -->
-            <div class="hidden md:block h-px bg-gradient-to-r from-cyan-500/50 via-violet-500/50 to-pink-500/50 mx-16"></div>
-            
-            <!-- Step 3: Campaign & Content Engine -->
-            <div class="flex flex-col md:flex-row items-center gap-6 md:gap-8">
-                <div class="flex-shrink-0">
-                    <div class="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-slate-900 border border-slate-700">
-                        <i class="fa-solid fa-bullhorn text-pink-400 text-2xl"></i>
-                    </div>
-                </div>
-                <div class="flex-1 text-center md:text-left">
-                    <h3 class="text-xl font-bold text-slate-100 mb-2">Campaign & Content Engine</h3>
-                    <p class="text-slate-400">AI generates campaigns, content, and offers tailored to your ideal customers.</p>
-                </div>
-                <div class="hidden md:block">
-                    <i class="fa-solid fa-arrow-right text-cyan-400 text-2xl"></i>
-                </div>
-            </div>
-            
-            <!-- Connecting Line -->
-            <div class="hidden md:block h-px bg-gradient-to-r from-cyan-500/50 via-violet-500/50 to-pink-500/50 mx-16"></div>
-            
-            <!-- Step 4: Websites, Bots & Socials -->
-            <div class="flex flex-col md:flex-row items-center gap-6 md:gap-8">
-                <div class="flex-shrink-0">
-                    <div class="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-slate-900 border border-slate-700">
-                        <div class="flex items-center space-x-1">
-                            <i class="fa-solid fa-globe text-cyan-400 text-xl"></i>
-                            <i class="fa-solid fa-comments text-violet-400 text-xl"></i>
-                            <i class="fa-solid fa-hashtag text-pink-400 text-xl"></i>
+            <div class="space-y-8 md:space-y-12">
+                <!-- Step 1: Business Owner -->
+                <div class="relative flex items-start gap-6">
+                    <!-- Icon Circle -->
+                    <div class="flex-shrink-0 relative z-10">
+                        <div class="h-16 w-16 md:h-20 md:w-20 flex items-center justify-center rounded-2xl bg-slate-900 border-2 border-cyan-400/50 shadow-[0_0_25px_rgba(56,189,248,0.35)] hover:shadow-[0_0_40px_rgba(56,189,248,0.55)] transition-all duration-300">
+                            <i class="fa-solid fa-user-tie text-cyan-400 text-xl md:text-2xl"></i>
                         </div>
                     </div>
-                </div>
-                <div class="flex-1 text-center md:text-left">
-                    <h3 class="text-xl font-bold text-slate-100 mb-2">Websites, Bots & Socials</h3>
-                    <p class="text-slate-400">AI-generated sites, landing pages, chatbots, and social media meet people where they are.</p>
-                </div>
-                <div class="hidden md:block">
-                    <i class="fa-solid fa-arrow-right text-cyan-400 text-2xl"></i>
-                </div>
-            </div>
-            
-            <!-- Connecting Line -->
-            <div class="hidden md:block h-px bg-gradient-to-r from-cyan-500/50 via-violet-500/50 to-pink-500/50 mx-16"></div>
-            
-            <!-- Step 5: Reputation & Feedback Loop -->
-            <div class="flex flex-col md:flex-row items-center gap-6 md:gap-8">
-                <div class="flex-shrink-0">
-                    <div class="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-slate-900 border border-slate-700">
-                        <i class="fa-solid fa-star-half-stroke text-yellow-400 text-2xl"></i>
+                    <!-- Content -->
+                    <div class="flex-1 pt-2">
+                        <h3 class="text-xl md:text-2xl font-bold text-slate-100 mb-2">Business Owner</h3>
+                        <p class="text-slate-400 text-base md:text-lg">You define your goals: more leads, better follow-up, higher reviews.</p>
+                    </div>
+                    <!-- Arrow (Mobile) -->
+                    <div class="md:hidden flex-shrink-0 pt-2">
+                        <i class="fa-solid fa-arrow-down text-cyan-400 text-xl"></i>
                     </div>
                 </div>
-                <div class="flex-1 text-center md:text-left">
-                    <h3 class="text-xl font-bold text-slate-100 mb-2">Reputation & Feedback Loop</h3>
-                    <p class="text-slate-400">Track reviews, feedback, and sentiment — then correct messaging automatically.</p>
-                </div>
-                <div class="hidden md:block">
-                    <i class="fa-solid fa-arrow-right text-cyan-400 text-2xl"></i>
-                </div>
-            </div>
-            
-            <!-- Connecting Line -->
-            <div class="hidden md:block h-px bg-gradient-to-r from-cyan-500/50 via-violet-500/50 to-pink-500/50 mx-16"></div>
-            
-            <!-- Step 6: Qualified Lead / Customer -->
-            <div class="flex flex-col md:flex-row items-center gap-6 md:gap-8">
-                <div class="flex-shrink-0">
-                    <div class="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-slate-900 border border-slate-700">
-                        <i class="fa-solid fa-user-check text-green-400 text-2xl"></i>
+                
+                <!-- Step 2: KaTek AI CRM -->
+                <div class="relative flex items-start gap-6">
+                    <div class="flex-shrink-0 relative z-10">
+                        <div class="h-16 w-16 md:h-20 md:w-20 flex items-center justify-center rounded-2xl bg-slate-900 border-2 border-violet-400/50 shadow-[0_0_25px_rgba(139,92,246,0.35)] hover:shadow-[0_0_40px_rgba(139,92,246,0.55)] transition-all duration-300">
+                            <i class="fa-solid fa-database text-violet-400 text-xl md:text-2xl"></i>
+                        </div>
+                    </div>
+                    <div class="flex-1 pt-2">
+                        <h3 class="text-xl md:text-2xl font-bold text-slate-100 mb-2">KaTek AI CRM (Core)</h3>
+                        <p class="text-slate-400 text-base md:text-lg">All your contacts, affiliates, and conversations live in one intelligent hub.</p>
+                    </div>
+                    <div class="md:hidden flex-shrink-0 pt-2">
+                        <i class="fa-solid fa-arrow-down text-violet-400 text-xl"></i>
                     </div>
                 </div>
-                <div class="flex-1 text-center md:text-left">
-                    <h3 class="text-xl font-bold text-slate-100 mb-2">Qualified Lead / Customer</h3>
-                    <p class="text-slate-400">Warm, ready-to-buy leads passed straight to your sales or booking system.</p>
+                
+                <!-- Step 3: Campaign & Content Engine -->
+                <div class="relative flex items-start gap-6">
+                    <div class="flex-shrink-0 relative z-10">
+                        <div class="h-16 w-16 md:h-20 md:w-20 flex items-center justify-center rounded-2xl bg-slate-900 border-2 border-pink-400/50 shadow-[0_0_25px_rgba(236,72,153,0.35)] hover:shadow-[0_0_40px_rgba(236,72,153,0.55)] transition-all duration-300">
+                            <i class="fa-solid fa-bullhorn text-pink-400 text-xl md:text-2xl"></i>
+                        </div>
+                    </div>
+                    <div class="flex-1 pt-2">
+                        <h3 class="text-xl md:text-2xl font-bold text-slate-100 mb-2">Campaign & Content Engine</h3>
+                        <p class="text-slate-400 text-base md:text-lg">AI generates campaigns, content, and offers tailored to your ideal customers.</p>
+                    </div>
+                    <div class="md:hidden flex-shrink-0 pt-2">
+                        <i class="fa-solid fa-arrow-down text-pink-400 text-xl"></i>
+                    </div>
+                </div>
+                
+                <!-- Step 4: Websites, Bots & Socials -->
+                <div class="relative flex items-start gap-6">
+                    <div class="flex-shrink-0 relative z-10">
+                        <div class="h-16 w-16 md:h-20 md:w-20 flex items-center justify-center rounded-2xl bg-slate-900 border-2 border-cyan-400/50 shadow-[0_0_25px_rgba(94,234,212,0.35)] hover:shadow-[0_0_40px_rgba(94,234,212,0.55)] transition-all duration-300">
+                            <div class="flex flex-col space-y-0.5">
+                                <i class="fa-solid fa-globe text-cyan-400 text-sm md:text-base"></i>
+                                <i class="fa-solid fa-comments text-violet-400 text-sm md:text-base"></i>
+                                <i class="fa-solid fa-hashtag text-pink-400 text-sm md:text-base"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex-1 pt-2">
+                        <h3 class="text-xl md:text-2xl font-bold text-slate-100 mb-2">Websites, Bots & Socials</h3>
+                        <p class="text-slate-400 text-base md:text-lg">AI-generated sites, landing pages, chatbots, and social media meet people where they are.</p>
+                    </div>
+                    <div class="md:hidden flex-shrink-0 pt-2">
+                        <i class="fa-solid fa-arrow-down text-cyan-400 text-xl"></i>
+                    </div>
+                </div>
+                
+                <!-- Step 5: Reputation & Feedback Loop -->
+                <div class="relative flex items-start gap-6">
+                    <div class="flex-shrink-0 relative z-10">
+                        <div class="h-16 w-16 md:h-20 md:w-20 flex items-center justify-center rounded-2xl bg-slate-900 border-2 border-yellow-400/50 shadow-[0_0_25px_rgba(250,204,21,0.35)] hover:shadow-[0_0_40px_rgba(250,204,21,0.55)] transition-all duration-300">
+                            <i class="fa-solid fa-star-half-stroke text-yellow-400 text-xl md:text-2xl"></i>
+                        </div>
+                    </div>
+                    <div class="flex-1 pt-2">
+                        <h3 class="text-xl md:text-2xl font-bold text-slate-100 mb-2">Reputation & Feedback Loop</h3>
+                        <p class="text-slate-400 text-base md:text-lg">Track reviews, feedback, and sentiment — then correct messaging automatically.</p>
+                    </div>
+                    <div class="md:hidden flex-shrink-0 pt-2">
+                        <i class="fa-solid fa-arrow-down text-yellow-400 text-xl"></i>
+                    </div>
+                </div>
+                
+                <!-- Step 6: Qualified Lead / Customer -->
+                <div class="relative flex items-start gap-6">
+                    <div class="flex-shrink-0 relative z-10">
+                        <div class="h-16 w-16 md:h-20 md:w-20 flex items-center justify-center rounded-2xl bg-slate-900 border-2 border-green-400/50 shadow-[0_0_25px_rgba(52,211,153,0.35)] hover:shadow-[0_0_40px_rgba(52,211,153,0.55)] transition-all duration-300">
+                            <i class="fa-solid fa-user-check text-green-400 text-xl md:text-2xl"></i>
+                        </div>
+                    </div>
+                    <div class="flex-1 pt-2">
+                        <h3 class="text-xl md:text-2xl font-bold text-green-400 mb-2">Qualified Lead / Customer</h3>
+                        <p class="text-slate-400 text-base md:text-lg">Warm, ready-to-buy leads passed straight to your sales or booking system.</p>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
-
