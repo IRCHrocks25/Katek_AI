@@ -1,0 +1,1919 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Onboarding - KaTek AI</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        /* Custom gradient text */
+        .gradient-text {
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 50%, #ec4899 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        /* Step transition */
+        .step-panel {
+            display: none;
+            animation: fadeIn 0.3s ease-in;
+        }
+        
+        .step-panel.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Input card styling */
+        .input-card {
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid rgba(51, 65, 85, 0.5);
+            transition: all 0.2s;
+        }
+        
+        .input-card:focus-within {
+            border-color: rgba(59, 130, 246, 0.5);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        /* Progress bar */
+        .progress-bar {
+            transition: width 0.3s ease;
+        }
+        
+        /* AI button hover */
+        .ai-help-btn:hover {
+            background: linear-gradient(135deg, #ec4899 0%, #f472b6 100%);
+        }
+        
+        /* AI loading spinner */
+        .ai-loading {
+            pointer-events: none;
+            opacity: 0.7;
+        }
+        
+        .ai-loading i {
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Step Preloader Styles */
+        .step-preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(30, 41, 59, 0.98) 100%);
+            backdrop-filter: blur(10px);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        
+        .step-preloader.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+        
+        .preloader-content {
+            text-align: center;
+            max-width: 500px;
+            padding: 2rem;
+        }
+        
+        .preloader-spinner {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 2rem;
+            position: relative;
+        }
+        
+        .preloader-spinner::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 4px solid transparent;
+            border-top: 4px solid #3b82f6;
+            border-right: 4px solid #8b5cf6;
+            border-bottom: 4px solid #ec4899;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        .preloader-spinner::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60px;
+            height: 60px;
+            border: 3px solid transparent;
+            border-top: 3px solid #8b5cf6;
+            border-right: 3px solid #ec4899;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite reverse;
+        }
+        
+        .preloader-message {
+            font-size: 1.25rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 50%, #ec4899 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            line-height: 1.6;
+            animation: fadeInUp 0.5s ease;
+        }
+        
+        .preloader-subtitle {
+            font-size: 0.875rem;
+            color: #94a3b8;
+            animation: fadeInUp 0.5s ease 0.2s both;
+        }
+        
+        .preloader-dots {
+            display: inline-flex;
+            gap: 0.5rem;
+            margin-top: 1.5rem;
+        }
+        
+        .preloader-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #3b82f6, #ec4899);
+            animation: pulse 1.4s ease-in-out infinite;
+        }
+        
+        .preloader-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        
+        .preloader-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 0.4;
+                transform: scale(0.8);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.2);
+            }
+        }
+        
+        /* Mobile preloader adjustments */
+        @media (max-width: 768px) {
+            .preloader-content {
+                max-width: 90%;
+                padding: 1.5rem;
+            }
+            
+            .preloader-spinner {
+                width: 60px;
+                height: 60px;
+                margin-bottom: 1.5rem;
+            }
+            
+            .preloader-spinner::after {
+                width: 45px;
+                height: 45px;
+            }
+            
+            .preloader-message {
+                font-size: 1.1rem;
+            }
+        }
+        
+        /* Sidebar text – keep it simple so it wraps normally */
+        .sidebar-step-text {
+            white-space: normal;
+            overflow-wrap: anywhere;
+        }
+        
+        /* Radio button checked state styling - more aggressive */
+        input[type="radio"] {
+            appearance: none !important;
+            -webkit-appearance: none !important;
+            -moz-appearance: none !important;
+            width: 1rem !important;
+            height: 1rem !important;
+            min-width: 1rem !important;
+            min-height: 1rem !important;
+            border: 2px solid rgb(71, 85, 105) !important;
+            border-radius: 50% !important;
+            background-color: rgb(30, 41, 59) !important;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.2s;
+            flex-shrink: 0;
+            margin: 0;
+            padding: 0;
+        }
+        
+        input[type="radio"]:checked,
+        input[type="radio"].radio-checked {
+            background-color: #3b82f6 !important;
+            border-color: #3b82f6 !important;
+        }
+        
+        input[type="radio"]:checked::after,
+        input[type="radio"].radio-checked::after {
+            content: '' !important;
+            position: absolute !important;
+            top: 50% !important;
+            left: 50% !important;
+            transform: translate(-50%, -50%) !important;
+            width: 6px !important;
+            height: 6px !important;
+            border-radius: 50% !important;
+            background-color: white !important;
+            display: block !important;
+        }
+        
+        /* Radio button label card when selected */
+        label.radio-selected {
+            background-color: rgba(59, 130, 246, 0.2) !important;
+            border-color: rgba(59, 130, 246, 0.6) !important;
+        }
+        
+        /* Checkbox checked state */
+        input[type="checkbox"] {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 1rem;
+            height: 1rem;
+            border: 2px solid rgb(71, 85, 105);
+            border-radius: 0.25rem;
+            background-color: rgb(30, 41, 59);
+            cursor: pointer;
+            position: relative;
+            transition: all 0.2s;
+        }
+        
+        input[type="checkbox"]:checked {
+            background-color: #3b82f6;
+            border-color: #3b82f6;
+        }
+        
+        input[type="checkbox"]:checked::after {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 min-h-screen text-slate-100">
+    
+    <!-- Desktop Layout -->
+    <div class="hidden lg:flex h-screen overflow-hidden">
+        <!-- Sidebar -->
+        <aside class="w-80 xl:w-96 bg-slate-900/80 border-r border-slate-700/50 flex flex-col flex-shrink-0">
+            <!-- Logo/Brand -->
+            <div class="p-4 border-b border-slate-700/50 flex-shrink-0">
+                <h1 class="text-lg font-bold gradient-text">KaTek AI</h1>
+                <p class="text-xs text-slate-400 mt-0.5">Course Creator</p>
+            </div>
+            
+            <!-- Steps List -->
+            <div class="flex-1 overflow-y-auto p-4">
+                <div class="space-y-2" id="steps-list">
+                    <!-- Step 1 -->
+                    <div class="step-item" data-step="1">
+                        <div class="flex items-start gap-3 p-3 rounded-lg transition-all cursor-pointer hover:bg-slate-800/50">
+                            <div class="w-9 h-9 rounded-full bg-blue-500/20 border border-blue-500/50 flex items-center justify-center text-xs font-bold text-blue-400 flex-shrink-0">
+                                01
+                            </div>
+                            <div class="flex-1 min-w-0 flex flex-col sidebar-step-text">
+                                <div class="text-sm font-semibold text-slate-100 leading-snug">
+                                    Meet You
+                                </div>
+                                <div class="text-xs text-slate-400 mt-1 leading-snug">
+                                    Introduction & contact
+                                </div>
+                            </div>
+                            <i class="fas fa-check-circle text-green-400 hidden step-complete flex-shrink-0 text-sm mt-1"></i>
+                        </div>
+                    </div>
+                    
+                    <!-- Step 2 -->
+                    <div class="step-item" data-step="2">
+                        <div class="flex items-start gap-3 p-3 rounded-lg transition-all cursor-pointer hover:bg-slate-800/50">
+                            <div class="w-9 h-9 rounded-full bg-slate-700/50 border border-slate-600/50 flex items-center justify-center text-xs font-bold text-slate-400 flex-shrink-0">
+                                02
+                            </div>
+                            <div class="flex-1 min-w-0 flex flex-col sidebar-step-text">
+                                <div class="text-sm font-semibold text-slate-200 leading-snug">
+                                    Course Idea
+                                </div>
+                                <div class="text-xs text-slate-400 mt-1 leading-snug">
+                                    Core concept & vision
+                                </div>
+                            </div>
+                            <i class="fas fa-check-circle text-green-400 hidden step-complete flex-shrink-0 text-sm mt-1"></i>
+                        </div>
+                    </div>
+                    
+                    <!-- Step 3 -->
+                    <div class="step-item" data-step="3">
+                        <div class="flex items-start gap-3 p-3 rounded-lg transition-all cursor-pointer hover:bg-slate-800/50">
+                            <div class="w-9 h-9 rounded-full bg-slate-700/50 border border-slate-600/50 flex items-center justify-center text-xs font-bold text-slate-400 flex-shrink-0">
+                                03
+                            </div>
+                            <div class="flex-1 min-w-0 flex flex-col sidebar-step-text">
+                                <div class="text-sm font-semibold text-slate-200 leading-snug">
+                                    Transformation
+                                </div>
+                                <div class="text-xs text-slate-400 mt-1 leading-snug">
+                                    Outcomes & results
+                                </div>
+                            </div>
+                            <i class="fas fa-check-circle text-green-400 hidden step-complete flex-shrink-0 text-sm mt-1"></i>
+                        </div>
+                    </div>
+                    
+                    <!-- Step 4 -->
+                    <div class="step-item" data-step="4">
+                        <div class="flex items-start gap-3 p-3 rounded-lg transition-all cursor-pointer hover:bg-slate-800/50">
+                            <div class="w-9 h-9 rounded-full bg-slate-700/50 border border-slate-600/50 flex items-center justify-center text-xs font-bold text-slate-400 flex-shrink-0">
+                                04
+                            </div>
+                            <div class="flex-1 min-w-0 flex flex-col sidebar-step-text">
+                                <div class="text-sm font-semibold text-slate-200 leading-snug">
+                                    Existing Materials
+                                </div>
+                                <div class="text-xs text-slate-400 mt-1 leading-snug">
+                                    What you already have
+                                </div>
+                            </div>
+                            <i class="fas fa-check-circle text-green-400 hidden step-complete flex-shrink-0 text-sm mt-1"></i>
+                        </div>
+                    </div>
+                    
+                    <!-- Step 5 -->
+                    <div class="step-item" data-step="5">
+                        <div class="flex items-start gap-3 p-3 rounded-lg transition-all cursor-pointer hover:bg-slate-800/50">
+                            <div class="w-9 h-9 rounded-full bg-slate-700/50 border border-slate-600/50 flex items-center justify-center text-xs font-bold text-slate-400 flex-shrink-0">
+                                05
+                            </div>
+                            <div class="flex-1 min-w-0 flex flex-col sidebar-step-text">
+                                <div class="text-sm font-semibold text-slate-200 leading-snug">
+                                    Brand & Vibe
+                                </div>
+                                <div class="text-xs text-slate-400 mt-1 leading-snug">
+                                    Personality & tone
+                                </div>
+                            </div>
+                            <i class="fas fa-check-circle text-green-400 hidden step-complete flex-shrink-0 text-sm mt-1"></i>
+                        </div>
+                    </div>
+                    
+                    <!-- Step 6 -->
+                    <div class="step-item" data-step="6">
+                        <div class="flex items-start gap-3 p-3 rounded-lg transition-all cursor-pointer hover:bg-slate-800/50">
+                            <div class="w-9 h-9 rounded-full bg-slate-700/50 border border-slate-600/50 flex items-center justify-center text-xs font-bold text-slate-400 flex-shrink-0">
+                                06
+                            </div>
+                            <div class="flex-1 min-w-0 flex flex-col sidebar-step-text">
+                                <div class="text-sm font-semibold text-slate-200 leading-snug">
+                                    Course Structure
+                                </div>
+                                <div class="text-xs text-slate-400 mt-1 leading-snug">
+                                    Format & interactivity
+                                </div>
+                            </div>
+                            <i class="fas fa-check-circle text-green-400 hidden step-complete flex-shrink-0 text-sm mt-1"></i>
+                        </div>
+                    </div>
+                    
+                    <!-- Step 7 -->
+                    <div class="step-item" data-step="7">
+                        <div class="flex items-start gap-3 p-3 rounded-lg transition-all cursor-pointer hover:bg-slate-800/50">
+                            <div class="w-9 h-9 rounded-full bg-slate-700/50 border border-slate-600/50 flex items-center justify-center text-xs font-bold text-slate-400 flex-shrink-0">
+                                07
+                            </div>
+                            <div class="flex-1 min-w-0 flex flex-col sidebar-step-text">
+                                <div class="text-sm font-semibold text-slate-200 leading-snug">
+                                    Face & Voice
+                                </div>
+                                <div class="text-xs text-slate-400 mt-1 leading-snug">
+                                    Media preferences
+                                </div>
+                            </div>
+                            <i class="fas fa-check-circle text-green-400 hidden step-complete flex-shrink-0 text-sm mt-1"></i>
+                        </div>
+                    </div>
+                    
+                    <!-- Step 8 -->
+                    <div class="step-item" data-step="8">
+                        <div class="flex items-start gap-3 p-3 rounded-lg transition-all cursor-pointer hover:bg-slate-800/50">
+                            <div class="w-9 h-9 rounded-full bg-slate-700/50 border border-slate-600/50 flex items-center justify-center text-xs font-bold text-slate-400 flex-shrink-0">
+                                08
+                            </div>
+                            <div class="flex-1 min-w-0 flex flex-col sidebar-step-text">
+                                <div class="text-sm font-semibold text-slate-200 leading-snug">
+                                    Legal & Rights
+                                </div>
+                                <div class="text-xs text-slate-400 mt-1 leading-snug">
+                                    Permissions & ownership
+                                </div>
+                            </div>
+                            <i class="fas fa-check-circle text-green-400 hidden step-complete flex-shrink-0 text-sm mt-1"></i>
+                        </div>
+                    </div>
+                    
+                    <!-- Step 9 -->
+                    <div class="step-item" data-step="9">
+                        <div class="flex items-start gap-3 p-3 rounded-lg transition-all cursor-pointer hover:bg-slate-800/50">
+                            <div class="w-9 h-9 rounded-full bg-slate-700/50 border border-slate-600/50 flex items-center justify-center text-xs font-bold text-slate-400 flex-shrink-0">
+                                09
+                            </div>
+                            <div class="flex-1 min-w-0 flex flex-col sidebar-step-text">
+                                <div class="text-sm font-semibold text-slate-200 leading-snug">
+                                    Platform & Money
+                                </div>
+                                <div class="text-xs text-slate-400 mt-1 leading-snug">
+                                    Distribution & pricing
+                                </div>
+                            </div>
+                            <i class="fas fa-check-circle text-green-400 hidden step-complete flex-shrink-0 text-sm mt-1"></i>
+                        </div>
+                    </div>
+                    
+                    <!-- Step 10 -->
+                    <div class="step-item" data-step="10">
+                        <div class="flex items-start gap-3 p-3 rounded-lg transition-all cursor-pointer hover:bg-slate-800/50">
+                            <div class="w-9 h-9 rounded-full bg-slate-700/50 border border-slate-600/50 flex items-center justify-center text-xs font-bold text-slate-400 flex-shrink-0">
+                                10
+                            </div>
+                            <div class="flex-1 min-w-0 flex flex-col sidebar-step-text">
+                                <div class="text-sm font-semibold text-slate-200 leading-snug">
+                                    Timelines
+                                </div>
+                                <div class="text-xs text-slate-400 mt-1 leading-snug">
+                                    Schedule & priorities
+                                </div>
+                            </div>
+                            <i class="fas fa-check-circle text-green-400 hidden step-complete flex-shrink-0 text-sm mt-1"></i>
+                        </div>
+                    </div>
+                    
+                    <!-- Step 11 -->
+                    <div class="step-item" data-step="11">
+                        <div class="flex items-start gap-3 p-3 rounded-lg transition-all cursor-pointer hover:bg-slate-800/50">
+                            <div class="w-9 h-9 rounded-full bg-slate-700/50 border border-slate-600/50 flex items-center justify-center text-xs font-bold text-slate-400 flex-shrink-0">
+                                11
+                            </div>
+                            <div class="flex-1 min-w-0 flex flex-col sidebar-step-text">
+                                <div class="text-sm font-semibold text-slate-200 leading-snug">
+                                    Reviews
+                                </div>
+                                <div class="text-xs text-slate-400 mt-1 leading-snug">
+                                    Decision-makers
+                                </div>
+                            </div>
+                            <i class="fas fa-check-circle text-green-400 hidden step-complete flex-shrink-0 text-sm mt-1"></i>
+                        </div>
+                    </div>
+                    
+                    <!-- Step 12 -->
+                    <div class="step-item" data-step="12">
+                        <div class="flex items-start gap-3 p-3 rounded-lg transition-all cursor-pointer hover:bg-slate-800/50">
+                            <div class="w-9 h-9 rounded-full bg-slate-700/50 border border-slate-600/50 flex items-center justify-center text-xs font-bold text-slate-400 flex-shrink-0">
+                                12
+                            </div>
+                            <div class="flex-1 min-w-0 flex flex-col sidebar-step-text">
+                                <div class="text-sm font-semibold text-slate-200 leading-snug">
+                                    Final Uploads
+                                </div>
+                                <div class="text-xs text-slate-400 mt-1 leading-snug">
+                                    Files & notes
+                                </div>
+                            </div>
+                            <i class="fas fa-check-circle text-green-400 hidden step-complete flex-shrink-0 text-sm mt-1"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Progress Indicator -->
+            <div class="p-4 border-t border-slate-700/50 flex-shrink-0">
+                <div class="text-xs uppercase tracking-wider text-slate-400 mb-2">Progress</div>
+                <div class="h-2 bg-slate-800 rounded-full overflow-hidden">
+                    <div class="h-full bg-gradient-to-r from-blue-500 via-violet-500 to-pink-500 progress-bar" id="sidebar-progress" style="width: 8.33%"></div>
+                </div>
+                <div class="text-sm text-slate-300 mt-2" id="progress-text">Step 1 of 12</div>
+            </div>
+        </aside>
+        
+        <!-- Step Preloader -->
+        <div id="step-preloader" class="step-preloader">
+            <div class="preloader-content">
+                <div class="preloader-spinner"></div>
+                <div class="preloader-message" id="preloader-message">Loading...</div>
+                <div class="preloader-subtitle" id="preloader-subtitle">Please wait while we prepare your step</div>
+                <div class="preloader-dots">
+                    <div class="preloader-dot"></div>
+                    <div class="preloader-dot"></div>
+                    <div class="preloader-dot"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <main class="flex-1 overflow-y-auto">
+            <div class="max-w-4xl mx-auto p-8">
+                <!-- Step Content Container -->
+                <div id="steps-container">
+                    {% include 'myApp/onboarding/step_01_meet_you.html' %}
+                    {% include 'myApp/onboarding/step_02_course_idea.html' %}
+                    {% include 'myApp/onboarding/step_03_transformation.html' %}
+                    {% include 'myApp/onboarding/step_04_existing_materials.html' %}
+                    {% include 'myApp/onboarding/step_05_brand_vibe.html' %}
+                    {% include 'myApp/onboarding/step_06_course_structure.html' %}
+                    {% include 'myApp/onboarding/step_07_media.html' %}
+                    {% include 'myApp/onboarding/step_08_legal.html' %}
+                    {% include 'myApp/onboarding/step_09_platform_money.html' %}
+                    {% include 'myApp/onboarding/step_10_timelines.html' %}
+                    {% include 'myApp/onboarding/step_11_reviews.html' %}
+                    {% include 'myApp/onboarding/step_12_final.html' %}
+                </div>
+                
+                <!-- Navigation -->
+                <div class="flex justify-between items-center mt-8 pt-6 border-t border-slate-700/50">
+                    <button id="btn-back" class="px-6 py-3 bg-slate-800/50 hover:bg-slate-700/50 border border-slate-600/50 rounded-lg text-slate-300 transition-all disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                        <i class="fas fa-arrow-left mr-2"></i> Back
+                    </button>
+                    <div class="flex items-center gap-3">
+                        <!-- Skip/Jump Button -->
+                        <div class="relative">
+                            <button id="btn-skip" class="px-4 py-3 bg-slate-800/50 hover:bg-slate-700/50 border border-slate-600/50 rounded-lg text-slate-300 transition-all text-sm">
+                                <i class="fas fa-forward mr-2"></i> Skip to Step
+                            </button>
+                            <div id="skip-menu" class="hidden absolute bottom-full left-0 mb-2 w-48 bg-slate-800 border border-slate-600/50 rounded-lg shadow-xl z-50 max-h-96 overflow-y-auto">
+                                <div class="p-2">
+                                    <div class="text-xs text-slate-400 px-3 py-2 mb-1">Jump to any step:</div>
+                                    <button data-jump-step="1" class="w-full text-left px-3 py-2 rounded hover:bg-slate-700/50 text-sm text-slate-300 transition-all">
+                                        <span class="font-semibold text-blue-400">01</span> - Meet You
+                                    </button>
+                                    <button data-jump-step="2" class="w-full text-left px-3 py-2 rounded hover:bg-slate-700/50 text-sm text-slate-300 transition-all">
+                                        <span class="font-semibold text-blue-400">02</span> - Course Idea
+                                    </button>
+                                    <button data-jump-step="3" class="w-full text-left px-3 py-2 rounded hover:bg-slate-700/50 text-sm text-slate-300 transition-all">
+                                        <span class="font-semibold text-blue-400">03</span> - Transformation
+                                    </button>
+                                    <button data-jump-step="4" class="w-full text-left px-3 py-2 rounded hover:bg-slate-700/50 text-sm text-slate-300 transition-all">
+                                        <span class="font-semibold text-blue-400">04</span> - Existing Materials
+                                    </button>
+                                    <button data-jump-step="5" class="w-full text-left px-3 py-2 rounded hover:bg-slate-700/50 text-sm text-slate-300 transition-all">
+                                        <span class="font-semibold text-blue-400">05</span> - Brand & Vibe
+                                    </button>
+                                    <button data-jump-step="6" class="w-full text-left px-3 py-2 rounded hover:bg-slate-700/50 text-sm text-slate-300 transition-all">
+                                        <span class="font-semibold text-blue-400">06</span> - Course Structure
+                                    </button>
+                                    <button data-jump-step="7" class="w-full text-left px-3 py-2 rounded hover:bg-slate-700/50 text-sm text-slate-300 transition-all">
+                                        <span class="font-semibold text-blue-400">07</span> - Media
+                                    </button>
+                                    <button data-jump-step="8" class="w-full text-left px-3 py-2 rounded hover:bg-slate-700/50 text-sm text-slate-300 transition-all">
+                                        <span class="font-semibold text-blue-400">08</span> - Legal & Rights
+                                    </button>
+                                    <button data-jump-step="9" class="w-full text-left px-3 py-2 rounded hover:bg-slate-700/50 text-sm text-slate-300 transition-all">
+                                        <span class="font-semibold text-blue-400">09</span> - Platform & Money
+                                    </button>
+                                    <button data-jump-step="10" class="w-full text-left px-3 py-2 rounded hover:bg-slate-700/50 text-sm text-slate-300 transition-all">
+                                        <span class="font-semibold text-blue-400">10</span> - Timelines
+                                    </button>
+                                    <button data-jump-step="11" class="w-full text-left px-3 py-2 rounded hover:bg-slate-700/50 text-sm text-slate-300 transition-all">
+                                        <span class="font-semibold text-blue-400">11</span> - Reviews
+                                    </button>
+                                    <button data-jump-step="12" class="w-full text-left px-3 py-2 rounded hover:bg-slate-700/50 text-sm text-slate-300 transition-all">
+                                        <span class="font-semibold text-blue-400">12</span> - Final Uploads
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <button id="btn-save-exit" class="px-6 py-3 bg-slate-800/50 hover:bg-slate-700/50 border border-slate-600/50 rounded-lg text-slate-300 transition-all">
+                            <i class="fas fa-save mr-2"></i> Save & Exit
+                        </button>
+                    </div>
+                    <button id="btn-next" data-action="next" class="px-8 py-3 bg-gradient-to-r from-blue-500 via-violet-500 to-pink-500 hover:from-blue-600 hover:via-violet-600 hover:to-pink-600 rounded-lg text-white font-semibold transition-all shadow-lg shadow-blue-500/20">
+                        Next <i class="fas fa-arrow-right ml-2"></i>
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <!-- Mobile Step Preloader -->
+    <div id="step-preloader-mobile" class="step-preloader">
+        <div class="preloader-content">
+            <div class="preloader-spinner"></div>
+            <div class="preloader-message" id="preloader-message-mobile">Loading...</div>
+            <div class="preloader-subtitle" id="preloader-subtitle-mobile">Please wait while we prepare your step</div>
+            <div class="preloader-dots">
+                <div class="preloader-dot"></div>
+                <div class="preloader-dot"></div>
+                <div class="preloader-dot"></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Mobile Layout -->
+    <div class="lg:hidden min-h-screen pb-40">
+        <!-- Mobile Header -->
+        <div class="sticky top-0 z-10 bg-slate-900/95 backdrop-blur-sm border-b border-slate-700/50 p-4">
+            <div class="mb-3">
+                <h1 class="text-lg font-bold gradient-text">KaTek AI Course Creator</h1>
+            </div>
+            <div class="text-xs uppercase tracking-wider text-blue-400 mb-2" id="mobile-step-label">Step 1 of 12</div>
+            <div class="h-2 bg-slate-800 rounded-full overflow-hidden">
+                <div class="h-full bg-gradient-to-r from-blue-500 via-violet-500 to-pink-500 progress-bar" id="mobile-progress" style="width: 8.33%"></div>
+            </div>
+        </div>
+        
+        <!-- Mobile Content -->
+        <div class="p-4 pb-32">
+            <div id="mobile-steps-container">
+                {% include 'myApp/onboarding/step_01_meet_you.html' %}
+                {% include 'myApp/onboarding/step_02_course_idea.html' %}
+                {% include 'myApp/onboarding/step_03_transformation.html' %}
+                {% include 'myApp/onboarding/step_04_existing_materials.html' %}
+                {% include 'myApp/onboarding/step_05_brand_vibe.html' %}
+                {% include 'myApp/onboarding/step_06_course_structure.html' %}
+                {% include 'myApp/onboarding/step_07_media.html' %}
+                {% include 'myApp/onboarding/step_08_legal.html' %}
+                {% include 'myApp/onboarding/step_09_platform_money.html' %}
+                {% include 'myApp/onboarding/step_10_timelines.html' %}
+                {% include 'myApp/onboarding/step_11_reviews.html' %}
+                {% include 'myApp/onboarding/step_12_final.html' %}
+            </div>
+        </div>
+        
+        <!-- Mobile Navigation (Sticky Bottom) -->
+        <div class="fixed bottom-0 left-0 right-0 bg-slate-900/95 backdrop-blur-sm border-t border-slate-700/50 p-4 space-y-2">
+            <div class="flex gap-2">
+                <button id="btn-back-mobile" class="flex-1 px-4 py-3 bg-slate-800/50 hover:bg-slate-700/50 border border-slate-600/50 rounded-lg text-slate-300 transition-all disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                    <i class="fas fa-arrow-left mr-2"></i> Back
+                </button>
+                <div class="relative">
+                    <button id="btn-skip-mobile" class="px-3 py-3 bg-slate-800/50 hover:bg-slate-700/50 border border-slate-600/50 rounded-lg text-slate-300 transition-all">
+                        <i class="fas fa-forward"></i>
+                    </button>
+                    <div id="skip-menu-mobile" class="hidden absolute bottom-full left-0 mb-2 w-56 bg-slate-800 border border-slate-600/50 rounded-lg shadow-xl z-50 max-h-96 overflow-y-auto">
+                        <div class="p-2">
+                            <div class="text-xs text-slate-400 px-3 py-2 mb-1">Jump to any step:</div>
+                            <button data-jump-step="1" class="w-full text-left px-3 py-2 rounded hover:bg-slate-700/50 text-sm text-slate-300 transition-all">
+                                <span class="font-semibold text-blue-400">01</span> - Meet You
+                            </button>
+                            <button data-jump-step="2" class="w-full text-left px-3 py-2 rounded hover:bg-slate-700/50 text-sm text-slate-300 transition-all">
+                                <span class="font-semibold text-blue-400">02</span> - Course Idea
+                            </button>
+                            <button data-jump-step="3" class="w-full text-left px-3 py-2 rounded hover:bg-slate-700/50 text-sm text-slate-300 transition-all">
+                                <span class="font-semibold text-blue-400">03</span> - Transformation
+                            </button>
+                            <button data-jump-step="4" class="w-full text-left px-3 py-2 rounded hover:bg-slate-700/50 text-sm text-slate-300 transition-all">
+                                <span class="font-semibold text-blue-400">04</span> - Existing Materials
+                            </button>
+                            <button data-jump-step="5" class="w-full text-left px-3 py-2 rounded hover:bg-slate-700/50 text-sm text-slate-300 transition-all">
+                                <span class="font-semibold text-blue-400">05</span> - Brand & Vibe
+                            </button>
+                            <button data-jump-step="6" class="w-full text-left px-3 py-2 rounded hover:bg-slate-700/50 text-sm text-slate-300 transition-all">
+                                <span class="font-semibold text-blue-400">06</span> - Course Structure
+                            </button>
+                            <button data-jump-step="7" class="w-full text-left px-3 py-2 rounded hover:bg-slate-700/50 text-sm text-slate-300 transition-all">
+                                <span class="font-semibold text-blue-400">07</span> - Media
+                            </button>
+                            <button data-jump-step="8" class="w-full text-left px-3 py-2 rounded hover:bg-slate-700/50 text-sm text-slate-300 transition-all">
+                                <span class="font-semibold text-blue-400">08</span> - Legal & Rights
+                            </button>
+                            <button data-jump-step="9" class="w-full text-left px-3 py-2 rounded hover:bg-slate-700/50 text-sm text-slate-300 transition-all">
+                                <span class="font-semibold text-blue-400">09</span> - Platform & Money
+                            </button>
+                            <button data-jump-step="10" class="w-full text-left px-3 py-2 rounded hover:bg-slate-700/50 text-sm text-slate-300 transition-all">
+                                <span class="font-semibold text-blue-400">10</span> - Timelines
+                            </button>
+                            <button data-jump-step="11" class="w-full text-left px-3 py-2 rounded hover:bg-slate-700/50 text-sm text-slate-300 transition-all">
+                                <span class="font-semibold text-blue-400">11</span> - Reviews
+                            </button>
+                            <button data-jump-step="12" class="w-full text-left px-3 py-2 rounded hover:bg-slate-700/50 text-sm text-slate-300 transition-all">
+                                <span class="font-semibold text-blue-400">12</span> - Final Uploads
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <button id="btn-next-mobile" data-action="next" class="flex-1 px-4 py-3 bg-gradient-to-r from-blue-500 via-violet-500 to-pink-500 hover:from-blue-600 hover:via-violet-600 hover:to-pink-600 rounded-lg text-white font-semibold transition-all">
+                    Next <i class="fas fa-arrow-right ml-2"></i>
+                </button>
+            </div>
+            <button id="btn-save-exit-mobile" class="w-full px-4 py-2 bg-slate-800/50 hover:bg-slate-700/50 border border-slate-600/50 rounded-lg text-slate-300 text-sm transition-all">
+                <i class="fas fa-save mr-2"></i> Save & Exit
+            </button>
+        </div>
+    </div>
+    
+    <!-- Inline JavaScript -->
+    <script>
+        (function() {
+            // State management
+            const state = {
+                currentStep: 1,
+                totalSteps: 12,
+                sessionId: null,
+                data: {}
+            };
+            
+            // Get CSRF token
+            function getCookie(name) {
+                let cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    const cookies = document.cookie.split(';');
+                    for (let i = 0; i < cookies.length; i++) {
+                        const cookie = cookies[i].trim();
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+            
+            const csrftoken = getCookie('csrftoken');
+            
+            // Initialize session ID
+            if (!state.sessionId) {
+                state.sessionId = localStorage.getItem('onboarding_session_id') || generateSessionId();
+                localStorage.setItem('onboarding_session_id', state.sessionId);
+            }
+            
+            function generateSessionId() {
+                return 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+            }
+            
+            // Get all step panels
+            function getStepPanels() {
+                const desktop = document.querySelectorAll('#steps-container .step-panel');
+                const mobile = document.querySelectorAll('#mobile-steps-container .step-panel');
+                return { desktop, mobile };
+            }
+            
+            // Step preloader messages
+            const preloaderMessages = {
+                1: "Locking in your creator profile…",
+                2: "Scanning your big idea for magic…",
+                3: "Mapping the transformation your students will experience…",
+                4: "Collecting your existing assets into the KaTek vault…",
+                5: "Tuning the brand frequency to your unique vibe…",
+                6: "Building your course skeleton and engagement loops…",
+                7: "Syncing your face, voice, and presence with the experience…",
+                8: "Securing rights, permissions, and creator protections…",
+                9: "Configuring platforms, pricing, and flow of payments…",
+                10: "Locking in timelines and what matters most right now…",
+                11: "Aligning reviewers, approvers, and feedback flow…",
+                12: "Saving your final files, secrets, and special requests…"
+            };
+            
+            // Show preloader
+            function showPreloader(stepNumber) {
+                const message = preloaderMessages[stepNumber] || "Loading your step…";
+                const desktopPreloader = document.getElementById('step-preloader');
+                const mobilePreloader = document.getElementById('step-preloader-mobile');
+                const desktopMessage = document.getElementById('preloader-message');
+                const mobileMessage = document.getElementById('preloader-message-mobile');
+                
+                if (desktopMessage) desktopMessage.textContent = message;
+                if (mobileMessage) mobileMessage.textContent = message;
+                
+                if (desktopPreloader) desktopPreloader.classList.add('active');
+                if (mobilePreloader) mobilePreloader.classList.add('active');
+            }
+            
+            // Hide preloader
+            function hidePreloader() {
+                const desktopPreloader = document.getElementById('step-preloader');
+                const mobilePreloader = document.getElementById('step-preloader-mobile');
+                
+                if (desktopPreloader) desktopPreloader.classList.remove('active');
+                if (mobilePreloader) mobilePreloader.classList.remove('active');
+            }
+            
+            // Track if this is the first load
+            let isFirstLoad = true;
+            
+            // Show step
+            function showStep(stepNumber, skipPreloader = false) {
+                // Show preloader only if not first load and not skipped
+                if (!isFirstLoad && !skipPreloader) {
+                    showPreloader(stepNumber);
+                }
+                
+                // Wait a bit for smooth transition, then load the step
+                const delay = (!isFirstLoad && !skipPreloader) ? 300 : 0;
+                
+                setTimeout(() => {
+                    const { desktop, mobile } = getStepPanels();
+                    
+                    // Hide all steps
+                    desktop.forEach(panel => {
+                        panel.classList.remove('active');
+                    });
+                    mobile.forEach(panel => {
+                        panel.classList.remove('active');
+                    });
+                    
+                    // Show current step
+                    if (desktop[stepNumber - 1]) desktop[stepNumber - 1].classList.add('active');
+                    if (mobile[stepNumber - 1]) mobile[stepNumber - 1].classList.add('active');
+                    
+                    // Update sidebar
+                    updateSidebar(stepNumber);
+                    
+                    // Update progress
+                    updateProgress(stepNumber);
+                    
+                    // Update navigation buttons
+                    updateNavigation(stepNumber);
+                    
+                    // Update radio button visuals after step is shown
+                    setTimeout(setupRadioButtons, 50);
+                    
+                    // Re-setup AI help buttons when step changes
+                    setTimeout(setupAIHelpButtons, 100);
+                    
+                    // Hide preloader after step is loaded
+                    if (!isFirstLoad && !skipPreloader) {
+                        setTimeout(() => {
+                            hidePreloader();
+                        }, 5000); // Show preloader for 5 seconds for awesome experience
+                    }
+                    
+                    // Mark that first load is done
+                    isFirstLoad = false;
+                }, delay);
+            }
+            
+            // Update sidebar highlighting
+            function updateSidebar(stepNumber) {
+                document.querySelectorAll('.step-item').forEach((item, index) => {
+                    const stepNum = index + 1;
+                    const circle = item.querySelector('.w-9.h-9') || item.querySelector('div > div');
+                    const titleText = item.querySelector('.text-sm.font-semibold');
+                    
+                    if (stepNum === stepNumber) {
+                        if (circle) circle.className = 'w-9 h-9 rounded-full bg-blue-500/20 border border-blue-500/50 flex items-center justify-center text-xs font-bold text-blue-400 flex-shrink-0';
+                        if (titleText) titleText.className = 'text-sm font-semibold text-slate-100 leading-snug';
+                    } else if (stepNum < stepNumber) {
+                        if (circle) circle.className = 'w-9 h-9 rounded-full bg-green-500/20 border border-green-500/50 flex items-center justify-center text-xs font-bold text-green-400 flex-shrink-0';
+                        if (titleText) titleText.className = 'text-sm font-semibold text-slate-200 leading-snug';
+                        item.querySelector('.step-complete')?.classList.remove('hidden');
+                    } else {
+                        if (circle) circle.className = 'w-9 h-9 rounded-full bg-slate-700/50 border border-slate-600/50 flex items-center justify-center text-xs font-bold text-slate-400 flex-shrink-0';
+                        if (titleText) titleText.className = 'text-sm font-semibold text-slate-200 leading-snug';
+                        item.querySelector('.step-complete')?.classList.add('hidden');
+                    }
+                });
+            }
+            
+            // Update progress bars
+            function updateProgress(stepNumber) {
+                const percentage = (stepNumber / state.totalSteps) * 100;
+                document.getElementById('sidebar-progress').style.width = percentage + '%';
+                document.getElementById('mobile-progress').style.width = percentage + '%';
+                document.getElementById('progress-text').textContent = `Step ${stepNumber} of ${state.totalSteps}`;
+                document.getElementById('mobile-step-label').textContent = `Step ${stepNumber} of ${state.totalSteps}`;
+            }
+            
+            // Update navigation buttons
+            function updateNavigation(stepNumber) {
+                const backBtns = [document.getElementById('btn-back'), document.getElementById('btn-back-mobile')];
+                const nextBtns = [document.getElementById('btn-next'), document.getElementById('btn-next-mobile')];
+                
+                backBtns.forEach(btn => {
+                    if (btn) btn.disabled = stepNumber === 1;
+                });
+                
+                nextBtns.forEach(btn => {
+                    if (btn) {
+                        if (stepNumber === state.totalSteps) {
+                            btn.innerHTML = 'Finish & Submit <i class="fas fa-check ml-2"></i>';
+                            btn.setAttribute('data-action', 'submit');
+                        } else {
+                            btn.innerHTML = 'Next <i class="fas fa-arrow-right ml-2"></i>';
+                            btn.setAttribute('data-action', 'next');
+                        }
+                    }
+                });
+            }
+            
+            // Unified click handler for next buttons
+            function handleNextClick(event) {
+                const action = event.target.closest('button').getAttribute('data-action');
+                if (action === 'submit') {
+                    handleSubmit();
+                } else {
+                    handleNext();
+                }
+            }
+            
+            // Sync data between desktop and mobile panels
+            function syncInputs(sourceInput, targetPanel) {
+                const name = sourceInput.name || sourceInput.id;
+                if (!name) return;
+                
+                if (sourceInput.type === 'checkbox' || sourceInput.type === 'radio') {
+                    // For checkboxes/radios, find the matching one by value
+                    const value = sourceInput.value;
+                    const targetInput = targetPanel.querySelector(`[name="${name}"][value="${value}"], [id="${name}"][value="${value}"]`);
+                    if (targetInput) {
+                        targetInput.checked = sourceInput.checked;
+                        // Update radio button visuals if it's a radio
+                        if (sourceInput.type === 'radio') {
+                            updateRadioButtonVisuals(targetInput);
+                        }
+                    }
+                    // Also update source radio visuals
+                    if (sourceInput.type === 'radio') {
+                        updateRadioButtonVisuals(sourceInput);
+                    }
+                } else {
+                    // For text inputs, textareas, selects
+                    const targetInput = targetPanel.querySelector(`[name="${name}"], [id="${name}"]`);
+                    if (targetInput) {
+                        targetInput.value = sourceInput.value;
+                    }
+                }
+            }
+            
+            // Validate current step (works for both desktop and mobile)
+            function validateStep(stepNumber) {
+                const { desktop, mobile } = getStepPanels();
+                const desktopPanel = desktop[stepNumber - 1];
+                const mobilePanel = mobile[stepNumber - 1];
+                
+                // Use the visible panel (or desktop as fallback)
+                const currentPanel = desktopPanel?.classList.contains('active') ? desktopPanel : 
+                                   (mobilePanel?.classList.contains('active') ? mobilePanel : desktopPanel);
+                
+                if (!currentPanel) return true;
+                
+                const requiredFields = currentPanel.querySelectorAll('[data-required="true"]');
+                let isValid = true;
+                
+                requiredFields.forEach(field => {
+                    const value = field.value ? field.value.trim() : '';
+                    const inputCard = field.closest('.input-card');
+                    
+                    if (!value) {
+                        isValid = false;
+                        // Mark error in both panels
+                        [desktopPanel, mobilePanel].forEach(panel => {
+                            if (panel) {
+                                const name = field.name || field.id;
+                                const panelField = panel.querySelector(`[name="${name}"], [id="${name}"]`);
+                                const panelCard = panelField?.closest('.input-card');
+                                if (panelCard) {
+                                    panelCard.classList.add('border-red-500/50');
+                                    const errorMsg = panelCard.querySelector('.error-message');
+                                    if (!errorMsg) {
+                                        const err = document.createElement('div');
+                                        err.className = 'error-message text-xs text-red-400 mt-1';
+                                        err.textContent = 'This field is required';
+                                        panelCard.appendChild(err);
+                                    }
+                                }
+                            }
+                        });
+                    } else {
+                        // Clear errors in both panels
+                        [desktopPanel, mobilePanel].forEach(panel => {
+                            if (panel) {
+                                const name = field.name || field.id;
+                                const panelField = panel.querySelector(`[name="${name}"], [id="${name}"]`);
+                                const panelCard = panelField?.closest('.input-card');
+                                if (panelCard) {
+                                    panelCard.classList.remove('border-red-500/50');
+                                    const errorMsg = panelCard.querySelector('.error-message');
+                                    if (errorMsg) errorMsg.remove();
+                                }
+                            }
+                        });
+                    }
+                });
+                
+                return isValid;
+            }
+            
+            // Collect data from current step (works for both desktop and mobile)
+            function collectStepData(stepNumber) {
+                const { desktop, mobile } = getStepPanels();
+                const desktopPanel = desktop[stepNumber - 1];
+                const mobilePanel = mobile[stepNumber - 1];
+                
+                // Use desktop panel for data collection (they should be in sync)
+                const currentPanel = desktopPanel || mobilePanel;
+                if (!currentPanel) return {};
+                
+                const data = {};
+                const inputs = currentPanel.querySelectorAll('input, textarea, select');
+                
+                // Track processed radio button groups to avoid duplicates
+                const processedRadioGroups = new Set();
+                
+                inputs.forEach(input => {
+                    const name = input.name || input.id;
+                    if (name) {
+                        if (input.type === 'checkbox') {
+                            // For checkboxes with the same name, collect as array
+                            const checkboxes = currentPanel.querySelectorAll(`input[type="checkbox"][name="${name}"]`);
+                            if (checkboxes.length > 1) {
+                                // Multiple checkboxes with same name - collect as array
+                                if (!data[name]) {
+                                    data[name] = [];
+                                }
+                                if (input.checked) {
+                                    data[name].push(input.value);
+                                }
+                            } else {
+                                // Single checkbox - store as boolean
+                                data[name] = input.checked;
+                            }
+                        } else if (input.type === 'radio') {
+                            // Only collect the checked radio button value, and only once per group
+                            if (input.checked && !processedRadioGroups.has(name)) {
+                                data[name] = input.value;
+                                processedRadioGroups.add(name);
+                            }
+                        } else {
+                            data[name] = input.value;
+                        }
+                    }
+                });
+                
+                return data;
+            }
+            
+            // Save step data
+            function saveStepData(stepNumber, submit = false) {
+                const stepNames = [
+                    'meet_you', 'course_idea', 'transformation_outcomes',
+                    'existing_materials', 'brand_vibe', 'course_structure',
+                    'media_content', 'legal_rights', 'platform_money',
+                    'timelines_priorities', 'reviews_decision_makers', 'final_uploads'
+                ];
+                
+                const stepName = stepNames[stepNumber - 1];
+                const stepData = collectStepData(stepNumber);
+                
+                state.data[stepName] = stepData;
+                
+                const payload = {
+                    session_id: state.sessionId,
+                    steps: {
+                        [stepName]: stepData
+                    },
+                    submit: submit
+                };
+                
+                fetch('/api/onboarding/save/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrftoken
+                    },
+                    body: JSON.stringify(payload)
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        return response.json().then(err => {
+                            throw new Error(err.error || 'Save failed');
+                        });
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success && data.session_id) {
+                        state.sessionId = data.session_id;
+                        localStorage.setItem('onboarding_session_id', state.sessionId);
+                    }
+                    if (data.warnings && data.warnings.length > 0) {
+                        console.warn('Save warnings:', data.warnings);
+                    }
+                })
+                .catch(error => {
+                    console.error('Save error:', error);
+                    // Don't show alert for autosave errors, just log them
+                    if (submit) {
+                        alert('Failed to save: ' + error.message);
+                    }
+                });
+            }
+            
+            // Handle Next
+            function handleNext() {
+                if (!validateStep(state.currentStep)) {
+                    return;
+                }
+                
+                saveStepData(state.currentStep);
+                
+                if (state.currentStep < state.totalSteps) {
+                    state.currentStep++;
+                    showStep(state.currentStep);
+                }
+            }
+            
+            // Handle Back
+            function handleBack() {
+                if (state.currentStep > 1) {
+                    state.currentStep--;
+                    showStep(state.currentStep);
+                }
+            }
+            
+            // Handle Submit
+            function handleSubmit() {
+                if (!validateStep(state.currentStep)) {
+                    return;
+                }
+                
+                saveStepData(state.currentStep, true);
+                
+                // Show success message
+                alert('Thank you! Your course blueprint has been submitted successfully.');
+                
+                // Optionally redirect
+                // window.location.href = '/onboarding/thank-you/';
+            }
+            
+            // Handle Save & Exit
+            function handleSaveExit() {
+                saveStepData(state.currentStep);
+                alert('Your progress has been saved. You can continue later.');
+                // Optionally redirect to home
+                // window.location.href = '/';
+            }
+            
+            // Field type to field ID mapping
+            const aiFieldMapping = {
+                'course_title': 'course_title',
+                'pitch': 'course_pitch',
+                'outcomes': 'learning_outcomes',
+                'tone': 'brand_tone',
+                'taglines': 'course_tagline',
+                'visual_style': 'visual_style',  // Radio button group
+                'course_description': 'course_description',
+                'main_transformation': 'main_transformation',
+                'skills_gained': 'skills_gained',
+                'prerequisites': 'prerequisites',
+                'existing_content': 'existing_content',
+                'materials_notes': 'materials_notes',
+                'brand_description': 'brand_description',
+                'structure_notes': 'structure_notes',
+                'media_notes': 'media_notes',
+                'third_party_content': 'third_party_content',
+                'required_permissions': 'required_permissions',
+                'legal_notes': 'legal_notes',
+                'revenue_goals': 'revenue_goals',
+                'priority_features': 'priority_features',
+                'timeline_notes': 'timeline_notes',
+                'decision_makers': 'decision_makers',
+                'review_criteria': 'review_criteria',
+                'approval_notes': 'approval_notes',
+                'file_descriptions': 'file_descriptions',
+                'secret_notes': 'secret_notes'
+            };
+            
+            // AI Help handler with loading state
+            function handleAIHelp(fieldType, context = {}, buttonElement) {
+                // Get the button element if not provided
+                if (!buttonElement) {
+                    buttonElement = event?.target?.closest('.ai-help-btn') || event?.target;
+                }
+                
+                // Show loading state
+                if (buttonElement) {
+                    const originalHTML = buttonElement.innerHTML;
+                    buttonElement.classList.add('ai-loading');
+                    buttonElement.disabled = true;
+                    buttonElement.innerHTML = '<i class="fas fa-spinner mr-1"></i> AI Thinking...';
+                    
+                    // Store original HTML for restoration
+                    buttonElement.dataset.originalHtml = originalHTML;
+                }
+                
+                const payload = {
+                    field_type: fieldType,
+                    context: context
+                };
+                
+                fetch('/api/onboarding/ai-help/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrftoken
+                    },
+                    body: JSON.stringify(payload)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Remove loading state
+                    if (buttonElement) {
+                        buttonElement.classList.remove('ai-loading');
+                        buttonElement.disabled = false;
+                        if (buttonElement.dataset.originalHtml) {
+                            buttonElement.innerHTML = buttonElement.dataset.originalHtml;
+                        } else {
+                            buttonElement.innerHTML = '<i class="fas fa-magic mr-1"></i> AI Help';
+                        }
+                    }
+                    
+                    if (data.success && data.suggestions && data.suggestions.length > 0) {
+                        // Get the field ID from mapping
+                        const fieldId = aiFieldMapping[fieldType] || fieldType;
+                        
+                        // Find the target field in both desktop and mobile
+                        const { desktop, mobile } = getStepPanels();
+                        let desktopField = null;
+                        let mobileField = null;
+                        
+                        desktop.forEach(panel => {
+                            const field = panel.querySelector(`#${fieldId}, [name="${fieldId}"]`);
+                            if (field) desktopField = field;
+                        });
+                        
+                        mobile.forEach(panel => {
+                            const field = panel.querySelector(`#${fieldId}, [name="${fieldId}"]`);
+                            if (field) mobileField = field;
+                        });
+                        
+                        // Determine the suggestion value
+                        let suggestion = '';
+                        if (fieldType === 'outcomes' && data.suggestions.length > 1) {
+                            // For outcomes, join multiple suggestions with newlines
+                            suggestion = data.suggestions.join('\n');
+                        } else {
+                            // Use first suggestion for others
+                            suggestion = data.suggestions[0];
+                        }
+                        
+                        // Handle different field types
+                        const fillField = (field) => {
+                            if (!field) return;
+                            
+                            if (field.tagName === 'SELECT') {
+                                // For select dropdowns, try to find matching option
+                                const lowerSuggestion = suggestion.toLowerCase();
+                                const options = Array.from(field.options);
+                                
+                                // Try exact match first
+                                let matchedOption = options.find(opt => 
+                                    opt.value.toLowerCase() === lowerSuggestion ||
+                                    opt.text.toLowerCase() === lowerSuggestion
+                                );
+                                
+                                // Try partial match
+                                if (!matchedOption) {
+                                    matchedOption = options.find(opt => 
+                                        opt.text.toLowerCase().includes(lowerSuggestion) ||
+                                        lowerSuggestion.includes(opt.text.toLowerCase())
+                                    );
+                                }
+                                
+                                if (matchedOption) {
+                                    field.value = matchedOption.value;
+                                } else {
+                                    // If no match, try to set by value directly
+                                    field.value = suggestion;
+                                }
+                                
+                                // Trigger events
+                                field.dispatchEvent(new Event('input', { bubbles: true }));
+                                field.dispatchEvent(new Event('change', { bubbles: true }));
+                            } else if (field.type === 'radio') {
+                                // For radio buttons, find and check the matching one
+                                const fieldName = field.name;
+                                const lowerSuggestion = suggestion.toLowerCase();
+                                
+                                // Find all radio buttons with the same name
+                                const radioButtons = document.querySelectorAll(`input[type="radio"][name="${fieldName}"]`);
+                                
+                                radioButtons.forEach(radio => {
+                                    if (radio.value.toLowerCase() === lowerSuggestion) {
+                                        radio.checked = true;
+                                        radio.dispatchEvent(new Event('change', { bubbles: true }));
+                                        radio.dispatchEvent(new Event('input', { bubbles: true }));
+                                    }
+                                });
+                            } else {
+                                // For text inputs and textareas
+                                field.value = suggestion;
+                                field.dispatchEvent(new Event('input', { bubbles: true }));
+                                field.dispatchEvent(new Event('change', { bubbles: true }));
+                            }
+                        };
+                        
+                        // For radio buttons, we need to find the first radio in the group
+                        if (fieldType === 'visual_style') {
+                            const { desktop, mobile } = getStepPanels();
+                            let desktopRadio = null;
+                            let mobileRadio = null;
+                            
+                            desktop.forEach(panel => {
+                                const radio = panel.querySelector(`input[type="radio"][name="visual_style"]`);
+                                if (radio) desktopRadio = radio;
+                            });
+                            
+                            mobile.forEach(panel => {
+                                const radio = panel.querySelector(`input[type="radio"][name="visual_style"]`);
+                                if (radio) mobileRadio = radio;
+                            });
+                            
+                            fillField(desktopRadio);
+                            fillField(mobileRadio);
+                        } else {
+                            // Fill both desktop and mobile fields for other types
+                            fillField(desktopField);
+                            fillField(mobileField);
+                        }
+                        
+                        // Show success feedback
+                        if (buttonElement) {
+                            const originalBg = buttonElement.style.background;
+                            buttonElement.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
+                            buttonElement.innerHTML = '<i class="fas fa-check mr-1"></i> Done!';
+                            
+                            setTimeout(() => {
+                                buttonElement.style.background = originalBg || '';
+                                if (buttonElement.dataset.originalHtml) {
+                                    buttonElement.innerHTML = buttonElement.dataset.originalHtml;
+                                } else {
+                                    buttonElement.innerHTML = '<i class="fas fa-magic mr-1"></i> AI Help';
+                                }
+                            }, 2000);
+                        }
+                    } else {
+                        // No suggestions available
+                        if (buttonElement) {
+                            buttonElement.style.background = 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)';
+                            buttonElement.innerHTML = '<i class="fas fa-exclamation mr-1"></i> Try again';
+                            
+                            setTimeout(() => {
+                                buttonElement.style.background = '';
+                                if (buttonElement.dataset.originalHtml) {
+                                    buttonElement.innerHTML = buttonElement.dataset.originalHtml;
+                                } else {
+                                    buttonElement.innerHTML = '<i class="fas fa-magic mr-1"></i> AI Help';
+                                }
+                            }, 2000);
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error('AI help error:', error);
+                    
+                    // Remove loading state
+                    if (buttonElement) {
+                        buttonElement.classList.remove('ai-loading');
+                        buttonElement.disabled = false;
+                        if (buttonElement.dataset.originalHtml) {
+                            buttonElement.innerHTML = buttonElement.dataset.originalHtml;
+                        } else {
+                            buttonElement.innerHTML = '<i class="fas fa-magic mr-1"></i> AI Help';
+                        }
+                        
+                        // Show error feedback
+                        buttonElement.style.background = 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)';
+                        buttonElement.innerHTML = '<i class="fas fa-exclamation-triangle mr-1"></i> Error';
+                        
+                        setTimeout(() => {
+                            buttonElement.style.background = '';
+                            if (buttonElement.dataset.originalHtml) {
+                                buttonElement.innerHTML = buttonElement.dataset.originalHtml;
+                            } else {
+                                buttonElement.innerHTML = '<i class="fas fa-magic mr-1"></i> AI Help';
+                            }
+                        }, 2000);
+                    }
+                });
+            }
+            
+            // Wrapper to pass button element to handleAIHelp
+            window.handleAIHelp = function(fieldType, context = {}, buttonElement) {
+                // If buttonElement not provided, try to get it from event
+                if (!buttonElement && typeof event !== 'undefined') {
+                    buttonElement = event?.target?.closest('.ai-help-btn') || event?.target;
+                }
+                handleAIHelp(fieldType, context, buttonElement);
+            };
+            
+            // Attach event listeners
+            const nextBtn = document.getElementById('btn-next');
+            const nextBtnMobile = document.getElementById('btn-next-mobile');
+            
+            if (nextBtn) {
+                nextBtn.addEventListener('click', handleNextClick);
+            }
+            if (nextBtnMobile) {
+                nextBtnMobile.addEventListener('click', handleNextClick);
+            }
+            
+            document.getElementById('btn-back')?.addEventListener('click', handleBack);
+            document.getElementById('btn-back-mobile')?.addEventListener('click', handleBack);
+            document.getElementById('btn-save-exit')?.addEventListener('click', handleSaveExit);
+            document.getElementById('btn-save-exit-mobile')?.addEventListener('click', handleSaveExit);
+            
+            // Sidebar step click handlers
+            document.querySelectorAll('.step-item').forEach((item, index) => {
+                item.addEventListener('click', () => {
+                    const targetStep = index + 1;
+                    if (targetStep <= state.currentStep) {
+                        state.currentStep = targetStep;
+                        showStep(state.currentStep);
+                    }
+                });
+            });
+            
+            // Set up AI help button event listeners
+            function setupAIHelpButtons() {
+                document.querySelectorAll('.ai-help-btn[data-ai-field]').forEach(button => {
+                    // Remove existing listeners
+                    const newButton = button.cloneNode(true);
+                    button.parentNode.replaceChild(newButton, button);
+                    
+                    newButton.addEventListener('click', function() {
+                        const fieldType = this.getAttribute('data-ai-field');
+                        const contextData = this.getAttribute('data-ai-context');
+                        
+                        // Build context object
+                        let context = {};
+                        if (contextData) {
+                            try {
+                                const contextMap = JSON.parse(contextData);
+                                for (const [key, selector] of Object.entries(contextMap)) {
+                                    let value = null;
+                                    if (selector.includes(':checked')) {
+                                        // Radio button or checkbox
+                                        const checked = document.querySelector(selector);
+                                        value = checked ? checked.value : null;
+                                    } else if (selector.startsWith('#')) {
+                                        // ID selector
+                                        const elem = document.getElementById(selector.substring(1));
+                                        value = elem ? elem.value : null;
+                                    } else {
+                                        // Try as ID first, then querySelector
+                                        const elem = document.getElementById(selector) || document.querySelector(selector);
+                                        value = elem ? elem.value : null;
+                                    }
+                                    context[key] = value;
+                                }
+                            } catch (e) {
+                                console.log('Error parsing context:', e);
+                            }
+                        }
+                        
+                        // For specific fields, build context manually (handles missing fields gracefully)
+                        if (fieldType === 'media_notes') {
+                            context = {
+                                topic: (document.getElementById('course_topic')?.value || ''),
+                                on_camera: (document.querySelector('input[name="on_camera"]:checked')?.value || ''),
+                                audio_quality: (document.getElementById('audio_quality')?.value || '')
+                            };
+                        } else if (fieldType === 'structure_notes') {
+                            context = {
+                                topic: (document.getElementById('course_topic')?.value || ''),
+                                format: (document.querySelector('input[name="course_format"]:checked')?.value || ''),
+                                length: (document.getElementById('course_length')?.value || '')
+                            };
+                        } else if (fieldType === 'revenue_goals') {
+                            context = {
+                                topic: (document.getElementById('course_topic')?.value || ''),
+                                pricing: (document.querySelector('input[name="pricing_model"]:checked')?.value || ''),
+                                price: (document.getElementById('target_price')?.value || '')
+                            };
+                        } else if (fieldType === 'priority_features' || fieldType === 'timeline_notes') {
+                            context = {
+                                topic: (document.getElementById('course_topic')?.value || ''),
+                                urgency: (document.querySelector('input[name="urgency"]:checked')?.value || ''),
+                                launch_date: (document.getElementById('target_launch_date')?.value || '')
+                            };
+                        } else if (fieldType === 'approval_notes') {
+                            context = {
+                                topic: (document.getElementById('course_topic')?.value || ''),
+                                review_process: (document.getElementById('review_process')?.value || ''),
+                                criteria: (document.getElementById('review_criteria')?.value || '')
+                            };
+                        } else if (fieldType === 'decision_makers' || fieldType === 'review_criteria') {
+                            context = {
+                                topic: (document.getElementById('course_topic')?.value || ''),
+                                review_process: (document.getElementById('review_process')?.value || '')
+                            };
+                        } else if (fieldType === 'required_permissions') {
+                            context = {
+                                topic: (document.getElementById('course_topic')?.value || ''),
+                                third_party: (document.getElementById('third_party_content')?.value || '')
+                            };
+                        } else if (fieldType === 'legal_notes' || fieldType === 'third_party_content') {
+                            context = {
+                                topic: (document.getElementById('course_topic')?.value || ''),
+                                ownership: (document.querySelector('input[name="content_ownership"]:checked')?.value || '')
+                            };
+                        } else if (fieldType === 'materials_notes') {
+                            context = {
+                                topic: (document.getElementById('course_topic')?.value || ''),
+                                existing_content: (document.getElementById('existing_content')?.value || '')
+                            };
+                        } else if (fieldType === 'brand_description') {
+                            context = {
+                                topic: (document.getElementById('course_topic')?.value || ''),
+                                pitch: (document.getElementById('course_pitch')?.value || '')
+                            };
+                        } else if (fieldType === 'course_description') {
+                            context = {
+                                topic: (document.getElementById('course_topic')?.value || ''),
+                                pitch: (document.getElementById('course_pitch')?.value || ''),
+                                title: (document.getElementById('course_title')?.value || '')
+                            };
+                        } else if (fieldType === 'main_transformation') {
+                            context = {
+                                topic: (document.getElementById('course_topic')?.value || ''),
+                                pitch: (document.getElementById('course_pitch')?.value || ''),
+                                outcomes: (document.getElementById('learning_outcomes')?.value || '')
+                            };
+                        } else if (fieldType === 'skills_gained') {
+                            context = {
+                                topic: (document.getElementById('course_topic')?.value || ''),
+                                outcomes: (document.getElementById('learning_outcomes')?.value || '')
+                            };
+                        } else if (fieldType === 'prerequisites') {
+                            context = {
+                                topic: (document.getElementById('course_topic')?.value || ''),
+                                audience: (document.getElementById('target_audience')?.value || '')
+                            };
+                        } else if (fieldType === 'existing_content') {
+                            context = {
+                                topic: (document.getElementById('course_topic')?.value || '')
+                            };
+                        } else if (fieldType === 'secret_notes') {
+                            context = {
+                                topic: (document.getElementById('course_topic')?.value || ''),
+                                pitch: (document.getElementById('course_pitch')?.value || '')
+                            };
+                        } else if (fieldType === 'file_descriptions') {
+                            context = {
+                                topic: (document.getElementById('course_topic')?.value || '')
+                            };
+                        }
+                        
+                        handleAIHelp(fieldType, context, this);
+                    });
+                });
+            }
+            
+            // Sync inputs between desktop and mobile
+            function setupInputSync() {
+                const { desktop, mobile } = getStepPanels();
+                
+                // Sync from desktop to mobile
+                desktop.forEach((desktopPanel, index) => {
+                    const mobilePanel = mobile[index];
+                    if (!mobilePanel) return;
+                    
+                    const desktopInputs = desktopPanel.querySelectorAll('input, textarea, select');
+                    desktopInputs.forEach(input => {
+                        input.addEventListener('input', () => {
+                            syncInputs(input, mobilePanel);
+                        });
+                        input.addEventListener('change', () => {
+                            syncInputs(input, mobilePanel);
+                        });
+                    });
+                });
+                
+                // Sync from mobile to desktop
+                mobile.forEach((mobilePanel, index) => {
+                    const desktopPanel = desktop[index];
+                    if (!desktopPanel) return;
+                    
+                    const mobileInputs = mobilePanel.querySelectorAll('input, textarea, select');
+                    mobileInputs.forEach(input => {
+                        input.addEventListener('input', () => {
+                            syncInputs(input, desktopPanel);
+                        });
+                        input.addEventListener('change', () => {
+                            syncInputs(input, desktopPanel);
+                        });
+                    });
+                });
+            }
+            
+            // Skip/Jump Menu Functions
+            function toggleSkipMenu() {
+                const menu = document.getElementById('skip-menu');
+                if (menu) {
+                    menu.classList.toggle('hidden');
+                }
+            }
+            
+            function toggleSkipMenuMobile() {
+                const menu = document.getElementById('skip-menu-mobile');
+                if (menu) {
+                    menu.classList.toggle('hidden');
+                }
+            }
+            
+            function jumpToStep(stepNumber) {
+                // Close menus
+                const desktopMenu = document.getElementById('skip-menu');
+                const mobileMenu = document.getElementById('skip-menu-mobile');
+                if (desktopMenu) desktopMenu.classList.add('hidden');
+                if (mobileMenu) mobileMenu.classList.add('hidden');
+                
+                // Save current step data before jumping (without validation)
+                try {
+                    const stepData = collectStepData(state.currentStep);
+                    const stepNames = [
+                        'meet_you', 'course_idea', 'transformation_outcomes',
+                        'existing_materials', 'brand_vibe', 'course_structure',
+                        'media_content', 'legal_rights', 'platform_money',
+                        'timelines_priorities', 'reviews_decision_makers', 'final_uploads'
+                    ];
+                    const stepName = stepNames[state.currentStep - 1];
+                    if (stepName) {
+                        state.data[stepName] = stepData;
+                    }
+                } catch (e) {
+                    console.log('Could not save current step data:', e);
+                }
+                
+                // Jump to the selected step (bypass validation)
+                if (stepNumber >= 1 && stepNumber <= state.totalSteps) {
+                    state.currentStep = stepNumber;
+                    showStep(stepNumber, false); // Show preloader when jumping
+                }
+            }
+            
+            // Set up skip button event listeners
+            const skipBtn = document.getElementById('btn-skip');
+            const skipBtnMobile = document.getElementById('btn-skip-mobile');
+            
+            if (skipBtn) {
+                skipBtn.addEventListener('click', function() {
+                    toggleSkipMenu();
+                });
+            }
+            
+            if (skipBtnMobile) {
+                skipBtnMobile.addEventListener('click', function() {
+                    toggleSkipMenuMobile();
+                });
+            }
+            
+            // Set up jump step button event listeners
+            document.querySelectorAll('[data-jump-step]').forEach(button => {
+                button.addEventListener('click', function() {
+                    const stepNumber = parseInt(this.getAttribute('data-jump-step'));
+                    jumpToStep(stepNumber);
+                });
+            });
+            
+            // Close skip menus when clicking outside
+            document.addEventListener('click', function(event) {
+                const skipMenu = document.getElementById('skip-menu');
+                const skipMenuMobile = document.getElementById('skip-menu-mobile');
+                
+                if (skipBtn && skipMenu && !skipBtn.contains(event.target) && !skipMenu.contains(event.target)) {
+                    skipMenu.classList.add('hidden');
+                }
+                
+                if (skipBtnMobile && skipMenuMobile && !skipBtnMobile.contains(event.target) && !skipMenuMobile.contains(event.target)) {
+                    skipMenuMobile.classList.add('hidden');
+                }
+            });
+            
+            // Set up radio button visual feedback
+            function setupRadioButtons() {
+                // Handle radio button changes
+                document.querySelectorAll('input[type="radio"]').forEach(radio => {
+                    // Remove existing listeners to avoid duplicates
+                    const newRadio = radio.cloneNode(true);
+                    radio.parentNode.replaceChild(newRadio, radio);
+                    
+                    // Update on change
+                    newRadio.addEventListener('change', function() {
+                        updateRadioButtonVisuals(this);
+                    });
+                    
+                    // Update on click (immediate feedback)
+                    newRadio.addEventListener('click', function() {
+                        setTimeout(() => updateRadioButtonVisuals(this), 10);
+                    });
+                    
+                    // Update on load (for existing selections)
+                    updateRadioButtonVisuals(newRadio);
+                });
+            }
+            
+            function updateRadioButtonVisuals(radio) {
+                if (!radio || radio.type !== 'radio') return;
+                
+                const name = radio.name;
+                if (!name) return;
+                
+                // Remove selected class and checked class from all radios in the same group
+                document.querySelectorAll(`input[type="radio"][name="${name}"]`).forEach(r => {
+                    r.classList.remove('radio-checked');
+                    // Reset inline styles
+                    r.style.backgroundColor = '';
+                    r.style.borderColor = '';
+                    r.style.setProperty('background-color', '', 'important');
+                    r.style.setProperty('border-color', '', 'important');
+                    
+                    const lbl = r.closest('label');
+                    if (lbl) {
+                        lbl.classList.remove('radio-selected');
+                        lbl.style.backgroundColor = '';
+                        lbl.style.borderColor = '';
+                    }
+                });
+                
+                // Add selected class to checked radio and its label
+                if (radio.checked) {
+                    radio.classList.add('radio-checked');
+                    // Force style update with !important via setProperty
+                    radio.style.setProperty('background-color', '#3b82f6', 'important');
+                    radio.style.setProperty('border-color', '#3b82f6', 'important');
+                    
+                    // Add white dot via span element
+                    let dot = radio.parentElement.querySelector('.radio-dot');
+                    if (!dot) {
+                        dot = document.createElement('span');
+                        dot.className = 'radio-dot';
+                        dot.style.cssText = 'position: absolute; top: 50%; left: 0.5rem; transform: translateY(-50%); width: 6px; height: 6px; border-radius: 50%; background-color: white; pointer-events: none; z-index: 10;';
+                        const label = radio.closest('label');
+                        if (label) {
+                            label.style.position = 'relative';
+                            label.appendChild(dot);
+                        }
+                    }
+                    dot.style.display = 'block';
+                    
+                    const label = radio.closest('label');
+                    if (label) {
+                        label.classList.add('radio-selected');
+                        label.style.setProperty('background-color', 'rgba(59, 130, 246, 0.2)', 'important');
+                        label.style.setProperty('border-color', 'rgba(59, 130, 246, 0.6)', 'important');
+                    }
+                } else {
+                    // Remove dot if exists
+                    const dot = radio.nextElementSibling;
+                    if (dot && dot.classList.contains('radio-dot')) {
+                        dot.style.display = 'none';
+                    }
+                }
+            }
+            
+            
+            // Auto-save on input changes (debounced)
+            let autosaveTimeout;
+            function setupAutosave() {
+                const { desktop, mobile } = getStepPanels();
+                const allPanels = [...desktop, ...mobile];
+                
+                allPanels.forEach(panel => {
+                    if (!panel) return;
+                    const inputs = panel.querySelectorAll('input, textarea, select');
+                    inputs.forEach(input => {
+                        input.addEventListener('input', function() {
+                            // Clear existing timeout
+                            clearTimeout(autosaveTimeout);
+                            
+                            // Save after 2 seconds of no typing
+                            autosaveTimeout = setTimeout(() => {
+                                const stepPanel = input.closest('.step-panel');
+                                if (stepPanel) {
+                                    const stepNum = parseInt(stepPanel.getAttribute('data-step'));
+                                    if (stepNum) {
+                                        // Silently save without validation
+                                        try {
+                                            const stepData = collectStepData(stepNum);
+                                            const stepNames = [
+                                                'meet_you', 'course_idea', 'transformation_outcomes',
+                                                'existing_materials', 'brand_vibe', 'course_structure',
+                                                'media_content', 'legal_rights', 'platform_money',
+                                                'timelines_priorities', 'reviews_decision_makers', 'final_uploads'
+                                            ];
+                                            const stepName = stepNames[stepNum - 1];
+                                            if (stepName) {
+                                                state.data[stepName] = stepData;
+                                                saveStepData(stepNum, false);
+                                            }
+                                        } catch (e) {
+                                            console.log('Autosave error:', e);
+                                        }
+                                    }
+                                }
+                            }, 2000);
+                        });
+                        
+                        input.addEventListener('change', function() {
+                            // Save immediately on change (for selects, checkboxes, radios)
+                            clearTimeout(autosaveTimeout);
+                            const stepPanel = input.closest('.step-panel');
+                            if (stepPanel) {
+                                const stepNum = parseInt(stepPanel.getAttribute('data-step'));
+                                if (stepNum) {
+                                    setTimeout(() => {
+                                        try {
+                                            const stepData = collectStepData(stepNum);
+                                            const stepNames = [
+                                                'meet_you', 'course_idea', 'transformation_outcomes',
+                                                'existing_materials', 'brand_vibe', 'course_structure',
+                                                'media_content', 'legal_rights', 'platform_money',
+                                                'timelines_priorities', 'reviews_decision_makers', 'final_uploads'
+                                            ];
+                                            const stepName = stepNames[stepNum - 1];
+                                            if (stepName) {
+                                                state.data[stepName] = stepData;
+                                                saveStepData(stepNum, false);
+                                            }
+                                        } catch (e) {
+                                            console.log('Autosave error:', e);
+                                        }
+                                    }, 500);
+                                }
+                            }
+                        });
+                    });
+                });
+            }
+            
+            // Initialize
+            showStep(1);
+            setupInputSync();
+            setupRadioButtons();
+            setupAutosave();
+            setupAIHelpButtons();
+        })();
+    </script>
+</body>
+</html>

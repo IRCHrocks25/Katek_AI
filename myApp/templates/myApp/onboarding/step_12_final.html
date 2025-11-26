@@ -1,0 +1,67 @@
+<section class="step-panel" data-step="12">
+    <div class="mb-6">
+        <div class="text-xs uppercase tracking-wider text-blue-400 mb-2">Step 12 of 12</div>
+        <h2 class="text-3xl font-bold gradient-text mb-2">Final Uploads & Secret Notes</h2>
+        <p class="text-slate-400">Any final files to upload? Any secret notes or additional context?</p>
+    </div>
+    
+    <div class="space-y-6">
+        <div class="input-card rounded-lg p-4">
+            <label class="block text-sm font-medium text-slate-300 mb-2">
+                File Uploads
+            </label>
+            <div class="border-2 border-dashed border-slate-600/50 rounded-lg p-6 text-center">
+                <i class="fas fa-cloud-upload-alt text-4xl text-slate-500 mb-3"></i>
+                <p class="text-sm text-slate-400 mb-2">Drag and drop files here, or click to browse</p>
+                <input type="file" name="file_uploads" id="file_uploads" multiple
+                       class="hidden">
+                <button type="button" onclick="document.getElementById('file_uploads').click()" 
+                        class="px-4 py-2 bg-slate-800/50 hover:bg-slate-700/50 border border-slate-600/50 rounded-lg text-slate-300 text-sm transition-all">
+                    Select Files
+                </button>
+                <p class="text-xs text-slate-500 mt-2">Max file size: 50MB per file</p>
+            </div>
+        </div>
+        
+        <div class="input-card rounded-lg p-4">
+            <div class="flex items-center justify-between mb-2">
+                <label class="block text-sm font-medium text-slate-300">
+                    File Descriptions
+                </label>
+                <button type="button" class="ai-help-btn px-3 py-1 bg-gradient-to-r from-pink-500/20 to-pink-600/20 border border-pink-500/30 rounded-lg text-xs text-pink-300 hover:text-pink-200 transition-all" data-ai-field="file_descriptions">
+                    <i class="fas fa-magic mr-1"></i> AI Help
+                </button>
+            </div>
+            <textarea name="file_descriptions" id="file_descriptions" rows="3"
+                      class="w-full bg-slate-800/50 border border-slate-600/50 rounded-lg px-4 py-2 text-slate-100 focus:outline-none focus:border-blue-500/50" 
+                      placeholder="Describe what each file contains and how it should be used..."></textarea>
+        </div>
+        
+        <div class="input-card rounded-lg p-4">
+            <div class="flex items-center justify-between mb-2">
+                <label class="block text-sm font-medium text-slate-300">
+                    Secret Notes / Additional Context
+                </label>
+                <button type="button" class="ai-help-btn px-3 py-1 bg-gradient-to-r from-pink-500/20 to-pink-600/20 border border-pink-500/30 rounded-lg text-xs text-pink-300 hover:text-pink-200 transition-all" data-ai-field="secret_notes">
+                    <i class="fas fa-magic mr-1"></i> AI Help
+                </button>
+            </div>
+            <textarea name="secret_notes" id="secret_notes" rows="5"
+                      class="w-full bg-slate-800/50 border border-slate-600/50 rounded-lg px-4 py-2 text-slate-100 focus:outline-none focus:border-blue-500/50" 
+                      placeholder="Any additional context, concerns, special instructions, or notes that don't fit elsewhere..."></textarea>
+            <p class="text-xs text-slate-500 mt-2">This information will only be visible to the course creation team</p>
+        </div>
+        
+        <div class="input-card rounded-lg p-4 bg-gradient-to-r from-blue-500/10 via-violet-500/10 to-pink-500/10 border-blue-500/30">
+            <h3 class="text-lg font-semibold text-slate-200 mb-2">Almost Done!</h3>
+            <p class="text-sm text-slate-300 mb-4">
+                You've completed all 12 steps of the onboarding process. Click "Finish & Submit" below to finalize your course blueprint.
+            </p>
+            <div class="flex items-start gap-2 text-sm text-slate-400">
+                <i class="fas fa-info-circle mt-0.5"></i>
+                <p>Your data will be saved and our team will review your course blueprint. We'll be in touch soon!</p>
+            </div>
+        </div>
+    </div>
+</section>
+

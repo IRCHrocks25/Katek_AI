@@ -1,0 +1,67 @@
+<section class="step-panel" data-step="11">
+    <div class="mb-6">
+        <div class="text-xs uppercase tracking-wider text-blue-400 mb-2">Step 11 of 12</div>
+        <h2 class="text-3xl font-bold gradient-text mb-2">Reviews & Decision-Makers</h2>
+        <p class="text-slate-400">Who needs to approve this course? What's the review process?</p>
+    </div>
+    
+    <div class="space-y-6">
+        <div class="input-card rounded-lg p-4">
+            <div class="flex items-center justify-between mb-2">
+                <label class="block text-sm font-medium text-slate-300">
+                    Decision-Makers/Reviewers
+                </label>
+                <button type="button" class="ai-help-btn px-3 py-1 bg-gradient-to-r from-pink-500/20 to-pink-600/20 border border-pink-500/30 rounded-lg text-xs text-pink-300 hover:text-pink-200 transition-all" data-ai-field="decision_makers">
+                    <i class="fas fa-magic mr-1"></i> AI Help
+                </button>
+            </div>
+            <textarea name="decision_makers" id="decision_makers" rows="3"
+                      class="w-full bg-slate-800/50 border border-slate-600/50 rounded-lg px-4 py-2 text-slate-100 focus:outline-none focus:border-blue-500/50" 
+                      placeholder="List the people who need to review or approve the course..."></textarea>
+        </div>
+        
+        <div class="input-card rounded-lg p-4">
+            <label class="block text-sm font-medium text-slate-300 mb-2">
+                Review Process
+            </label>
+            <select name="review_process" id="review_process"
+                    class="w-full bg-slate-800/50 border border-slate-600/50 rounded-lg px-4 py-2 text-slate-100 focus:outline-none focus:border-blue-500/50">
+                <option value="">Select process...</option>
+                <option value="single">Single person approval</option>
+                <option value="team">Team review</option>
+                <option value="committee">Committee approval</option>
+                <option value="iterative">Iterative feedback loops</option>
+                <option value="none">No formal review process</option>
+            </select>
+        </div>
+        
+        <div class="input-card rounded-lg p-4">
+            <div class="flex items-center justify-between mb-2">
+                <label class="block text-sm font-medium text-slate-300">
+                    Review Criteria
+                </label>
+                <button type="button" class="ai-help-btn px-3 py-1 bg-gradient-to-r from-pink-500/20 to-pink-600/20 border border-pink-500/30 rounded-lg text-xs text-pink-300 hover:text-pink-200 transition-all" data-ai-field="review_criteria">
+                    <i class="fas fa-magic mr-1"></i> AI Help
+                </button>
+            </div>
+            <textarea name="review_criteria" id="review_criteria" rows="3"
+                      class="w-full bg-slate-800/50 border border-slate-600/50 rounded-lg px-4 py-2 text-slate-100 focus:outline-none focus:border-blue-500/50" 
+                      placeholder="What aspects will reviewers be checking? (accuracy, tone, completeness, etc.)"></textarea>
+        </div>
+        
+        <div class="input-card rounded-lg p-4">
+            <div class="flex items-center justify-between mb-2">
+                <label class="block text-sm font-medium text-slate-300">
+                    Approval Notes
+                </label>
+                <button type="button" class="ai-help-btn px-3 py-1 bg-gradient-to-r from-pink-500/20 to-pink-600/20 border border-pink-500/30 rounded-lg text-xs text-pink-300 hover:text-pink-200 transition-all" data-ai-field="approval_notes">
+                    <i class="fas fa-magic mr-1"></i> AI Help
+                </button>
+            </div>
+            <textarea name="approval_notes" id="approval_notes" rows="3"
+                      class="w-full bg-slate-800/50 border border-slate-600/50 rounded-lg px-4 py-2 text-slate-100 focus:outline-none focus:border-blue-500/50" 
+                      placeholder="Any specific requirements or concerns about the review/approval process..."></textarea>
+        </div>
+    </div>
+</section>
+

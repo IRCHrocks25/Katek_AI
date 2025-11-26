@@ -1,0 +1,75 @@
+<section class="step-panel" data-step="2">
+    <div class="mb-6">
+        <div class="text-xs uppercase tracking-wider text-blue-400 mb-2">Step 2 of 12</div>
+        <h2 class="text-3xl font-bold gradient-text mb-2">Your Course Idea</h2>
+        <p class="text-slate-400">Tell us about the course you want to create. What's the core concept?</p>
+    </div>
+    
+    <div class="space-y-6">
+        <div class="input-card rounded-lg p-4">
+            <div class="flex items-center justify-between mb-2">
+                <label class="block text-sm font-medium text-slate-300">
+                    Course Title <span class="text-red-400">*</span>
+                </label>
+                <button type="button" onclick="handleAIHelp('course_title', {topic: document.getElementById('course_topic')?.value}, this)" 
+                        class="ai-help-btn px-3 py-1 bg-gradient-to-r from-pink-500/20 to-pink-600/20 border border-pink-500/30 rounded-lg text-xs text-pink-300 hover:text-pink-200 transition-all">
+                    <i class="fas fa-magic mr-1"></i> AI Help
+                </button>
+            </div>
+            <input type="text" name="course_title" id="course_title" data-required="true" data-ai-field="course_title"
+                   class="w-full bg-slate-800/50 border border-slate-600/50 rounded-lg px-4 py-2 text-slate-100 focus:outline-none focus:border-blue-500/50" 
+                   placeholder="e.g., Master Python Programming in 30 Days">
+            <p class="text-xs text-slate-500 mt-2">A clear, compelling title that captures what students will learn</p>
+        </div>
+        
+        <div class="input-card rounded-lg p-4">
+            <label class="block text-sm font-medium text-slate-300 mb-2">
+                Course Topic/Subject <span class="text-red-400">*</span>
+            </label>
+            <input type="text" name="course_topic" id="course_topic" data-required="true"
+                   class="w-full bg-slate-800/50 border border-slate-600/50 rounded-lg px-4 py-2 text-slate-100 focus:outline-none focus:border-blue-500/50" 
+                   placeholder="e.g., Python Programming, Digital Marketing, Photography">
+        </div>
+        
+        <div class="input-card rounded-lg p-4">
+            <div class="flex items-center justify-between mb-2">
+                <label class="block text-sm font-medium text-slate-300">
+                    One-Sentence Pitch <span class="text-red-400">*</span>
+                </label>
+                <button type="button" onclick="handleAIHelp('pitch', {topic: document.getElementById('course_topic')?.value, audience: document.getElementById('target_audience')?.value}, this)" 
+                        class="ai-help-btn px-3 py-1 bg-gradient-to-r from-pink-500/20 to-pink-600/20 border border-pink-500/30 rounded-lg text-xs text-pink-300 hover:text-pink-200 transition-all">
+                    <i class="fas fa-magic mr-1"></i> AI Help
+                </button>
+            </div>
+            <textarea name="course_pitch" id="course_pitch" data-required="true" rows="3"
+                      class="w-full bg-slate-800/50 border border-slate-600/50 rounded-lg px-4 py-2 text-slate-100 focus:outline-none focus:border-blue-500/50" 
+                      placeholder="This course helps [who] to [result] without [pain]."></textarea>
+            <p class="text-xs text-slate-500 mt-2">Template: "This course helps [who] to [result] without [pain]."</p>
+        </div>
+        
+        <div class="input-card rounded-lg p-4">
+            <label class="block text-sm font-medium text-slate-300 mb-2">
+                Target Audience <span class="text-red-400">*</span>
+            </label>
+            <input type="text" name="target_audience" id="target_audience" data-required="true"
+                   class="w-full bg-slate-800/50 border border-slate-600/50 rounded-lg px-4 py-2 text-slate-100 focus:outline-none focus:border-blue-500/50" 
+                   placeholder="e.g., Beginners, Professionals, Entrepreneurs">
+        </div>
+        
+        <div class="input-card rounded-lg p-4">
+            <div class="flex items-center justify-between mb-2">
+                <label class="block text-sm font-medium text-slate-300">
+                    Course Description
+                </label>
+                <button type="button" onclick="handleAIHelp('course_description', {topic: document.getElementById('course_topic')?.value, pitch: document.getElementById('course_pitch')?.value, title: document.getElementById('course_title')?.value}, this)" 
+                        class="ai-help-btn px-3 py-1 bg-gradient-to-r from-pink-500/20 to-pink-600/20 border border-pink-500/30 rounded-lg text-xs text-pink-300 hover:text-pink-200 transition-all">
+                    <i class="fas fa-magic mr-1"></i> AI Help
+                </button>
+            </div>
+            <textarea name="course_description" id="course_description" rows="5"
+                      class="w-full bg-slate-800/50 border border-slate-600/50 rounded-lg px-4 py-2 text-slate-100 focus:outline-none focus:border-blue-500/50" 
+                      placeholder="A detailed description of what the course covers..."></textarea>
+        </div>
+    </div>
+</section>
+

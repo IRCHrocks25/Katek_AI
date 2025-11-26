@@ -1,0 +1,102 @@
+<section class="step-panel" data-step="5">
+    <div class="mb-6">
+        <div class="text-xs uppercase tracking-wider text-blue-400 mb-2">Step 5 of 12</div>
+        <h2 class="text-3xl font-bold gradient-text mb-2">Brand & Vibe</h2>
+        <p class="text-slate-400">What's the personality and tone of your course? How should it feel?</p>
+    </div>
+    
+    <div class="space-y-6">
+        <div class="input-card rounded-lg p-4">
+            <div class="flex items-center justify-between mb-2">
+                <label class="block text-sm font-medium text-slate-300">
+                    Brand Description
+                </label>
+                <button type="button" onclick="handleAIHelp('brand_description', {topic: document.getElementById('course_topic')?.value, pitch: document.getElementById('course_pitch')?.value}, this)" 
+                        class="ai-help-btn px-3 py-1 bg-gradient-to-r from-pink-500/20 to-pink-600/20 border border-pink-500/30 rounded-lg text-xs text-pink-300 hover:text-pink-200 transition-all">
+                    <i class="fas fa-magic mr-1"></i> AI Help
+                </button>
+            </div>
+            <textarea name="brand_description" id="brand_description" rows="4"
+                      class="w-full bg-slate-800/50 border border-slate-600/50 rounded-lg px-4 py-2 text-slate-100 focus:outline-none focus:border-blue-500/50" 
+                      placeholder="Describe your brand personality, values, and style..."></textarea>
+        </div>
+        
+        <div class="input-card rounded-lg p-4">
+            <div class="flex items-center justify-between mb-2">
+                <label class="block text-sm font-medium text-slate-300">
+                    Brand Tone <span class="text-red-400">*</span>
+                </label>
+                <button type="button" onclick="handleAIHelp('tone', {brand: document.getElementById('brand_description')?.value}, this)" 
+                        class="ai-help-btn px-3 py-1 bg-gradient-to-r from-pink-500/20 to-pink-600/20 border border-pink-500/30 rounded-lg text-xs text-pink-300 hover:text-pink-200 transition-all">
+                    <i class="fas fa-magic mr-1"></i> AI Help
+                </button>
+            </div>
+            <select name="brand_tone" id="brand_tone" data-required="true"
+                    class="w-full bg-slate-800/50 border border-slate-600/50 rounded-lg px-4 py-2 text-slate-100 focus:outline-none focus:border-blue-500/50">
+                <option value="">Select a tone...</option>
+                <option value="professional">Professional</option>
+                <option value="friendly">Friendly & Approachable</option>
+                <option value="casual">Casual & Conversational</option>
+                <option value="authoritative">Authoritative & Expert</option>
+                <option value="inspiring">Inspiring & Motivational</option>
+                <option value="playful">Playful & Fun</option>
+                <option value="serious">Serious & Academic</option>
+            </select>
+        </div>
+        
+        <div class="input-card rounded-lg p-4">
+            <div class="flex items-center justify-between mb-2">
+                <label class="block text-sm font-medium text-slate-300">
+                    Course Tagline
+                </label>
+                <button type="button" onclick="handleAIHelp('taglines', {topic: document.getElementById('course_topic')?.value, tone: document.getElementById('brand_tone')?.value}, this)" 
+                        class="ai-help-btn px-3 py-1 bg-gradient-to-r from-pink-500/20 to-pink-600/20 border border-pink-500/30 rounded-lg text-xs text-pink-300 hover:text-pink-200 transition-all">
+                    <i class="fas fa-magic mr-1"></i> AI Help
+                </button>
+            </div>
+            <input type="text" name="course_tagline" id="course_tagline"
+                   class="w-full bg-slate-800/50 border border-slate-600/50 rounded-lg px-4 py-2 text-slate-100 focus:outline-none focus:border-blue-500/50" 
+                   placeholder="A short, memorable phrase that captures your course">
+        </div>
+        
+        <div class="input-card rounded-lg p-4">
+            <label class="block text-sm font-medium text-slate-300 mb-2">
+                Color Preferences
+            </label>
+            <input type="text" name="color_preferences" id="color_preferences"
+                   class="w-full bg-slate-800/50 border border-slate-600/50 rounded-lg px-4 py-2 text-slate-100 focus:outline-none focus:border-blue-500/50" 
+                   placeholder="e.g., Blue and white, Warm colors, Brand colors">
+        </div>
+        
+        <div class="input-card rounded-lg p-4">
+            <div class="flex items-center justify-between mb-2">
+                <label class="block text-sm font-medium text-slate-300">
+                    Visual Style
+                </label>
+                <button type="button" onclick="handleAIHelp('visual_style', {brand: document.getElementById('brand_description')?.value, tone: document.getElementById('brand_tone')?.value}, this)" 
+                        class="ai-help-btn px-3 py-1 bg-gradient-to-r from-pink-500/20 to-pink-600/20 border border-pink-500/30 rounded-lg text-xs text-pink-300 hover:text-pink-200 transition-all">
+                    <i class="fas fa-magic mr-1"></i> AI Help
+                </button>
+            </div>
+            <div class="grid grid-cols-2 gap-3 mt-2">
+                <label class="flex items-center gap-3 p-3 rounded-lg border border-slate-600/50 bg-slate-800/30 hover:bg-slate-800/50 hover:border-blue-500/50 cursor-pointer transition-all">
+                    <input type="radio" name="visual_style" value="modern">
+                    <span class="text-sm text-slate-300 flex-1">Modern & Minimalist</span>
+                </label>
+                <label class="flex items-center gap-3 p-3 rounded-lg border border-slate-600/50 bg-slate-800/30 hover:bg-slate-800/50 hover:border-blue-500/50 cursor-pointer transition-all">
+                    <input type="radio" name="visual_style" value="classic">
+                    <span class="text-sm text-slate-300 flex-1">Classic & Traditional</span>
+                </label>
+                <label class="flex items-center gap-3 p-3 rounded-lg border border-slate-600/50 bg-slate-800/30 hover:bg-slate-800/50 hover:border-blue-500/50 cursor-pointer transition-all">
+                    <input type="radio" name="visual_style" value="bold">
+                    <span class="text-sm text-slate-300 flex-1">Bold & Vibrant</span>
+                </label>
+                <label class="flex items-center gap-3 p-3 rounded-lg border border-slate-600/50 bg-slate-800/30 hover:bg-slate-800/50 hover:border-blue-500/50 cursor-pointer transition-all">
+                    <input type="radio" name="visual_style" value="elegant">
+                    <span class="text-sm text-slate-300 flex-1">Elegant & Refined</span>
+                </label>
+            </div>
+        </div>
+    </div>
+</section>
+

@@ -1,0 +1,101 @@
+<section class="step-panel" data-step="9">
+    <div class="mb-6">
+        <div class="text-xs uppercase tracking-wider text-blue-400 mb-2">Step 9 of 12</div>
+        <h2 class="text-3xl font-bold gradient-text mb-2">Platform & Money</h2>
+        <p class="text-slate-400">Where will this course be distributed? What's the pricing strategy?</p>
+    </div>
+    
+    <div class="space-y-6">
+        <div class="input-card rounded-lg p-4">
+            <label class="block text-sm font-medium text-slate-300 mb-2">
+                Distribution Platform(s) <span class="text-red-400">*</span>
+            </label>
+            <div class="flex flex-wrap gap-3 mt-2">
+                <label class="flex items-center gap-2 cursor-pointer">
+                    <input type="checkbox" name="platform" value="udemy" class="rounded">
+                    <span class="text-sm text-slate-300">Udemy</span>
+                </label>
+                <label class="flex items-center gap-2 cursor-pointer">
+                    <input type="checkbox" name="platform" value="coursera" class="rounded">
+                    <span class="text-sm text-slate-300">Coursera</span>
+                </label>
+                <label class="flex items-center gap-2 cursor-pointer">
+                    <input type="checkbox" name="platform" value="teachable" class="rounded">
+                    <span class="text-sm text-slate-300">Teachable</span>
+                </label>
+                <label class="flex items-center gap-2 cursor-pointer">
+                    <input type="checkbox" name="platform" value="thinkific" class="rounded">
+                    <span class="text-sm text-slate-300">Thinkific</span>
+                </label>
+                <label class="flex items-center gap-2 cursor-pointer">
+                    <input type="checkbox" name="platform" value="custom" class="rounded">
+                    <span class="text-sm text-slate-300">Custom Website</span>
+                </label>
+                <label class="flex items-center gap-2 cursor-pointer">
+                    <input type="checkbox" name="platform" value="other" class="rounded">
+                    <span class="text-sm text-slate-300">Other</span>
+                </label>
+            </div>
+        </div>
+        
+        <div class="input-card rounded-lg p-4">
+            <label class="block text-sm font-medium text-slate-300 mb-2">
+                Pricing Model <span class="text-red-400">*</span>
+            </label>
+            <div class="space-y-3 mt-2">
+                <label class="flex items-center gap-3 p-3 border border-slate-600/50 rounded-lg cursor-pointer hover:border-blue-500/50 transition-all">
+                    <input type="radio" name="pricing_model" value="free" data-required="true" class="rounded">
+                    <div>
+                        <div class="text-sm font-medium text-slate-200">Free</div>
+                        <div class="text-xs text-slate-400">Course will be free to access</div>
+                    </div>
+                </label>
+                <label class="flex items-center gap-3 p-3 border border-slate-600/50 rounded-lg cursor-pointer hover:border-blue-500/50 transition-all">
+                    <input type="radio" name="pricing_model" value="one_time" data-required="true" class="rounded">
+                    <div>
+                        <div class="text-sm font-medium text-slate-200">One-Time Purchase</div>
+                        <div class="text-xs text-slate-400">Single payment for lifetime access</div>
+                    </div>
+                </label>
+                <label class="flex items-center gap-3 p-3 border border-slate-600/50 rounded-lg cursor-pointer hover:border-blue-500/50 transition-all">
+                    <input type="radio" name="pricing_model" value="subscription" data-required="true" class="rounded">
+                    <div>
+                        <div class="text-sm font-medium text-slate-200">Subscription</div>
+                        <div class="text-xs text-slate-400">Monthly or annual recurring payment</div>
+                    </div>
+                </label>
+                <label class="flex items-center gap-3 p-3 border border-slate-600/50 rounded-lg cursor-pointer hover:border-blue-500/50 transition-all">
+                    <input type="radio" name="pricing_model" value="tbd" data-required="true" class="rounded">
+                    <div>
+                        <div class="text-sm font-medium text-slate-200">To Be Determined</div>
+                        <div class="text-xs text-slate-400">We'll decide later</div>
+                    </div>
+                </label>
+            </div>
+        </div>
+        
+        <div class="input-card rounded-lg p-4">
+            <label class="block text-sm font-medium text-slate-300 mb-2">
+                Target Price Range
+            </label>
+            <input type="text" name="target_price" id="target_price"
+                   class="w-full bg-slate-800/50 border border-slate-600/50 rounded-lg px-4 py-2 text-slate-100 focus:outline-none focus:border-blue-500/50" 
+                   placeholder="e.g., $49-$99, $199, Free">
+        </div>
+        
+        <div class="input-card rounded-lg p-4">
+            <div class="flex items-center justify-between mb-2">
+                <label class="block text-sm font-medium text-slate-300">
+                    Revenue Goals
+                </label>
+                <button type="button" class="ai-help-btn px-3 py-1 bg-gradient-to-r from-pink-500/20 to-pink-600/20 border border-pink-500/30 rounded-lg text-xs text-pink-300 hover:text-pink-200 transition-all" data-ai-field="revenue_goals">
+                    <i class="fas fa-magic mr-1"></i> AI Help
+                </button>
+            </div>
+            <textarea name="revenue_goals" id="revenue_goals" rows="2"
+                      class="w-full bg-slate-800/50 border border-slate-600/50 rounded-lg px-4 py-2 text-slate-100 focus:outline-none focus:border-blue-500/50" 
+                      placeholder="What are your revenue or business goals for this course?"></textarea>
+        </div>
+    </div>
+</section>
+

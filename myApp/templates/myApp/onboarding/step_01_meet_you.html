@@ -1,0 +1,83 @@
+<section class="step-panel" data-step="1">
+    <div class="mb-6">
+        <div class="text-xs uppercase tracking-wider text-blue-400 mb-2">Step 1 of 12</div>
+        <h2 class="text-3xl font-bold gradient-text mb-2">Meet You</h2>
+        <p class="text-slate-400">Let's start by getting to know you and how we can reach you.</p>
+    </div>
+    
+    <div class="space-y-6">
+        <!-- Group 1: Who are you? -->
+        <div>
+            <h3 class="text-lg font-semibold text-slate-200 mb-4">Who are you?</h3>
+            <div class="space-y-4">
+                <div class="input-card rounded-lg p-4">
+                    <label class="block text-sm font-medium text-slate-300 mb-2">
+                        Full Name <span class="text-red-400">*</span>
+                    </label>
+                    <input type="text" name="full_name" id="full_name" data-required="true" 
+                           class="w-full bg-slate-800/50 border border-slate-600/50 rounded-lg px-4 py-2 text-slate-100 focus:outline-none focus:border-blue-500/50" 
+                           placeholder="John Doe">
+                </div>
+                
+                <div class="input-card rounded-lg p-4">
+                    <label class="block text-sm font-medium text-slate-300 mb-2">
+                        Brand/Company Name
+                    </label>
+                    <input type="text" name="brand_name" id="brand_name" 
+                           class="w-full bg-slate-800/50 border border-slate-600/50 rounded-lg px-4 py-2 text-slate-100 focus:outline-none focus:border-blue-500/50" 
+                           placeholder="Acme Inc.">
+                </div>
+                
+                <div class="input-card rounded-lg p-4">
+                    <label class="block text-sm font-medium text-slate-300 mb-2">
+                        Website (Optional)
+                    </label>
+                    <input type="text" name="website" id="website" 
+                           class="w-full bg-slate-800/50 border border-slate-600/50 rounded-lg px-4 py-2 text-slate-100 focus:outline-none focus:border-blue-500/50" 
+                           placeholder="https://example.com or leave blank if you don't have one">
+                    <p class="text-xs text-slate-500 mt-2">
+                        <i class="fas fa-info-circle mr-1"></i>
+                        If you don't have a website yet, you can leave this blank or type "N/A". We'll help you create one if needed!
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Group 2: How do we contact you? -->
+        <div>
+            <h3 class="text-lg font-semibold text-slate-200 mb-4">How do we contact you?</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="input-card rounded-lg p-4">
+                    <label class="block text-sm font-medium text-slate-300 mb-2">
+                        Email <span class="text-red-400">*</span>
+                    </label>
+                    <input type="email" name="email" id="email" data-required="true" 
+                           class="w-full bg-slate-800/50 border border-slate-600/50 rounded-lg px-4 py-2 text-slate-100 focus:outline-none focus:border-blue-500/50" 
+                           placeholder="john@example.com">
+                </div>
+                
+                <div class="input-card rounded-lg p-4">
+                    <label class="block text-sm font-medium text-slate-300 mb-2">
+                        Phone Number
+                    </label>
+                    <input type="tel" name="phone" id="phone" 
+                           class="w-full bg-slate-800/50 border border-slate-600/50 rounded-lg px-4 py-2 text-slate-100 focus:outline-none focus:border-blue-500/50" 
+                           placeholder="+1 (555) 123-4567">
+                </div>
+            </div>
+            
+            <div class="input-card rounded-lg p-4 mt-4">
+                <label class="block text-sm font-medium text-slate-300 mb-2">
+                    Preferred Contact Method
+                </label>
+                <select name="preferred_contact" id="preferred_contact" 
+                        class="w-full bg-slate-800/50 border border-slate-600/50 rounded-lg px-4 py-2 text-slate-100 focus:outline-none focus:border-blue-500/50">
+                    <option value="email">Email</option>
+                    <option value="phone">Phone</option>
+                    <option value="both">Both</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</section>
+

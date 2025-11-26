@@ -1,0 +1,337 @@
+{% extends 'myApp/dashboard/base.html' %}
+{% load static %}
+{% load dashboard_tags %}
+
+{% block title %}{{ session.course_title|default:"Session" }} - KaTek AI Studio Backend{% endblock %}
+{% block page_title %}{{ session.course_title|default:"Untitled Course" }}{% endblock %}
+{% block page_subtitle %}Session #{{ session.id }}{% endblock %}
+
+{% block content %}
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+    <!-- Left Column: Session Meta -->
+    <div class="lg:col-span-3 space-y-6">
+        <!-- Session Card -->
+        <div class="bg-slate-800/50 border border-slate-700/50 rounded-lg p-6">
+            <div class="flex items-center mb-4">
+                <div class="w-16 h-16 rounded-full bg-gradient-to-r from-blue-500 to-pink-500 flex items-center justify-center text-white font-bold text-xl">
+                    {% if session.client %}{{ session.client.full_name|first|upper }}{% else %}?{% endif %}
+                </div>
+                <div class="ml-4 flex-1 min-w-0">
+                    <h3 class="text-lg font-semibold text-slate-200 truncate">
+                        {% if session.client %}{{ session.client.full_name }}{% else %}Anonymous{% endif %}
+                    </h3>
+                    <p class="text-sm text-slate-400 truncate">
+                        {% if session.client %}{{ session.client.email }}{% else %}No email{% endif %}
+                    </p>
+                </div>
+            </div>
+            
+            <div class="space-y-4">
+                <!-- Status -->
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1">Status</label>
+                    <select id="status-select" class="w-full bg-slate-700/50 border border-slate-600/50 rounded-lg px-3 py-2 text-slate-100 focus:outline-none focus:border-blue-500/50">
+                        {% for value, label in session.STATUS_CHOICES %}
+                        <option value="{{ value }}" {% if session.status == value %}selected{% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <!-- Assignee -->
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1">Assignee</label>
+                    <select id="assignee-select" class="w-full bg-slate-700/50 border border-slate-600/50 rounded-lg px-3 py-2 text-slate-100 focus:outline-none focus:border-blue-500/50">
+                        <option value="">Unassigned</option>
+                        {% for user in users %}
+                        <option value="{{ user.id }}" {% if session.assignee.id == user.id %}selected{% endif %}>{{ user.get_full_name|default:user.username }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <!-- Progress -->
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1">Progress</label>
+                    <div class="flex items-center space-x-2">
+                        <div class="flex-1 bg-slate-700/50 rounded-full h-2">
+                            <div class="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full" style="width: {% widthratio progress 12 100 %}%"></div>
+                        </div>
+                        <span class="text-xs text-slate-400">{{ progress }}/12</span>
+                    </div>
+                </div>
+                
+                <!-- Dates -->
+                <div class="pt-4 border-t border-slate-700/50 space-y-2">
+                    <div class="text-xs">
+                        <span class="text-slate-400">Created:</span>
+                        <span class="text-slate-300">{{ session.created_at|date:"M d, Y" }}</span>
+                    </div>
+                    <div class="text-xs">
+                        <span class="text-slate-400">Updated:</span>
+                        <span class="text-slate-300">{{ session.updated_at|timesince }} ago</span>
+                    </div>
+                </div>
+                
+                <!-- Quick Actions -->
+                <div class="pt-4 border-t border-slate-700/50 space-y-2">
+                    <a href="{% url 'dashboard_export_csv' %}?session_id={{ session.id }}" class="block w-full px-4 py-2 bg-slate-700/50 border border-slate-600/50 rounded-lg text-slate-300 hover:bg-slate-700 transition-colors text-center text-sm">
+                        <i class="fas fa-download mr-2"></i>Export PDF
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Center Column: Answers by Section -->
+    <div class="lg:col-span-6 space-y-4">
+        {% for step_key, step_title, step_subtitle in step_names %}
+        <div class="bg-slate-800/50 border border-slate-700/50 rounded-lg overflow-hidden">
+            <div class="p-4 bg-slate-700/30 border-b border-slate-700/50">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-lg font-semibold text-slate-200">{{ step_title }}</h3>
+                        <p class="text-xs text-slate-400 mt-1">{{ step_subtitle }}</p>
+                    </div>
+                    <button class="step-toggle text-slate-400 hover:text-slate-200 transition-colors" data-step="{{ step_key }}">
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="step-content p-6" data-step="{{ step_key }}" style="display: none;">
+                {% if step_data|get_item:step_key %}
+                    {% with current_step_data=step_data|get_item:step_key %}
+                        <div class="space-y-4">
+                            {% for key, value in current_step_data.items %}
+                                {% if value %}
+                                <div class="border-b border-slate-700/30 pb-4 last:border-0 last:pb-0">
+                                    <label class="block text-xs font-medium text-slate-400 mb-1 uppercase tracking-wider">{{ key|title|replace:"_| " }}</label>
+                                    <div class="text-sm text-slate-200">
+                                        {% if value|length > 100 %}
+                                            <div class="whitespace-pre-wrap">{{ value }}</div>
+                                        {% else %}
+                                            {{ value }}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    {% endwith %}
+                {% else %}
+                    <p class="text-sm text-slate-400 italic">No data for this step</p>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    
+    <!-- Right Column: Brainside -->
+    <div class="lg:col-span-3 space-y-6">
+        <!-- AI Summary -->
+        <div class="bg-slate-800/50 border border-slate-700/50 rounded-lg p-6">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-semibold text-slate-200">AI Course Blueprint Summary</h3>
+                <button id="generate-summary-btn" class="text-xs px-3 py-1 bg-gradient-to-r from-pink-500/20 to-pink-600/20 border border-pink-500/30 rounded-lg text-pink-300 hover:text-pink-200 transition-all">
+                    <i class="fas fa-magic mr-1"></i>Generate
+                </button>
+            </div>
+            <div id="ai-summary-content" class="text-sm text-slate-300 whitespace-pre-wrap">
+                {% if session.ai_summary %}
+                    {{ session.ai_summary }}
+                {% else %}
+                    <p class="text-slate-400 italic">Click "Generate" to create an AI summary</p>
+                {% endif %}
+            </div>
+        </div>
+        
+        <!-- Internal Notes -->
+        <div class="bg-slate-800/50 border border-slate-700/50 rounded-lg p-6">
+            <h3 class="text-lg font-semibold text-slate-200 mb-4">Internal Notes</h3>
+            <form id="add-note-form" class="mb-4">
+                <textarea name="content" rows="3" class="w-full bg-slate-700/50 border border-slate-600/50 rounded-lg px-3 py-2 text-slate-100 focus:outline-none focus:border-blue-500/50" placeholder="Add a note..."></textarea>
+                <select name="note_type" class="w-full mt-2 bg-slate-700/50 border border-slate-600/50 rounded-lg px-3 py-2 text-slate-100 focus:outline-none focus:border-blue-500/50">
+                    <option value="general">General</option>
+                    <option value="content">Content</option>
+                    <option value="legal">Legal</option>
+                    <option value="platform">Platform</option>
+                    <option value="clarification">Clarification Needed</option>
+                </select>
+                <button type="submit" class="mt-2 w-full px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg text-white font-medium hover:from-blue-600 hover:to-purple-600 transition-all">
+                    Add Note
+                </button>
+            </form>
+            <div id="notes-list" class="space-y-3">
+                {% for note in notes %}
+                <div class="bg-slate-700/30 border border-slate-600/30 rounded-lg p-3">
+                    <div class="flex items-start justify-between mb-2">
+                        <div class="flex items-center space-x-2">
+                            <span class="text-xs font-medium text-slate-300">{{ note.author.get_full_name|default:note.author.username }}</span>
+                            <span class="text-xs text-slate-500">{{ note.get_note_type_display }}</span>
+                        </div>
+                        <span class="text-xs text-slate-500">{{ note.created_at|timesince }} ago</span>
+                    </div>
+                    <p class="text-sm text-slate-200">{{ note.content }}</p>
+                </div>
+                {% empty %}
+                <p class="text-sm text-slate-400 italic text-center py-4">No notes yet</p>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <!-- Tasks -->
+        <div class="bg-slate-800/50 border border-slate-700/50 rounded-lg p-6">
+            <h3 class="text-lg font-semibold text-slate-200 mb-4">Tasks</h3>
+            <div class="space-y-2">
+                {% for task in tasks %}
+                <div class="flex items-start space-x-2 bg-slate-700/30 border border-slate-600/30 rounded-lg p-3">
+                    <input type="checkbox" {% if task.completed %}checked{% endif %} class="mt-1">
+                    <div class="flex-1">
+                        <p class="text-sm font-medium text-slate-200">{{ task.title }}</p>
+                        {% if task.description %}
+                        <p class="text-xs text-slate-400 mt-1">{{ task.description }}</p>
+                        {% endif %}
+                        <div class="flex items-center space-x-2 mt-2">
+                            <span class="text-xs px-2 py-0.5 bg-slate-600/50 rounded text-slate-300">{{ task.get_priority_display }}</span>
+                            {% if task.assignee %}
+                            <span class="text-xs text-slate-400">{{ task.assignee.get_full_name|default:task.assignee.username }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <p class="text-sm text-slate-400 italic text-center py-4">No tasks yet</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Toggle step content
+    document.querySelectorAll('.step-toggle').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const stepKey = this.dataset.step;
+            const content = document.querySelector(`.step-content[data-step="${stepKey}"]`);
+            const icon = this.querySelector('i');
+            
+            if (content.style.display === 'none') {
+                content.style.display = 'block';
+                icon.classList.remove('fa-chevron-down');
+                icon.classList.add('fa-chevron-up');
+            } else {
+                content.style.display = 'none';
+                icon.classList.remove('fa-chevron-up');
+                icon.classList.add('fa-chevron-down');
+            }
+        });
+    });
+    
+    // Update status
+    document.getElementById('status-select').addEventListener('change', function() {
+        const formData = new FormData();
+        formData.append('status', this.value);
+        
+        fetch('{% url "dashboard_update_status" session.id %}', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Visual feedback
+                const badge = document.querySelector('.status-badge');
+                if (badge) badge.textContent = this.options[this.selectedIndex].text;
+            }
+        });
+    });
+    
+    // Update assignee
+    document.getElementById('assignee-select').addEventListener('change', function() {
+        const formData = new FormData();
+        formData.append('assignee_id', this.value);
+        
+        fetch('{% url "dashboard_assign" session.id %}', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Visual feedback
+                console.log('Assignee updated');
+            }
+        });
+    });
+    
+    // Generate AI summary
+    document.getElementById('generate-summary-btn').addEventListener('click', function() {
+        const btn = this;
+        const originalHTML = btn.innerHTML;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i>Generating...';
+        btn.disabled = true;
+        
+        fetch('{% url "dashboard_generate_ai_summary" session.id %}', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                document.getElementById('ai-summary-content').textContent = data.summary;
+            }
+            btn.innerHTML = originalHTML;
+            btn.disabled = false;
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            btn.innerHTML = originalHTML;
+            btn.disabled = false;
+        });
+    });
+    
+    // Add note
+    document.getElementById('add-note-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+        
+        fetch('{% url "dashboard_add_note" session.id %}', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Add note to list
+                const notesList = document.getElementById('notes-list');
+                const noteDiv = document.createElement('div');
+                noteDiv.className = 'bg-slate-700/30 border border-slate-600/30 rounded-lg p-3';
+                noteDiv.innerHTML = `
+                    <div class="flex items-start justify-between mb-2">
+                        <div class="flex items-center space-x-2">
+                            <span class="text-xs font-medium text-slate-300">${data.note.author}</span>
+                            <span class="text-xs text-slate-500">${data.note.note_type}</span>
+                        </div>
+                        <span class="text-xs text-slate-500">Just now</span>
+                    </div>
+                    <p class="text-sm text-slate-200">${data.note.content}</p>
+                `;
+                notesList.insertBefore(noteDiv, notesList.firstChild);
+                this.reset();
+            }
+        });
+    });
+</script>
+{% endblock %}
+

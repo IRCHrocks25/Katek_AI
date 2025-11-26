@@ -1,0 +1,81 @@
+<section class="step-panel" data-step="4">
+    <div class="mb-6">
+        <div class="text-xs uppercase tracking-wider text-blue-400 mb-2">Step 4 of 12</div>
+        <h2 class="text-3xl font-bold gradient-text mb-2">What You Already Have</h2>
+        <p class="text-slate-400">Do you have any existing materials, content, or resources we can use?</p>
+    </div>
+    
+    <div class="space-y-6">
+        <div class="input-card rounded-lg p-4">
+            <div class="flex items-center justify-between mb-2">
+                <label class="block text-sm font-medium text-slate-300">
+                    Existing Content/Materials
+                </label>
+                <button type="button" onclick="handleAIHelp('existing_content', {topic: document.getElementById('course_topic')?.value}, this)" 
+                        class="ai-help-btn px-3 py-1 bg-gradient-to-r from-pink-500/20 to-pink-600/20 border border-pink-500/30 rounded-lg text-xs text-pink-300 hover:text-pink-200 transition-all">
+                    <i class="fas fa-magic mr-1"></i> AI Help
+                </button>
+            </div>
+            <textarea name="existing_content" id="existing_content" rows="5"
+                      class="w-full bg-slate-800/50 border border-slate-600/50 rounded-lg px-4 py-2 text-slate-100 focus:outline-none focus:border-blue-500/50" 
+                      placeholder="Describe any existing materials: slides, videos, documents, notes, etc."></textarea>
+        </div>
+        
+        <div class="input-card rounded-lg p-4">
+            <label class="block text-sm font-medium text-slate-300 mb-2">
+                Content Types You Have
+            </label>
+            <div class="flex flex-wrap gap-3 mt-2">
+                <label class="flex items-center gap-2 cursor-pointer">
+                    <input type="checkbox" name="content_types" value="slides" class="rounded">
+                    <span class="text-sm text-slate-300">Slides/Presentations</span>
+                </label>
+                <label class="flex items-center gap-2 cursor-pointer">
+                    <input type="checkbox" name="content_types" value="videos" class="rounded">
+                    <span class="text-sm text-slate-300">Videos</span>
+                </label>
+                <label class="flex items-center gap-2 cursor-pointer">
+                    <input type="checkbox" name="content_types" value="documents" class="rounded">
+                    <span class="text-sm text-slate-300">Documents</span>
+                </label>
+                <label class="flex items-center gap-2 cursor-pointer">
+                    <input type="checkbox" name="content_types" value="notes" class="rounded">
+                    <span class="text-sm text-slate-300">Notes</span>
+                </label>
+                <label class="flex items-center gap-2 cursor-pointer">
+                    <input type="checkbox" name="content_types" value="exercises" class="rounded">
+                    <span class="text-sm text-slate-300">Exercises</span>
+                </label>
+                <label class="flex items-center gap-2 cursor-pointer">
+                    <input type="checkbox" name="content_types" value="none" class="rounded">
+                    <span class="text-sm text-slate-300">Starting from scratch</span>
+                </label>
+            </div>
+        </div>
+        
+        <div class="input-card rounded-lg p-4">
+            <label class="block text-sm font-medium text-slate-300 mb-2">
+                Where Are These Materials Located?
+            </label>
+            <input type="text" name="materials_location" id="materials_location"
+                   class="w-full bg-slate-800/50 border border-slate-600/50 rounded-lg px-4 py-2 text-slate-100 focus:outline-none focus:border-blue-500/50" 
+                   placeholder="e.g., Google Drive, Dropbox, local computer, etc.">
+        </div>
+        
+        <div class="input-card rounded-lg p-4">
+            <div class="flex items-center justify-between mb-2">
+                <label class="block text-sm font-medium text-slate-300">
+                    Additional Notes About Your Materials
+                </label>
+                <button type="button" onclick="handleAIHelp('materials_notes', {topic: document.getElementById('course_topic')?.value, existing_content: document.getElementById('existing_content')?.value}, this)" 
+                        class="ai-help-btn px-3 py-1 bg-gradient-to-r from-pink-500/20 to-pink-600/20 border border-pink-500/30 rounded-lg text-xs text-pink-300 hover:text-pink-200 transition-all">
+                    <i class="fas fa-magic mr-1"></i> AI Help
+                </button>
+            </div>
+            <textarea name="materials_notes" id="materials_notes" rows="3"
+                      class="w-full bg-slate-800/50 border border-slate-600/50 rounded-lg px-4 py-2 text-slate-100 focus:outline-none focus:border-blue-500/50" 
+                      placeholder="Any additional context about your existing materials..."></textarea>
+        </div>
+    </div>
+</section>
+

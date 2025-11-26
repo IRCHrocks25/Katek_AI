@@ -1,0 +1,81 @@
+<section class="step-panel" data-step="8">
+    <div class="mb-6">
+        <div class="text-xs uppercase tracking-wider text-blue-400 mb-2">Step 8 of 12</div>
+        <h2 class="text-3xl font-bold gradient-text mb-2">Legal & Rights</h2>
+        <p class="text-slate-400">Who owns the content? What permissions and rights do we need?</p>
+    </div>
+    
+    <div class="space-y-6">
+        <div class="input-card rounded-lg p-4">
+            <label class="block text-sm font-medium text-slate-300 mb-2">
+                Content Ownership <span class="text-red-400">*</span>
+            </label>
+            <div class="space-y-3 mt-2">
+                <label class="flex items-center gap-3 p-3 border border-slate-600/50 rounded-lg cursor-pointer hover:border-blue-500/50 transition-all">
+                    <input type="radio" name="content_ownership" value="you" data-required="true" class="rounded">
+                    <div>
+                        <div class="text-sm font-medium text-slate-200">You own all content</div>
+                        <div class="text-xs text-slate-400">You have full rights to all materials</div>
+                    </div>
+                </label>
+                <label class="flex items-center gap-3 p-3 border border-slate-600/50 rounded-lg cursor-pointer hover:border-blue-500/50 transition-all">
+                    <input type="radio" name="content_ownership" value="company" data-required="true" class="rounded">
+                    <div>
+                        <div class="text-sm font-medium text-slate-200">Company/Organization owns content</div>
+                        <div class="text-xs text-slate-400">You have permission to use it</div>
+                    </div>
+                </label>
+                <label class="flex items-center gap-3 p-3 border border-slate-600/50 rounded-lg cursor-pointer hover:border-blue-500/50 transition-all">
+                    <input type="radio" name="content_ownership" value="mixed" data-required="true" class="rounded">
+                    <div>
+                        <div class="text-sm font-medium text-slate-200">Mixed ownership</div>
+                        <div class="text-xs text-slate-400">Some content owned by others</div>
+                    </div>
+                </label>
+            </div>
+        </div>
+        
+        <div class="input-card rounded-lg p-4">
+            <div class="flex items-center justify-between mb-2">
+                <label class="block text-sm font-medium text-slate-300">
+                    Third-Party Content
+                </label>
+                <button type="button" class="ai-help-btn px-3 py-1 bg-gradient-to-r from-pink-500/20 to-pink-600/20 border border-pink-500/30 rounded-lg text-xs text-pink-300 hover:text-pink-200 transition-all" data-ai-field="third_party_content">
+                    <i class="fas fa-magic mr-1"></i> AI Help
+                </button>
+            </div>
+            <textarea name="third_party_content" id="third_party_content" rows="3"
+                      class="w-full bg-slate-800/50 border border-slate-600/50 rounded-lg px-4 py-2 text-slate-100 focus:outline-none focus:border-blue-500/50" 
+                      placeholder="List any third-party content (images, videos, music) and their licensing status..."></textarea>
+        </div>
+        
+        <div class="input-card rounded-lg p-4">
+            <div class="flex items-center justify-between mb-2">
+                <label class="block text-sm font-medium text-slate-300">
+                    Required Permissions/Licenses
+                </label>
+                <button type="button" class="ai-help-btn px-3 py-1 bg-gradient-to-r from-pink-500/20 to-pink-600/20 border border-pink-500/30 rounded-lg text-xs text-pink-300 hover:text-pink-200 transition-all" data-ai-field="required_permissions">
+                    <i class="fas fa-magic mr-1"></i> AI Help
+                </button>
+            </div>
+            <textarea name="required_permissions" id="required_permissions" rows="3"
+                      class="w-full bg-slate-800/50 border border-slate-600/50 rounded-lg px-4 py-2 text-slate-100 focus:outline-none focus:border-blue-500/50" 
+                      placeholder="Any permissions or licenses that need to be obtained..."></textarea>
+        </div>
+        
+        <div class="input-card rounded-lg p-4">
+            <div class="flex items-center justify-between mb-2">
+                <label class="block text-sm font-medium text-slate-300">
+                    Legal Notes or Concerns
+                </label>
+                <button type="button" class="ai-help-btn px-3 py-1 bg-gradient-to-r from-pink-500/20 to-pink-600/20 border border-pink-500/30 rounded-lg text-xs text-pink-300 hover:text-pink-200 transition-all" data-ai-field="legal_notes">
+                    <i class="fas fa-magic mr-1"></i> AI Help
+                </button>
+            </div>
+            <textarea name="legal_notes" id="legal_notes" rows="3"
+                      class="w-full bg-slate-800/50 border border-slate-600/50 rounded-lg px-4 py-2 text-slate-100 focus:outline-none focus:border-blue-500/50" 
+                      placeholder="Any legal considerations or concerns we should be aware of..."></textarea>
+        </div>
+    </div>
+</section>
+

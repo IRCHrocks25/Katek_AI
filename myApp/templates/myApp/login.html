@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - KaTek AI Studio Backend</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 50%, #312e81 100%);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        /* Dotted pattern overlay */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: radial-gradient(circle, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+            opacity: 0.3;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        /* Geometric shapes in background */
+        body::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .login-container {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .input-wrapper {
+            position: relative;
+        }
+        
+        .input-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            pointer-events: none;
+        }
+        
+        .input-field {
+            padding-left: 3rem;
+            padding-right: 3rem;
+        }
+        
+        .password-toggle {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        
+        .password-toggle:hover {
+            color: #64748b;
+        }
+        
+        /* Background geometric shapes */
+        .bg-shapes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .bg-shape {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.2;
+            filter: blur(60px);
+        }
+        
+        .bg-shape-1 {
+            width: 400px;
+            height: 400px;
+            background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
+            top: -150px;
+            right: -100px;
+        }
+        
+        .bg-shape-2 {
+            width: 350px;
+            height: 350px;
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            bottom: -100px;
+            right: 150px;
+        }
+        
+        .bg-shape-3 {
+            width: 300px;
+            height: 300px;
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            top: 50%;
+            left: -100px;
+        }
+        
+        .bg-shape-4 {
+            width: 250px;
+            height: 250px;
+            background: linear-gradient(135deg, #ec4899 0%, #f59e0b 100%);
+            top: 20%;
+            left: 10%;
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Geometric Shapes -->
+    <div class="bg-shapes">
+        <div class="bg-shape bg-shape-1"></div>
+        <div class="bg-shape bg-shape-2"></div>
+        <div class="bg-shape bg-shape-3"></div>
+        <div class="bg-shape bg-shape-4"></div>
+    </div>
+    
+    <div class="login-container min-h-screen flex items-center justify-center p-4 relative z-10">
+        <div class="w-full max-w-6xl">
+            <div class="bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl overflow-hidden flex flex-col lg:flex-row min-h-[600px]">
+                <!-- Left Section: Login Form -->
+                <div class="flex-1 p-8 lg:p-12 flex flex-col justify-center">
+                    <!-- Logo and Title -->
+                    <div class="mb-8">
+                        <div class="flex items-center space-x-3 mb-4">
+                            <img 
+                                src="https://katalyst-crm.com/wp-content/uploads/2024/09/K-1.png" 
+                                alt="KaTek Logo" 
+                                class="w-12 h-12 object-contain"
+                            >
+                            <div>
+                                <h1 class="text-2xl font-bold text-slate-800">KaTek AI Studio</h1>
+                                <p class="text-sm text-slate-500">Admin Dashboard</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Welcome Message -->
+                    <div class="mb-8">
+                        <h2 class="text-3xl font-bold text-slate-800 mb-2">Welcome Back, Admin</h2>
+                        <p class="text-slate-600">Access your course blueprint command center — manage sessions, review blueprints, and oversee production.</p>
+                    </div>
+                    
+                    <!-- Messages -->
+                    {% if messages %}
+                    <div class="mb-6">
+                        {% for message in messages %}
+                        <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
+                            <i class="fas fa-exclamation-circle mr-2"></i>{{ message }}
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Login Form -->
+                    <form method="post" action="{% url 'login' %}" class="space-y-6">
+                        {% csrf_token %}
+                        <input type="hidden" name="next" value="{{ request.GET.next }}">
+                        
+                        <!-- Username/Email Field -->
+                        <div>
+                            <label for="username" class="block text-sm font-medium text-slate-700 mb-2">Username or Email</label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-user input-icon"></i>
+                                <input 
+                                    type="text" 
+                                    id="username" 
+                                    name="username" 
+                                    required
+                                    class="input-field w-full bg-slate-50 border border-slate-300 rounded-lg px-4 py-3 text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                                    placeholder="admin"
+                                    autocomplete="username"
+                                >
+                            </div>
+                        </div>
+                        
+                        <!-- Password Field -->
+                        <div>
+                            <label for="password" class="block text-sm font-medium text-slate-700 mb-2">Password</label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-lock input-icon"></i>
+                                <input 
+                                    type="password" 
+                                    id="password" 
+                                    name="password" 
+                                    required
+                                    class="input-field w-full bg-slate-50 border border-slate-300 rounded-lg px-4 py-3 text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                                    placeholder="Enter your password"
+                                    autocomplete="current-password"
+                                >
+                                <i class="fas fa-eye password-toggle" id="togglePassword"></i>
+                            </div>
+                        </div>
+                        
+                        <!-- Sign In Button -->
+                        <button 
+                            type="submit"
+                            class="w-full bg-gradient-to-r from-purple-600 via-blue-600 to-indigo-700 text-white font-semibold py-3 rounded-lg hover:from-purple-700 hover:via-blue-700 hover:to-indigo-800 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+                        >
+                            Sign In
+                        </button>
+                        
+                        <!-- Links -->
+                        <div class="flex items-center justify-between text-sm">
+                            <a href="#" class="text-blue-600 hover:text-blue-700 hover:underline">Forgot your password?</a>
+                            <a href="#" class="text-blue-600 hover:text-blue-700 hover:underline">Need help?</a>
+                        </div>
+                    </form>
+                    
+                    <!-- Help Text -->
+                    <div class="mt-8 pt-6 border-t border-slate-200">
+                        <p class="text-xs text-slate-500 leading-relaxed">
+                            We've sent your login details to your registered email. Check your spam folder if you can't find it. 
+                            Or, use the Reset Password option with your same email. Still need help? 
+                            Reach out to <a href="mailto:support@katekai.com" class="text-blue-600 hover:underline">support@katekai.com</a>.
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Right Section: Promotional Image -->
+                <div class="flex-1 bg-gradient-to-br from-slate-50 to-slate-100 p-8 lg:p-12 flex flex-col justify-center items-center relative overflow-hidden">
+                    <div class="w-full h-full flex items-center justify-center">
+                        <img 
+                            src="https://katalyst-crm.com/wp-content/uploads/2024/10/Katalyst-Project-2.1.png" 
+                            alt="KaTek AI Studio" 
+                            class="max-w-full max-h-full object-contain drop-shadow-2xl"
+                            style="filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.1));"
+                        >
+                    </div>
+                    
+                    <!-- Welcome Text Overlay -->
+                    <div class="absolute bottom-8 left-8 right-8 z-20 text-slate-800">
+                        <h3 class="text-2xl font-bold mb-2">Welcome to KaTek AI Studio</h3>
+                        <p class="text-slate-600">Your central hub for course blueprints — from onboarding to production, all in one sleek platform.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Toggle password visibility
+        const togglePassword = document.getElementById('togglePassword');
+        const passwordInput = document.getElementById('password');
+        
+        togglePassword.addEventListener('click', function() {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            
+            // Toggle icon
+            if (type === 'password') {
+                this.classList.remove('fa-eye-slash');
+                this.classList.add('fa-eye');
+            } else {
+                this.classList.remove('fa-eye');
+                this.classList.add('fa-eye-slash');
+            }
+        });
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,96 @@
+<section class="step-panel" data-step="7">
+    <div class="mb-6">
+        <div class="text-xs uppercase tracking-wider text-blue-400 mb-2">Step 7 of 12</div>
+        <h2 class="text-3xl font-bold gradient-text mb-2">Your Face & Voice (Media)</h2>
+        <p class="text-slate-400">How do you want to appear in the course? What's your comfort level with being on camera?</p>
+    </div>
+    
+    <div class="space-y-6">
+        <div class="input-card rounded-lg p-4">
+            <label class="block text-sm font-medium text-slate-300 mb-2">
+                On-Camera Preference <span class="text-red-400">*</span>
+            </label>
+            <div class="space-y-3 mt-2">
+                <label class="flex items-center gap-3 p-3 border border-slate-600/50 rounded-lg cursor-pointer hover:border-blue-500/50 transition-all">
+                    <input type="radio" name="on_camera" value="yes" data-required="true" class="rounded">
+                    <div>
+                        <div class="text-sm font-medium text-slate-200">Yes, I'm comfortable on camera</div>
+                        <div class="text-xs text-slate-400">I'll appear in video lessons</div>
+                    </div>
+                </label>
+                <label class="flex items-center gap-3 p-3 border border-slate-600/50 rounded-lg cursor-pointer hover:border-blue-500/50 transition-all">
+                    <input type="radio" name="on_camera" value="sometimes" data-required="true" class="rounded">
+                    <div>
+                        <div class="text-sm font-medium text-slate-200">Sometimes</div>
+                        <div class="text-xs text-slate-400">I'll appear in some videos, not all</div>
+                    </div>
+                </label>
+                <label class="flex items-center gap-3 p-3 border border-slate-600/50 rounded-lg cursor-pointer hover:border-blue-500/50 transition-all">
+                    <input type="radio" name="on_camera" value="voice_only" data-required="true" class="rounded">
+                    <div>
+                        <div class="text-sm font-medium text-slate-200">Voice only</div>
+                        <div class="text-xs text-slate-400">Narration with screen recordings or slides</div>
+                    </div>
+                </label>
+                <label class="flex items-center gap-3 p-3 border border-slate-600/50 rounded-lg cursor-pointer hover:border-blue-500/50 transition-all">
+                    <input type="radio" name="on_camera" value="no" data-required="true" class="rounded">
+                    <div>
+                        <div class="text-sm font-medium text-slate-200">No on-camera presence</div>
+                        <div class="text-xs text-slate-400">Text-based or animated content only</div>
+                    </div>
+                </label>
+            </div>
+        </div>
+        
+        <div class="input-card rounded-lg p-4">
+            <label class="block text-sm font-medium text-slate-300 mb-2">
+                Video Style Preference
+            </label>
+            <div class="flex flex-wrap gap-3 mt-2">
+                <label class="flex items-center gap-2 cursor-pointer">
+                    <input type="checkbox" name="video_style" value="talking_head" class="rounded">
+                    <span class="text-sm text-slate-300">Talking Head</span>
+                </label>
+                <label class="flex items-center gap-2 cursor-pointer">
+                    <input type="checkbox" name="video_style" value="screen_recording" class="rounded">
+                    <span class="text-sm text-slate-300">Screen Recording</span>
+                </label>
+                <label class="flex items-center gap-2 cursor-pointer">
+                    <input type="checkbox" name="video_style" value="slides" class="rounded">
+                    <span class="text-sm text-slate-300">Slides with Voiceover</span>
+                </label>
+                <label class="flex items-center gap-2 cursor-pointer">
+                    <input type="checkbox" name="video_style" value="whiteboard" class="rounded">
+                    <span class="text-sm text-slate-300">Whiteboard/Animation</span>
+                </label>
+            </div>
+        </div>
+        
+        <div class="input-card rounded-lg p-4">
+            <label class="block text-sm font-medium text-slate-300 mb-2">
+                Audio Quality Requirements
+            </label>
+            <select name="audio_quality" id="audio_quality"
+                    class="w-full bg-slate-800/50 border border-slate-600/50 rounded-lg px-4 py-2 text-slate-100 focus:outline-none focus:border-blue-500/50">
+                <option value="standard">Standard (good enough)</option>
+                <option value="high">High (professional quality)</option>
+                <option value="studio">Studio Quality (broadcast ready)</option>
+            </select>
+        </div>
+        
+        <div class="input-card rounded-lg p-4">
+            <div class="flex items-center justify-between mb-2">
+                <label class="block text-sm font-medium text-slate-300">
+                    Media Production Notes
+                </label>
+                <button type="button" class="ai-help-btn px-3 py-1 bg-gradient-to-r from-pink-500/20 to-pink-600/20 border border-pink-500/30 rounded-lg text-xs text-pink-300 hover:text-pink-200 transition-all" data-ai-field="media_notes">
+                    <i class="fas fa-magic mr-1"></i> AI Help
+                </button>
+            </div>
+            <textarea name="media_notes" id="media_notes" rows="3"
+                      class="w-full bg-slate-800/50 border border-slate-600/50 rounded-lg px-4 py-2 text-slate-100 focus:outline-none focus:border-blue-500/50" 
+                      placeholder="Any specific requirements or concerns about media production..."></textarea>
+        </div>
+    </div>
+</section>
+

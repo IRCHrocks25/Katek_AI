@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}KaTek AI Studio Backend{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            min-height: 100vh;
+        }
+        .sidebar-link.active {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(139, 92, 246, 0.2) 50%, rgba(236, 72, 153, 0.2) 100%);
+            border-left: 3px solid #3b82f6;
+        }
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .status-new { background: rgba(59, 130, 246, 0.2); color: #93c5fd; border: 1px solid rgba(59, 130, 246, 0.3); }
+        .status-in_review { background: rgba(251, 191, 36, 0.2); color: #fde047; border: 1px solid rgba(251, 191, 36, 0.3); }
+        .status-needs_clarification { background: rgba(239, 68, 68, 0.2); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.3); }
+        .status-approved { background: rgba(34, 197, 94, 0.2); color: #86efac; border: 1px solid rgba(34, 197, 94, 0.3); }
+        .status-in_production { background: rgba(139, 92, 246, 0.2); color: #c4b5fd; border: 1px solid rgba(139, 92, 246, 0.3); }
+        .status-completed { background: rgba(34, 197, 94, 0.2); color: #86efac; border: 1px solid rgba(34, 197, 94, 0.3); }
+    </style>
+</head>
+<body class="text-slate-100">
+    <div class="flex h-screen overflow-hidden">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-slate-900/50 border-r border-slate-700/50 flex flex-col">
+            <div class="p-6 border-b border-slate-700/50">
+                <h1 class="text-xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+                    KaTek AI Studio
+                </h1>
+                <p class="text-xs text-slate-400 mt-1">Backend Dashboard</p>
+            </div>
+            
+            <nav class="flex-1 p-4 space-y-1">
+                <a href="{% url 'dashboard_overview' %}" class="sidebar-link flex items-center px-4 py-3 rounded-lg text-slate-300 hover:bg-slate-800/50 transition-colors {% if request.resolver_match.url_name == 'dashboard_overview' %}active{% endif %}">
+                    <i class="fas fa-chart-line w-5 mr-3"></i>
+                    <span>Overview</span>
+                </a>
+                <a href="{% url 'dashboard_sessions' %}" class="sidebar-link flex items-center px-4 py-3 rounded-lg text-slate-300 hover:bg-slate-800/50 transition-colors {% if request.resolver_match.url_name == 'dashboard_sessions' %}active{% endif %}">
+                    <i class="fas fa-list w-5 mr-3"></i>
+                    <span>Sessions</span>
+                </a>
+                <a href="#" class="sidebar-link flex items-center px-4 py-3 rounded-lg text-slate-300 hover:bg-slate-800/50 transition-colors">
+                    <i class="fas fa-users w-5 mr-3"></i>
+                    <span>Clients</span>
+                </a>
+                <a href="#" class="sidebar-link flex items-center px-4 py-3 rounded-lg text-slate-300 hover:bg-slate-800/50 transition-colors">
+                    <i class="fas fa-file-alt w-5 mr-3"></i>
+                    <span>Blueprints</span>
+                </a>
+                <a href="{% url 'dashboard_export_csv' %}" class="sidebar-link flex items-center px-4 py-3 rounded-lg text-slate-300 hover:bg-slate-800/50 transition-colors">
+                    <i class="fas fa-download w-5 mr-3"></i>
+                    <span>Exports</span>
+                </a>
+                <a href="/admin/" class="sidebar-link flex items-center px-4 py-3 rounded-lg text-slate-300 hover:bg-slate-800/50 transition-colors">
+                    <i class="fas fa-cog w-5 mr-3"></i>
+                    <span>Settings</span>
+                </a>
+            </nav>
+            
+            <div class="p-4 border-t border-slate-700/50">
+                <div class="flex items-center space-x-3 mb-3">
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-pink-500 flex items-center justify-center text-white font-bold">
+                        {{ user.username|first|upper }}
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-sm font-medium text-slate-200 truncate">{{ user.get_full_name|default:user.username }}</p>
+                        <p class="text-xs text-slate-400 truncate">{{ user.email }}</p>
+                    </div>
+                </div>
+                <a href="{% url 'logout' %}" class="block w-full px-4 py-2 bg-slate-700/50 border border-slate-600/50 rounded-lg text-slate-300 hover:bg-slate-700 transition-colors text-center text-sm">
+                    <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                </a>
+            </div>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="flex-1 overflow-y-auto">
+            <!-- Top Bar -->
+            <header class="bg-slate-800/30 border-b border-slate-700/50 px-6 py-4">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h2 class="text-2xl font-bold text-slate-100">{% block page_title %}Dashboard{% endblock %}</h2>
+                        <p class="text-sm text-slate-400 mt-1">{% block page_subtitle %}{% endblock %}</p>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <div class="relative">
+                            <input type="text" placeholder="Search..." class="bg-slate-700/50 border border-slate-600/50 rounded-lg px-4 py-2 pl-10 text-slate-100 placeholder-slate-400 focus:outline-none focus:border-blue-500/50 w-64">
+                            <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400"></i>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            
+            <!-- Page Content -->
+            <div class="p-6">
+                {% block content %}{% endblock %}
+            </div>
+        </main>
+    </div>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
+

@@ -1,0 +1,82 @@
+<section class="step-panel" data-step="10">
+    <div class="mb-6">
+        <div class="text-xs uppercase tracking-wider text-blue-400 mb-2">Step 10 of 12</div>
+        <h2 class="text-3xl font-bold gradient-text mb-2">Timelines & Priorities</h2>
+        <p class="text-slate-400">When do you need this course completed? What's the urgency level?</p>
+    </div>
+    
+    <div class="space-y-6">
+        <div class="input-card rounded-lg p-4">
+            <label class="block text-sm font-medium text-slate-300 mb-2">
+                Target Launch Date
+            </label>
+            <input type="date" name="target_launch_date" id="target_launch_date"
+                   class="w-full bg-slate-800/50 border border-slate-600/50 rounded-lg px-4 py-2 text-slate-100 focus:outline-none focus:border-blue-500/50">
+        </div>
+        
+        <div class="input-card rounded-lg p-4">
+            <label class="block text-sm font-medium text-slate-300 mb-2">
+                Urgency Level <span class="text-red-400">*</span>
+            </label>
+            <div class="space-y-3 mt-2">
+                <label class="flex items-center gap-3 p-3 border border-slate-600/50 rounded-lg cursor-pointer hover:border-blue-500/50 transition-all">
+                    <input type="radio" name="urgency" value="low" data-required="true" class="rounded">
+                    <div>
+                        <div class="text-sm font-medium text-slate-200">Low</div>
+                        <div class="text-xs text-slate-400">No rush, quality over speed</div>
+                    </div>
+                </label>
+                <label class="flex items-center gap-3 p-3 border border-slate-600/50 rounded-lg cursor-pointer hover:border-blue-500/50 transition-all">
+                    <input type="radio" name="urgency" value="medium" data-required="true" class="rounded">
+                    <div>
+                        <div class="text-sm font-medium text-slate-200">Medium</div>
+                        <div class="text-xs text-slate-400">Normal timeline, balanced approach</div>
+                    </div>
+                </label>
+                <label class="flex items-center gap-3 p-3 border border-slate-600/50 rounded-lg cursor-pointer hover:border-blue-500/50 transition-all">
+                    <input type="radio" name="urgency" value="high" data-required="true" class="rounded">
+                    <div>
+                        <div class="text-sm font-medium text-slate-200">High</div>
+                        <div class="text-xs text-slate-400">Need it done quickly</div>
+                    </div>
+                </label>
+                <label class="flex items-center gap-3 p-3 border border-slate-600/50 rounded-lg cursor-pointer hover:border-blue-500/50 transition-all">
+                    <input type="radio" name="urgency" value="urgent" data-required="true" class="rounded">
+                    <div>
+                        <div class="text-sm font-medium text-slate-200">Urgent</div>
+                        <div class="text-xs text-slate-400">ASAP, deadline-driven</div>
+                    </div>
+                </label>
+            </div>
+        </div>
+        
+        <div class="input-card rounded-lg p-4">
+            <div class="flex items-center justify-between mb-2">
+                <label class="block text-sm font-medium text-slate-300">
+                    Priority Features
+                </label>
+                <button type="button" class="ai-help-btn px-3 py-1 bg-gradient-to-r from-pink-500/20 to-pink-600/20 border border-pink-500/30 rounded-lg text-xs text-pink-300 hover:text-pink-200 transition-all" data-ai-field="priority_features">
+                    <i class="fas fa-magic mr-1"></i> AI Help
+                </button>
+            </div>
+            <textarea name="priority_features" id="priority_features" rows="3"
+                      class="w-full bg-slate-800/50 border border-slate-600/50 rounded-lg px-4 py-2 text-slate-100 focus:outline-none focus:border-blue-500/50" 
+                      placeholder="What features or elements are most important to get right?"></textarea>
+        </div>
+        
+        <div class="input-card rounded-lg p-4">
+            <div class="flex items-center justify-between mb-2">
+                <label class="block text-sm font-medium text-slate-300">
+                    Timeline Notes
+                </label>
+                <button type="button" class="ai-help-btn px-3 py-1 bg-gradient-to-r from-pink-500/20 to-pink-600/20 border border-pink-500/30 rounded-lg text-xs text-pink-300 hover:text-pink-200 transition-all" data-ai-field="timeline_notes">
+                    <i class="fas fa-magic mr-1"></i> AI Help
+                </button>
+            </div>
+            <textarea name="timeline_notes" id="timeline_notes" rows="3"
+                      class="w-full bg-slate-800/50 border border-slate-600/50 rounded-lg px-4 py-2 text-slate-100 focus:outline-none focus:border-blue-500/50" 
+                      placeholder="Any specific timeline requirements, deadlines, or constraints..."></textarea>
+        </div>
+    </div>
+</section>
+

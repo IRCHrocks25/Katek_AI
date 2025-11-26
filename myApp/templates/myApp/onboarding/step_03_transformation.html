@@ -1,0 +1,71 @@
+<section class="step-panel" data-step="3">
+    <div class="mb-6">
+        <div class="text-xs uppercase tracking-wider text-blue-400 mb-2">Step 3 of 12</div>
+        <h2 class="text-3xl font-bold gradient-text mb-2">Transformation & Outcomes</h2>
+        <p class="text-slate-400">What will students be able to do after completing your course?</p>
+    </div>
+    
+    <div class="space-y-6">
+        <div class="input-card rounded-lg p-4">
+            <div class="flex items-center justify-between mb-2">
+                <label class="block text-sm font-medium text-slate-300">
+                    Learning Outcomes <span class="text-red-400">*</span>
+                </label>
+                <button type="button" onclick="handleAIHelp('outcomes', {topic: document.getElementById('course_topic')?.value, pitch: document.getElementById('course_pitch')?.value}, this)" 
+                        class="ai-help-btn px-3 py-1 bg-gradient-to-r from-pink-500/20 to-pink-600/20 border border-pink-500/30 rounded-lg text-xs text-pink-300 hover:text-pink-200 transition-all">
+                    <i class="fas fa-magic mr-1"></i> AI Help
+                </button>
+            </div>
+            <textarea name="learning_outcomes" id="learning_outcomes" data-required="true" rows="6"
+                      class="w-full bg-slate-800/50 border border-slate-600/50 rounded-lg px-4 py-2 text-slate-100 focus:outline-none focus:border-blue-500/50" 
+                      placeholder="List 3-5 specific, measurable outcomes. One per line."></textarea>
+            <p class="text-xs text-slate-500 mt-2">Example: "Understand the fundamentals of Python syntax and data structures"</p>
+        </div>
+        
+        <div class="input-card rounded-lg p-4">
+            <div class="flex items-center justify-between mb-2">
+                <label class="block text-sm font-medium text-slate-300">
+                    Main Transformation
+                </label>
+                <button type="button" onclick="handleAIHelp('main_transformation', {topic: document.getElementById('course_topic')?.value, pitch: document.getElementById('course_pitch')?.value, outcomes: document.getElementById('learning_outcomes')?.value}, this)" 
+                        class="ai-help-btn px-3 py-1 bg-gradient-to-r from-pink-500/20 to-pink-600/20 border border-pink-500/30 rounded-lg text-xs text-pink-300 hover:text-pink-200 transition-all">
+                    <i class="fas fa-magic mr-1"></i> AI Help
+                </button>
+            </div>
+            <textarea name="main_transformation" id="main_transformation" rows="3"
+                      class="w-full bg-slate-800/50 border border-slate-600/50 rounded-lg px-4 py-2 text-slate-100 focus:outline-none focus:border-blue-500/50" 
+                      placeholder="Describe the biggest change students will experience..."></textarea>
+        </div>
+        
+        <div class="input-card rounded-lg p-4">
+            <div class="flex items-center justify-between mb-2">
+                <label class="block text-sm font-medium text-slate-300">
+                    Skills Students Will Gain
+                </label>
+                <button type="button" onclick="handleAIHelp('skills_gained', {topic: document.getElementById('course_topic')?.value, outcomes: document.getElementById('learning_outcomes')?.value}, this)" 
+                        class="ai-help-btn px-3 py-1 bg-gradient-to-r from-pink-500/20 to-pink-600/20 border border-pink-500/30 rounded-lg text-xs text-pink-300 hover:text-pink-200 transition-all">
+                    <i class="fas fa-magic mr-1"></i> AI Help
+                </button>
+            </div>
+            <input type="text" name="skills_gained" id="skills_gained"
+                   class="w-full bg-slate-800/50 border border-slate-600/50 rounded-lg px-4 py-2 text-slate-100 focus:outline-none focus:border-blue-500/50" 
+                   placeholder="e.g., Problem-solving, Data analysis, Creative thinking (comma-separated)">
+        </div>
+        
+        <div class="input-card rounded-lg p-4">
+            <div class="flex items-center justify-between mb-2">
+                <label class="block text-sm font-medium text-slate-300">
+                    Prerequisites
+                </label>
+                <button type="button" onclick="handleAIHelp('prerequisites', {topic: document.getElementById('course_topic')?.value, audience: document.getElementById('target_audience')?.value}, this)" 
+                        class="ai-help-btn px-3 py-1 bg-gradient-to-r from-pink-500/20 to-pink-600/20 border border-pink-500/30 rounded-lg text-xs text-pink-300 hover:text-pink-200 transition-all">
+                    <i class="fas fa-magic mr-1"></i> AI Help
+                </button>
+            </div>
+            <textarea name="prerequisites" id="prerequisites" rows="2"
+                      class="w-full bg-slate-800/50 border border-slate-600/50 rounded-lg px-4 py-2 text-slate-100 focus:outline-none focus:border-blue-500/50" 
+                      placeholder="What should students know or have before starting?"></textarea>
+        </div>
+    </div>
+</section>
+

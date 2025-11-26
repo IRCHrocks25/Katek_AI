@@ -1,0 +1,153 @@
+{% extends 'myApp/dashboard/base.html' %}
+
+{% block title %}Sessions - KaTek AI Studio Backend{% endblock %}
+{% block page_title %}Sessions{% endblock %}
+{% block page_subtitle %}Manage all course blueprint sessions{% endblock %}
+
+{% block content %}
+<!-- Filters -->
+<div class="bg-slate-800/50 border border-slate-700/50 rounded-lg p-4 mb-6">
+    <form method="get" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div>
+            <label class="block text-xs text-slate-400 mb-1">Status</label>
+            <select name="status" class="w-full bg-slate-700/50 border border-slate-600/50 rounded-lg px-3 py-2 text-slate-100 focus:outline-none focus:border-blue-500/50">
+                <option value="">All Statuses</option>
+                {% for value, label in status_choices %}
+                <option value="{{ value }}" {% if status_filter == value %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <div>
+            <label class="block text-xs text-slate-400 mb-1">Assignee</label>
+            <select name="assignee" class="w-full bg-slate-700/50 border border-slate-600/50 rounded-lg px-3 py-2 text-slate-100 focus:outline-none focus:border-blue-500/50">
+                <option value="">All Assignees</option>
+                {% for user in users %}
+                <option value="{{ user.id }}" {% if assignee_filter == user.id|stringformat:"s" %}selected{% endif %}>{{ user.get_full_name|default:user.username }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <div>
+            <label class="block text-xs text-slate-400 mb-1">Date From</label>
+            <input type="date" name="date_from" value="{{ date_from }}" class="w-full bg-slate-700/50 border border-slate-600/50 rounded-lg px-3 py-2 text-slate-100 focus:outline-none focus:border-blue-500/50">
+        </div>
+        
+        <div>
+            <label class="block text-xs text-slate-400 mb-1">Date To</label>
+            <input type="date" name="date_to" value="{{ date_to }}" class="w-full bg-slate-700/50 border border-slate-600/50 rounded-lg px-3 py-2 text-slate-100 focus:outline-none focus:border-blue-500/50">
+        </div>
+        
+        <div class="md:col-span-4">
+            <label class="block text-xs text-slate-400 mb-1">Search</label>
+            <div class="flex space-x-2">
+                <input type="text" name="q" value="{{ search_query }}" placeholder="Search by title, client, email, or session ID..." class="flex-1 bg-slate-700/50 border border-slate-600/50 rounded-lg px-4 py-2 text-slate-100 placeholder-slate-400 focus:outline-none focus:border-blue-500/50">
+                <button type="submit" class="px-6 py-2 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg text-white font-medium hover:from-blue-600 hover:to-purple-600 transition-all">
+                    <i class="fas fa-search mr-2"></i>Filter
+                </button>
+                <a href="{% url 'dashboard_sessions' %}" class="px-6 py-2 bg-slate-700/50 border border-slate-600/50 rounded-lg text-slate-300 hover:bg-slate-700 transition-colors">
+                    <i class="fas fa-times mr-2"></i>Clear
+                </a>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- Sessions Table -->
+<div class="bg-slate-800/50 border border-slate-700/50 rounded-lg overflow-hidden">
+    <div class="overflow-x-auto">
+        <table class="w-full">
+            <thead class="bg-slate-700/30 border-b border-slate-600/50">
+                <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">Client</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">Course Title</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">Status</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">Progress</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">Assignee</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">Last Activity</th>
+                    <th class="px-6 py-3 text-right text-xs font-medium text-slate-400 uppercase tracking-wider">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-700/30">
+                {% for session in sessions %}
+                <tr class="hover:bg-slate-700/20 transition-colors">
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-pink-500 flex items-center justify-center text-white font-bold text-sm">
+                                {% if session.client %}{{ session.client.full_name|first|upper }}{% else %}?{% endif %}
+                            </div>
+                            <div class="ml-3">
+                                <div class="text-sm font-medium text-slate-200">
+                                    {% if session.client %}{{ session.client.full_name }}{% else %}Anonymous{% endif %}
+                                </div>
+                                <div class="text-xs text-slate-400">
+                                    {% if session.client %}{{ session.client.email }}{% else %}No email{% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4">
+                        <a href="{% url 'dashboard_session_detail' session.id %}" class="text-sm font-medium text-blue-400 hover:text-blue-300 transition-colors">
+                            {{ session.course_title|default:"Untitled Course" }}
+                        </a>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="status-badge status-{{ session.status }}">{{ session.get_status_display }}</span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="flex items-center">
+                            <div class="w-16 bg-slate-700/50 rounded-full h-2 mr-2">
+                                <div class="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full" style="width: {% widthratio session.steps_completed 12 100 %}%"></div>
+                            </div>
+                            <span class="text-xs text-slate-400">{{ session.steps_completed }}/12</span>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-300">
+                        {% if session.assignee %}{{ session.assignee.get_full_name|default:session.assignee.username }}{% else %}<span class="text-slate-500">Unassigned</span>{% endif %}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-400">
+                        {{ session.updated_at|timesince }} ago
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        <div class="flex items-center justify-end space-x-2">
+                            <a href="{% url 'dashboard_session_detail' session.id %}" class="text-blue-400 hover:text-blue-300 transition-colors" title="View">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" class="px-6 py-8 text-center text-slate-400">
+                        <i class="fas fa-inbox text-3xl mb-2 block"></i>
+                        No sessions found
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    
+    <!-- Pagination -->
+    {% if sessions.has_other_pages %}
+    <div class="bg-slate-700/30 px-6 py-4 border-t border-slate-600/50 flex items-center justify-between">
+        <div class="text-sm text-slate-400">
+            Showing {{ sessions.start_index }} to {{ sessions.end_index }} of {{ sessions.paginator.count }} sessions
+        </div>
+        <div class="flex space-x-2">
+            {% if sessions.has_previous %}
+            <a href="?page={{ sessions.previous_page_number }}{% if status_filter %}&status={{ status_filter }}{% endif %}{% if search_query %}&q={{ search_query }}{% endif %}" class="px-4 py-2 bg-slate-700/50 border border-slate-600/50 rounded-lg text-slate-300 hover:bg-slate-700 transition-colors">
+                Previous
+            </a>
+            {% endif %}
+            {% if sessions.has_next %}
+            <a href="?page={{ sessions.next_page_number }}{% if status_filter %}&status={{ status_filter }}{% endif %}{% if search_query %}&q={{ search_query }}{% endif %}" class="px-4 py-2 bg-slate-700/50 border border-slate-600/50 rounded-lg text-slate-300 hover:bg-slate-700 transition-colors">
+                Next
+            </a>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
