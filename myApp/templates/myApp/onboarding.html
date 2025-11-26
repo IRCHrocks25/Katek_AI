@@ -325,6 +325,130 @@
 </head>
 <body class="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 min-h-screen text-slate-100">
     
+    <!-- Preloader Overlay -->
+    <div id="preloader-overlay" class="fixed inset-0 z-50 min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 overflow-y-auto">
+        <!-- Preloader Screen 1 - Warm Welcome -->
+        <div id="preloader-step-1" class="w-full max-w-2xl mx-auto px-4 sm:px-6 pt-16 sm:pt-20 pb-6 sm:pb-12">
+            <div class="bg-slate-800/60 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-blue-500/30 shadow-2xl p-6 sm:p-8 md:p-12 text-center">
+                <div class="mb-6 sm:mb-8">
+                    <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold gradient-text mb-3 sm:mb-4 leading-tight">
+                        Welcome to KaTek AI Course Creator
+                    </h1>
+                    <p class="text-base sm:text-lg text-slate-300 mb-4 sm:mb-6">
+                        We're about to co-create a course blueprint your future students will love.
+                    </p>
+                    <p class="text-sm sm:text-base text-slate-400 mb-3 sm:mb-4">
+                        This isn't a boring form. It's a guided, 12-step journey where we help you think, clarify, and design.
+                    </p>
+                    <p class="text-xs sm:text-sm text-slate-500 mt-4 sm:mt-6">
+                        You'll go through 12 fun steps: Meet You, Course Idea, Transformation, Brand & Vibe, Structure, and more.
+                    </p>
+                </div>
+                
+                <div class="mt-6 sm:mt-10">
+                    <button id="preloader-next-1" class="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white font-semibold rounded-full hover:from-blue-600 hover:via-purple-600 hover:to-pink-600 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 text-sm sm:text-base">
+                        Let's Begin
+                    </button>
+                    <p class="text-xs text-slate-500 mt-3 sm:mt-4">
+                        You can save and come back any time.
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Preloader Screen 2 - What to Expect -->
+        <div id="preloader-step-2" class="hidden w-full max-w-4xl mx-auto px-4 sm:px-6 pt-16 sm:pt-20 pb-6 sm:pb-12">
+            <div class="bg-slate-800/60 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-blue-500/30 shadow-2xl p-6 sm:p-8 md:p-12">
+                <div class="text-center mb-6 sm:mb-10">
+                    <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold gradient-text mb-3 sm:mb-4 leading-tight">
+                        Here's how this 12-step journey works
+                    </h2>
+                    <p class="text-sm sm:text-base md:text-lg text-slate-300">
+                        We'll ask you about your course idea, your audience, the transformation you want, your brand & vibe, and how you like to teach. You don't need perfect answers — we have AI to help with wording.
+                    </p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-10">
+                    <!-- Card 1 - Time & Focus -->
+                    <div class="bg-slate-700/40 rounded-xl p-4 sm:p-6 border border-slate-600/30">
+                        <div class="text-center mb-3 sm:mb-4">
+                            <i class="fas fa-clock text-2xl sm:text-3xl text-blue-400 mb-2 sm:mb-3"></i>
+                            <h3 class="text-base sm:text-lg font-semibold text-slate-200 mb-2">Time & Focus</h3>
+                        </div>
+                        <p class="text-xs sm:text-sm text-slate-300 text-center">
+                            <strong class="text-blue-400">Time needed: ~15–25 minutes.</strong>
+                        </p>
+                        <p class="text-xs text-slate-400 text-center mt-2">
+                            You can always save and return later.
+                        </p>
+                    </div>
+                    
+                    <!-- Card 2 - What you'll share -->
+                    <div class="bg-slate-700/40 rounded-xl p-4 sm:p-6 border border-slate-600/30">
+                        <div class="text-center mb-3 sm:mb-4">
+                            <i class="fas fa-list-check text-2xl sm:text-3xl text-purple-400 mb-2 sm:mb-3"></i>
+                            <h3 class="text-base sm:text-lg font-semibold text-slate-200 mb-2">What You'll Share</h3>
+                        </div>
+                        <ul class="text-xs sm:text-sm text-slate-300 space-y-1.5 sm:space-y-2 text-left">
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-purple-400 mr-2 mt-0.5 sm:mt-1 text-xs flex-shrink-0"></i>
+                                <span>Who you are and who this is for</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-purple-400 mr-2 mt-0.5 sm:mt-1 text-xs flex-shrink-0"></i>
+                                <span>What change your learners should experience</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-purple-400 mr-2 mt-0.5 sm:mt-1 text-xs flex-shrink-0"></i>
+                                <span>What materials you already have</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-purple-400 mr-2 mt-0.5 sm:mt-1 text-xs flex-shrink-0"></i>
+                                <span>Your brand, tone, and preferred structure</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Card 3 - How we help -->
+                    <div class="bg-slate-700/40 rounded-xl p-4 sm:p-6 border border-slate-600/30">
+                        <div class="text-center mb-3 sm:mb-4">
+                            <i class="fas fa-wand-magic-sparkles text-2xl sm:text-3xl text-pink-400 mb-2 sm:mb-3"></i>
+                            <h3 class="text-base sm:text-lg font-semibold text-slate-200 mb-2">How We Help</h3>
+                        </div>
+                        <p class="text-xs sm:text-sm text-slate-300 text-center mb-2 sm:mb-3">
+                            AI helps you with titles, outcomes, and taglines.
+                        </p>
+                        <p class="text-xs text-slate-400 text-center">
+                            We turn your answers into a clear, editable course blueprint.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="text-center border-t border-slate-700/50 pt-6 sm:pt-8">
+                    <p class="text-sm sm:text-base text-slate-400 mb-2">
+                        Ready? Step 1 is just getting to know you.
+                    </p>
+                    <p class="text-xs text-slate-500 mb-4 sm:mb-6">
+                        0 of 12 steps answered yet — let's go.
+                    </p>
+                    <button id="preloader-start-wizard" class="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white font-semibold rounded-full hover:from-blue-600 hover:via-purple-600 hover:to-pink-600 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 text-sm sm:text-base">
+                        Start Step 1 – Meet You
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mini loading transition -->
+        <div id="preloader-transition" class="hidden fixed inset-0 bg-slate-950/95 backdrop-blur-sm z-50 flex items-center justify-center">
+            <div class="text-center px-4">
+                <div class="inline-block w-12 h-12 sm:w-16 sm:h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mb-3 sm:mb-4"></div>
+                <p class="text-slate-300 text-base sm:text-lg">Setting up your course canvas…</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Main Onboarding Wizard (Hidden Initially) -->
+    <div id="onboarding-main" class="hidden">
     <!-- Desktop Layout -->
     <div class="hidden lg:flex h-screen overflow-hidden">
         <!-- Sidebar -->
@@ -769,6 +893,8 @@
                 <i class="fas fa-save mr-2"></i> Save & Exit
             </button>
         </div>
+    </div>
+    <!-- End of Main Onboarding Wizard -->
     </div>
     
     <!-- Inline JavaScript -->
@@ -1913,6 +2039,58 @@
             setupRadioButtons();
             setupAutosave();
             setupAIHelpButtons();
+        })();
+    </script>
+    
+    <!-- Preloader JavaScript -->
+    <script>
+        (function() {
+            // Check if user has seen preloader before (using sessionStorage)
+            const hasSeenPreloader = sessionStorage.getItem('katek_preloader_seen');
+            
+            if (hasSeenPreloader) {
+                // Skip preloader if already seen in this session
+                document.getElementById('preloader-overlay').classList.add('hidden');
+                document.getElementById('onboarding-main').classList.remove('hidden');
+                // Initialize wizard
+                if (typeof showStep === 'function') {
+                    showStep(1);
+                }
+                return;
+            }
+            
+            // Preloader Step 1 -> Step 2
+            document.getElementById('preloader-next-1').addEventListener('click', function() {
+                document.getElementById('preloader-step-1').classList.add('hidden');
+                document.getElementById('preloader-step-2').classList.remove('hidden');
+            });
+            
+            // Preloader Step 2 -> Start Wizard
+            document.getElementById('preloader-start-wizard').addEventListener('click', function() {
+                // Show transition
+                document.getElementById('preloader-transition').classList.remove('hidden');
+                
+                // After 500ms, hide preloader and show wizard
+                setTimeout(function() {
+                    document.getElementById('preloader-overlay').classList.add('hidden');
+                    document.getElementById('onboarding-main').classList.remove('hidden');
+                    
+                    // Mark as seen
+                    sessionStorage.setItem('katek_preloader_seen', 'true');
+                    
+                    // Initialize wizard - show step 1
+                    if (typeof showStep === 'function') {
+                        showStep(1);
+                    } else {
+                        // Fallback if showStep isn't defined yet
+                        setTimeout(function() {
+                            if (typeof showStep === 'function') {
+                                showStep(1);
+                            }
+                        }, 100);
+                    }
+                }, 500);
+            });
         })();
     </script>
 </body>
