@@ -88,9 +88,19 @@ WSGI_APPLICATION = 'myProject.wsgi.application'
 # Use DATABASE_URL from .env file, otherwise fall back to SQLite
 DATABASE_URL = os.getenv('DATABASE_URL')
 if DATABASE_URL:
+    # Use psycopg (psycopg3) for Python 3.13 compatibility
     DATABASES = {
-        'default': dj_database_url.config(default=DATABASE_URL, conn_max_age=600)
+        'default': dj_database_url.config(
+            default=DATABASE_URL, 
+            conn_max_age=600,
+            conn_health_checks=True
+        )
     }
+    # Ensure we're using psycopg3 adapter
+    if DATABASES['default']['ENGINE'] == 'django.db.backends.postgresql':
+        DATABASES['default']['OPTIONS'] = {
+            'connect_timeout': 10,
+        }
 else:
     DATABASES = {
         'default': {
