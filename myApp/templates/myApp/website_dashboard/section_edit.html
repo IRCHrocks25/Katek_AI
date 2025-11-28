@@ -1,0 +1,69 @@
+{% extends 'myApp/website_dashboard/base.html' %}
+
+{% block title %}Edit {{ section.get_section_type_display }} - Website CMS{% endblock %}
+{% block page_title %}{{ section.get_section_type_display }}{% endblock %}
+{% block page_subtitle %}Edit section content{% endblock %}
+
+{% block content %}
+<form method="POST" class="space-y-6">
+    {% csrf_token %}
+    
+    <div class="bg-slate-800/50 border border-slate-700/50 rounded-lg p-6">
+        <h3 class="text-lg font-bold text-slate-100 mb-4">Section Content</h3>
+        
+        <div class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium text-slate-300 mb-2">Title</label>
+                <input type="text" name="title" value="{{ section.title }}" class="w-full px-4 py-2 bg-slate-700/50 border border-slate-600/50 rounded-lg text-slate-100">
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium text-slate-300 mb-2">Subtitle</label>
+                <input type="text" name="subtitle" value="{{ section.subtitle }}" class="w-full px-4 py-2 bg-slate-700/50 border border-slate-600/50 rounded-lg text-slate-100">
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium text-slate-300 mb-2">Description</label>
+                <textarea name="description" rows="5" class="w-full px-4 py-2 bg-slate-700/50 border border-slate-600/50 rounded-lg text-slate-100">{{ section.description }}</textarea>
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium text-slate-300 mb-2">Background Image URL</label>
+                <div class="flex space-x-2">
+                    <input type="url" id="background_image_url" name="background_image_url" value="{{ section.background_image_url }}" class="flex-1 px-4 py-2 bg-slate-700/50 border border-slate-600/50 rounded-lg text-slate-100">
+                    <button type="button" onclick="openGalleryPicker('background_image_url', 'original')" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-white text-sm font-medium transition-colors whitespace-nowrap">
+                        <i class="fas fa-images mr-2"></i>Select from Gallery
+                    </button>
+                </div>
+                {% if section.background_image_url %}
+                <div class="mt-2">
+                    <img id="background_image_url_preview" src="{{ section.background_image_url }}" alt="Preview" class="max-w-xs h-32 object-cover rounded-lg border border-slate-600/50">
+                </div>
+                {% else %}
+                <div class="mt-2 hidden">
+                    <img id="background_image_url_preview" src="" alt="Preview" class="max-w-xs h-32 object-cover rounded-lg border border-slate-600/50">
+                </div>
+                {% endif %}
+                <p class="text-xs text-slate-400 mt-1">Use image URL from gallery or external URL</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="bg-slate-800/50 border border-slate-700/50 rounded-lg p-6">
+        <label class="flex items-center space-x-3">
+            <input type="checkbox" name="is_active" {% if section.is_active %}checked{% endif %} class="w-5 h-5 rounded bg-slate-700/50 border-slate-600/50 text-blue-600">
+            <span class="text-slate-200">Active (show on website)</span>
+        </label>
+    </div>
+    
+    <div class="flex justify-end space-x-4">
+        <a href="{% url 'website_dashboard:home' %}" class="px-6 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg text-slate-200 transition-colors">
+            Cancel
+        </a>
+        <button type="submit" class="px-6 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-white font-medium transition-colors">
+            <i class="fas fa-save mr-2"></i>Save Changes
+        </button>
+    </div>
+</form>
+{% endblock %}
+

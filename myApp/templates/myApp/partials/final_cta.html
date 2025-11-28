@@ -1,44 +1,58 @@
 <!-- Final CTA Section -->
-<section id="pricing" class="py-16 md:py-24 px-6 md:px-10 bg-gradient-to-r from-cyan-500/20 via-violet-500/20 to-pink-500/20">
-    <div class="max-w-4xl mx-auto">
-        <div class="bg-slate-900/90 border border-slate-700/70 rounded-3xl p-8 md:p-12 shadow-2xl text-center">
-            <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-6">
-                Ready to See Your Business on Autopilot?
-            </h2>
-            <p class="text-lg md:text-xl text-slate-300 mb-8 max-w-2xl mx-auto">
-                Book a live walkthrough and we'll map KaTek AI to your exact workflows — CRM, campaigns, websites, bots, and more.
-            </p>
+{% with final_cta_section=content.sections.final_cta|default:None %}
+<section id="pricing" class="section-spacing relative overflow-hidden">
+    <!-- Background Image - From Database or Fallback -->
+    <div class="absolute inset-0 z-0">
+        <img src="{% if final_cta_section.background_image_url %}{{ final_cta_section.background_image_url }}{% else %}https://images.unsplash.com/photo-1557683316-973673baf926?w=1920&h=1080&fit=crop{% endif %}" 
+             alt="Final CTA Background" 
+             class="w-full h-full object-cover"
+             onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+        <!-- Fallback gradient if image doesn't load -->
+        <div class="hidden absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950"></div>
+    </div>
+    
+    <!-- Blue and Teal Neon Waves - From Bottom and Sides -->
+    <div class="neon-wave neon-wave-blue absolute bottom-0 left-0 opacity-40" style="width: 1400px; height: 1400px; filter: blur(100px); transform: translate(-30%, 30%);"></div>
+    <div class="neon-wave absolute bottom-0 right-0 opacity-40" style="width: 1200px; height: 1200px; background: radial-gradient(circle, rgba(20, 184, 166, 0.4) 0%, transparent 70%); filter: blur(100px); transform: translate(30%, 30%);"></div>
+    <div class="neon-wave absolute top-0 left-1/2 opacity-30" style="width: 1000px; height: 1000px; background: radial-gradient(circle, rgba(56, 189, 248, 0.3) 0%, transparent 70%); filter: blur(100px); transform: translate(-50%, -50%);"></div>
+    
+    <div class="content-container relative z-10">
+        <div class="max-w-3xl mx-auto text-center">
+            <!-- Halo Glow Effect Behind Content -->
+            <div class="absolute -z-10 rounded-full blur-3xl" style="top: 50%; left: 50%; transform: translate(-50%, -50%); width: 800px; height: 800px; background: radial-gradient(circle, rgba(56, 189, 248, 0.15) 0%, rgba(20, 184, 166, 0.15) 30%, transparent 70%);"></div>
             
-            <!-- CTAs -->
-            <div class="flex flex-col sm:flex-row gap-4 justify-center mb-8">
-                <button class="px-8 py-4 bg-gradient-to-r from-cyan-500 to-violet-500 text-white rounded-lg font-semibold text-lg hover:shadow-[0_0_40px_rgba(56,189,248,0.5)] transition-all duration-300 hover:-translate-y-1 flex items-center justify-center space-x-2">
-                    <i class="fa-solid fa-calendar-check"></i>
-                    <span>Book a Demo</span>
-                </button>
-                <button class="px-8 py-4 text-slate-300 border border-slate-700 rounded-lg font-semibold hover:border-cyan-400 hover:text-cyan-400 transition-all duration-300 flex items-center justify-center space-x-2">
-                    <i class="fa-solid fa-file-pdf"></i>
-                    <span>Get a Strategy PDF</span>
-                </button>
-            </div>
-            
-            <!-- Trust Helpers -->
-            <div class="flex flex-wrap justify-center gap-6 text-sm text-slate-400">
-                <div class="flex items-center space-x-2">
-                    <i class="fa-solid fa-check text-green-400"></i>
-                    <span>No hard pitch.</span>
+            <div class="relative z-10">
+                <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 text-white fade-in-up stagger-1">
+                    {% if final_cta_section.title %}{{ final_cta_section.title }}{% else %}Ready to see your business on autopilot?{% endif %}
+                </h2>
+                <p class="text-lg md:text-xl text-slate-300 mb-10 max-w-2xl mx-auto fade-in-up stagger-2">
+                    {% if final_cta_section.subtitle %}{{ final_cta_section.subtitle }}{% else %}Book a live walkthrough and we'll map Katalyst AI to your exact workflows — CRM, campaigns, websites, bots, and more.{% endif %}
+                </p>
+                
+                <!-- CTA Buttons - Side by Side -->
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-10 fade-in-up stagger-3">
+                    <!-- Primary Button: Schedule Your Call -->
+                    <button class="btn-schedule-call">
+                        Schedule Your Call
+                    </button>
+                    
+                    <!-- Text Link: Get A Strategy PDF -->
+                    <a href="#" class="text-white hover:text-cyan-400 transition-colors flex items-center space-x-2 text-base font-medium">
+                        <span>Get A Strategy PDF</span>
+                        <i class="fa-solid fa-arrow-right text-sm"></i>
+                    </a>
                 </div>
-                <div class="flex items-center space-x-2">
-                    <i class="fa-solid fa-check text-green-400"></i>
-                    <span>We'll show you live inside the platform.</span>
-                </div>
-                <div class="flex items-center space-x-2">
-                    <i class="fa-solid fa-check text-green-400"></i>
-                    <span>Walk away with a clear action plan — even if we're not a fit.</span>
-                </div>
+                
+                <!-- Concluding Sentence -->
+                <p class="text-sm md:text-base text-slate-300">
+                    Walk away with a clear action plan - even if we're not a fit.
+                </p>
             </div>
         </div>
     </div>
 </section>
+{% endwith %}
+
 
 
 

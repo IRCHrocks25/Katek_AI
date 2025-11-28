@@ -1,0 +1,207 @@
+<!-- Gallery Picker Modal -->
+<div id="galleryPickerModal" class="hidden fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4">
+    <div class="bg-slate-800 rounded-xl max-w-6xl w-full max-h-[90vh] flex flex-col">
+        <!-- Header -->
+        <div class="sticky top-0 bg-slate-800 border-b border-slate-700 p-4 flex items-center justify-between z-10">
+            <div>
+                <h3 class="text-lg font-bold text-slate-100">Select Image from Gallery</h3>
+                <p class="text-xs text-slate-400 mt-1">Choose an image to use</p>
+            </div>
+            <button onclick="closeGalleryPicker()" class="text-slate-400 hover:text-slate-200 transition-colors">
+                <i class="fas fa-times text-2xl"></i>
+            </button>
+        </div>
+        
+        <!-- Search and Filter -->
+        <div class="p-4 border-b border-slate-700">
+            <div class="flex flex-col md:flex-row gap-4">
+                <div class="flex-1 relative">
+                    <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400"></i>
+                    <input type="text" id="galleryPickerSearch" placeholder="Search images..." class="w-full pl-10 pr-4 py-2 bg-slate-700/50 border border-slate-600/50 rounded-lg text-slate-100 placeholder-slate-400 focus:outline-none focus:border-blue-500">
+                </div>
+                <div>
+                    <select id="galleryPickerFolder" class="px-4 py-2 bg-slate-700/50 border border-slate-600/50 rounded-lg text-slate-100">
+                        <option value="">All Folders</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Images Grid -->
+        <div class="flex-1 overflow-y-auto p-4">
+            <div id="galleryPickerGrid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                <div class="col-span-full text-center py-12">
+                    <i class="fas fa-spinner fa-spin text-4xl text-slate-400 mb-4"></i>
+                    <p class="text-slate-400">Loading images...</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="sticky bottom-0 bg-slate-800 border-t border-slate-700 p-4 flex items-center justify-end space-x-3">
+            <button onclick="closeGalleryPicker()" class="px-4 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg text-slate-200 transition-colors">
+                Cancel
+            </button>
+            <a href="{% url 'website_dashboard:gallery' %}" target="_blank" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-white transition-colors">
+                <i class="fas fa-images mr-2"></i>Manage Gallery
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+let galleryPickerCallback = null;
+let galleryPickerUrlType = 'original'; // 'original', 'web', 'thumbnail'
+
+function openGalleryPicker(inputFieldId, urlType = 'original') {
+    galleryPickerCallback = inputFieldId;
+    galleryPickerUrlType = urlType;
+    document.getElementById('galleryPickerModal').classList.remove('hidden');
+    loadGalleryImages();
+}
+
+function closeGalleryPicker() {
+    document.getElementById('galleryPickerModal').classList.add('hidden');
+    galleryPickerCallback = null;
+}
+
+function selectGalleryImage(image) {
+    if (!galleryPickerCallback) return;
+    
+    let url = image.url;
+    if (galleryPickerUrlType === 'web' && image.web_url) {
+        url = image.web_url;
+    } else if (galleryPickerUrlType === 'thumbnail' && image.thumbnail_url) {
+        url = image.thumbnail_url;
+    }
+    
+    const inputField = document.getElementById(galleryPickerCallback);
+    if (inputField) {
+        inputField.value = url;
+        // Trigger change event
+        inputField.dispatchEvent(new Event('change', { bubbles: true }));
+        
+        // Show preview if there's a preview element
+        const previewId = galleryPickerCallback + '_preview';
+        const previewElement = document.getElementById(previewId);
+        if (previewElement) {
+            previewElement.src = url;
+            previewElement.parentElement.classList.remove('hidden');
+        }
+    }
+    
+    closeGalleryPicker();
+    
+    // Show success notification
+    showNotification('Image selected successfully!', 'success');
+}
+
+async function loadGalleryImages() {
+    const grid = document.getElementById('galleryPickerGrid');
+    const searchQuery = document.getElementById('galleryPickerSearch').value;
+    const folderFilter = document.getElementById('galleryPickerFolder').value;
+    
+    grid.innerHTML = '<div class="col-span-full text-center py-12"><i class="fas fa-spinner fa-spin text-4xl text-slate-400 mb-4"></i><p class="text-slate-400">Loading images...</p></div>';
+    
+    try {
+        const params = new URLSearchParams();
+        if (searchQuery) params.append('q', searchQuery);
+        if (folderFilter) params.append('folder', folderFilter);
+        
+        const url = '{% url "website_dashboard:gallery_api" %}' + (params.toString() ? '?' + params.toString() : '');
+        const response = await fetch(url);
+        const data = await response.json();
+        
+        if (data.success && data.images && data.images.length > 0) {
+            grid.innerHTML = '';
+            data.images.forEach(image => {
+                const imageCard = document.createElement('div');
+                imageCard.className = 'bg-slate-700/50 border border-slate-600/50 rounded-lg overflow-hidden group hover:border-blue-500 cursor-pointer transition-all';
+                imageCard.onclick = () => selectGalleryImage(image);
+                imageCard.innerHTML = `
+                    <div class="aspect-square bg-slate-600/50 relative overflow-hidden">
+                        <img src="${image.thumbnail_url || image.url}" alt="${image.title || 'Image'}" class="w-full h-full object-cover transition-transform group-hover:scale-110">
+                        <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                            <div class="px-3 py-1.5 bg-blue-600 rounded text-sm text-white">
+                                <i class="fas fa-check mr-1"></i>Select
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-2">
+                        <p class="text-xs text-slate-200 truncate" title="${image.title || 'Untitled'}">${image.title || 'Untitled'}</p>
+                        <p class="text-xs text-slate-400">${image.width}×${image.height}</p>
+                    </div>
+                `;
+                grid.appendChild(imageCard);
+            });
+        } else {
+            grid.innerHTML = '<div class="col-span-full text-center py-12"><i class="fas fa-images text-4xl text-slate-500 mb-4"></i><p class="text-slate-400">No images found</p><p class="text-slate-500 text-sm mt-2">Upload images in the gallery first</p></div>';
+        }
+    } catch (error) {
+        grid.innerHTML = '<div class="col-span-full text-center py-12"><i class="fas fa-exclamation-triangle text-4xl text-red-400 mb-4"></i><p class="text-red-400">Error loading images</p></div>';
+    }
+}
+
+// Load folders for filter
+async function loadGalleryFolders() {
+    try {
+        const response = await fetch('{% url "website_dashboard:gallery_api" %}?limit=100');
+        const data = await response.json();
+        if (data.success && data.images) {
+            const folders = [...new Set(data.images.map(img => img.folder).filter(f => f))];
+            const select = document.getElementById('galleryPickerFolder');
+            // Clear existing options except "All Folders"
+            while (select.children.length > 1) {
+                select.removeChild(select.lastChild);
+            }
+            folders.forEach(folder => {
+                const option = document.createElement('option');
+                option.value = folder;
+                option.textContent = folder;
+                select.appendChild(option);
+            });
+        }
+    } catch (error) {
+        console.error('Error loading folders:', error);
+    }
+}
+
+// Event listeners
+document.getElementById('galleryPickerSearch').addEventListener('input', debounce(loadGalleryImages, 300));
+document.getElementById('galleryPickerFolder').addEventListener('change', loadGalleryImages);
+
+// Close modal on outside click
+document.getElementById('galleryPickerModal').addEventListener('click', function(e) {
+    if (e.target === this) {
+        closeGalleryPicker();
+    }
+});
+
+// Debounce function
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
+// Notification function
+function showNotification(message, type = 'success') {
+    const notification = document.createElement('div');
+    notification.className = `fixed top-4 right-4 px-4 py-3 rounded-lg shadow-lg z-50 ${
+        type === 'success' ? 'bg-green-600 text-white' : 'bg-red-600 text-white'
+    }`;
+    notification.innerHTML = `<i class="fas fa-${type === 'success' ? 'check' : 'times'}-circle mr-2"></i>${message}`;
+    document.body.appendChild(notification);
+    setTimeout(() => notification.remove(), 3000);
+}
+
+// Load folders on page load
+document.addEventListener('DOMContentLoaded', loadGalleryFolders);
+</script>
+

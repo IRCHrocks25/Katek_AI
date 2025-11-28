@@ -1,79 +1,69 @@
 <!-- Footer -->
-<footer class="bg-slate-950 border-t border-slate-800 py-12 md:py-16 px-6 md:px-10">
-    <div class="max-w-7xl mx-auto">
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-            <!-- Logo + Description -->
-            <div class="md:col-span-1">
-                <div class="flex items-center space-x-2 mb-4">
-                    <div class="h-10 w-10 rounded-lg bg-gradient-to-br from-cyan-400 to-violet-500 flex items-center justify-center">
-                        <i class="fa-solid fa-robot text-white text-xl"></i>
-                    </div>
-                    <span class="text-xl font-bold text-slate-100">KATEK AI</span>
-                </div>
-                <p class="text-slate-400 text-sm">
-                    KaTek AI is your all-in-one AI CRM and growth engine, built for founders who want systems, not chaos.
-                </p>
+{% with footer_content=content.footer|default:None %}
+<footer class="py-12 md:py-16 relative" style="background: linear-gradient(to bottom, #0a0e27 0%, #1a1f3a 100%);">
+    <div class="content-container">
+        <!-- Centered Layout -->
+        <div class="flex flex-col md:flex-row items-center justify-between gap-8 mb-8">
+            <!-- Left: Logo -->
+            <div class="flex items-center space-x-2">
+                <span class="text-lg font-bold text-slate-100">KATEK AI</span>
             </div>
             
-            <!-- Product Links -->
-            <div>
-                <h4 class="text-slate-100 font-semibold mb-4">Product</h4>
-                <ul class="space-y-2">
-                    <li><a href="#platform" class="text-slate-400 hover:text-cyan-400 transition-colors text-sm">Platform</a></li>
-                    <li><a href="#solutions" class="text-slate-400 hover:text-cyan-400 transition-colors text-sm">Features</a></li>
-                    <li><a href="#pricing" class="text-slate-400 hover:text-cyan-400 transition-colors text-sm">Pricing</a></li>
-                    <li><a href="#" class="text-slate-400 hover:text-cyan-400 transition-colors text-sm">Integrations</a></li>
-                </ul>
+            <!-- Middle: Footer Links Row -->
+            <div class="flex flex-wrap items-center justify-center gap-6 text-sm">
+                {% if footer_content.footer_links %}
+                    {% for link in footer_content.footer_links %}
+                        <a href="{{ link.url|default:'#' }}" class="text-slate-400 hover:text-cyan-400 transition-colors">{{ link.title }}</a>
+                    {% endfor %}
+                {% else %}
+                    <a href="#platform" class="text-slate-400 hover:text-cyan-400 transition-colors">Home</a>
+                    <a href="#platform" class="text-slate-400 hover:text-cyan-400 transition-colors">Product</a>
+                    <a href="#solutions" class="text-slate-400 hover:text-cyan-400 transition-colors">Solutions</a>
+                    <a href="#results" class="text-slate-400 hover:text-cyan-400 transition-colors">Results</a>
+                    <a href="#pricing" class="text-slate-400 hover:text-cyan-400 transition-colors">Pricing</a>
+                {% endif %}
             </div>
             
-            <!-- Resources -->
-            <div>
-                <h4 class="text-slate-100 font-semibold mb-4">Resources</h4>
-                <ul class="space-y-2">
-                    <li><a href="#" class="text-slate-400 hover:text-cyan-400 transition-colors text-sm">Blog</a></li>
-                    <li><a href="#" class="text-slate-400 hover:text-cyan-400 transition-colors text-sm">Case Studies</a></li>
-                    <li><a href="#" class="text-slate-400 hover:text-cyan-400 transition-colors text-sm">Support Docs</a></li>
-                </ul>
+            <!-- Right: Social Links -->
+            {% if footer_content.social_links %}
+            <div class="flex items-center space-x-4">
+                {% if footer_content.social_links.facebook %}
+                    <a href="{{ footer_content.social_links.facebook }}" target="_blank" class="text-slate-400 hover:text-cyan-400 transition-colors">
+                        <i class="fab fa-facebook"></i>
+                    </a>
+                {% endif %}
+                {% if footer_content.social_links.twitter %}
+                    <a href="{{ footer_content.social_links.twitter }}" target="_blank" class="text-slate-400 hover:text-cyan-400 transition-colors">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                {% endif %}
+                {% if footer_content.social_links.instagram %}
+                    <a href="{{ footer_content.social_links.instagram }}" target="_blank" class="text-slate-400 hover:text-cyan-400 transition-colors">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                {% endif %}
+                {% if footer_content.social_links.linkedin %}
+                    <a href="{{ footer_content.social_links.linkedin }}" target="_blank" class="text-slate-400 hover:text-cyan-400 transition-colors">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                {% endif %}
+                {% if footer_content.social_links.youtube %}
+                    <a href="{{ footer_content.social_links.youtube }}" target="_blank" class="text-slate-400 hover:text-cyan-400 transition-colors">
+                        <i class="fab fa-youtube"></i>
+                    </a>
+                {% endif %}
             </div>
-            
-            <!-- Contact -->
-            <div>
-                <h4 class="text-slate-100 font-semibold mb-4">Contact</h4>
-                <ul class="space-y-3">
-                    <li class="flex items-center space-x-2">
-                        <i class="fa-solid fa-envelope text-cyan-400 text-sm"></i>
-                        <a href="mailto:info@katekai.com" class="text-slate-400 hover:text-cyan-400 transition-colors text-sm">info@katekai.com</a>
-                    </li>
-                    <li class="flex items-center space-x-2">
-                        <i class="fa-solid fa-location-dot text-cyan-400 text-sm"></i>
-                        <span class="text-slate-400 text-sm">United States</span>
-                    </li>
-                </ul>
-                <div class="flex items-center space-x-4 mt-4">
-                    <a href="#" class="text-slate-400 hover:text-cyan-400 transition-colors">
-                        <i class="fa-brands fa-linkedin text-xl"></i>
-                    </a>
-                    <a href="#" class="text-slate-400 hover:text-cyan-400 transition-colors">
-                        <i class="fa-brands fa-facebook text-xl"></i>
-                    </a>
-                    <a href="#" class="text-slate-400 hover:text-cyan-400 transition-colors">
-                        <i class="fa-brands fa-twitter text-xl"></i>
-                    </a>
-                </div>
-            </div>
+            {% endif %}
         </div>
         
-        <!-- Bottom Row -->
-        <div class="border-t border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center">
-            <p class="text-slate-500 text-sm mb-4 md:mb-0">
-                &copy; 2024 KaTek AI. All rights reserved.
-            </p>
-            <p class="text-slate-500 text-sm">
-                Made with <span class="text-red-400">❤️</span> for growing businesses
-            </p>
+        <!-- Bottom: Copyright -->
+        <div class="text-center text-sm text-slate-500">
+            {% if footer_content.copyright_text %}{{ footer_content.copyright_text }}{% else %}&copy; 2024 KaTek AI. All rights reserved.{% endif %}
         </div>
     </div>
 </footer>
+{% endwith %}
+
 
 
 

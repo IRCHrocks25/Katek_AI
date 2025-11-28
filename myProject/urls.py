@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from myApp import views
 
 urlpatterns = [
@@ -20,4 +20,7 @@ urlpatterns = [
     path('dashboard/sessions/<int:session_id>/add-note/', views.dashboard_add_note, name='dashboard_add_note'),
     path('dashboard/sessions/<int:session_id>/generate-summary/', views.dashboard_generate_ai_summary, name='dashboard_generate_ai_summary'),
     path('dashboard/export/csv/', views.dashboard_export_csv, name='dashboard_export_csv'),
+    
+    # Website Dashboard routes
+    path('website-dashboard/', include('myApp.website_dashboard_urls')),
 ]

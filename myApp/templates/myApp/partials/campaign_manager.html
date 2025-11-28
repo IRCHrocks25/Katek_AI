@@ -1,54 +1,58 @@
 <!-- AI Campaign Manager & Content Engine Section -->
-<section class="py-16 md:py-24 px-6 md:px-10 bg-slate-950">
-    <div class="max-w-7xl mx-auto">
-        <div class="text-center mb-16">
-            <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
-                Campaigns That Write, Test, and Optimize Themselves.
+<section class="section-spacing relative">
+    <div class="content-container relative z-10">
+        <!-- Section Header - Centered -->
+        <div class="text-center mb-16 fade-in-up">
+            {% with campaign_section=content.sections.campaign_manager|default:None %}
+            <div class="pill-label mb-4">{% if campaign_section and campaign_section.title %}{{ campaign_section.title }}{% else %}Campaigns{% endif %}</div>
+            <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-white">
+                {% if campaign_section and campaign_section.subtitle %}{{ campaign_section.subtitle|safe }}{% else %}Campaigns That Write, Test,<br>and Optimize Themselves{% endif %}
             </h2>
+            {% endwith %}
         </div>
         
-        <!-- Three Stacked Cards -->
-        <div class="space-y-6">
+        <!-- Three Stacked Cards with Gradient Borders -->
+        <div class="space-y-6 mb-12">
             <!-- Card 1: KaTek AI Campaign Manager -->
-            <div class="bg-gradient-to-r from-pink-500/40 via-violet-500/40 to-cyan-400/40 p-[1px] rounded-3xl">
-                <div class="bg-slate-900/90 rounded-3xl p-8">
+            <div class="bg-gradient-to-r from-pink-500/30 via-violet-500/30 to-cyan-400/30 p-[1px] rounded-3xl fade-in-up stagger-1 hover-lift">
+                <div class="bg-slate-900/80 backdrop-blur-sm rounded-3xl p-8">
                     <div class="flex items-start space-x-6">
-                        <div class="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-slate-800 flex-shrink-0">
+                        <div class="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-slate-800/60 flex-shrink-0">
                             <i class="fa-solid fa-layer-group text-pink-400 text-xl"></i>
                         </div>
                         <div class="flex-1">
                             <h3 class="text-2xl font-bold text-slate-100 mb-3">KaTek AI Campaign Manager</h3>
-                            <p class="text-slate-400 text-lg">Plan, launch, and track campaigns across email, SMS, social, and ads — from one screen.</p>
+                            <p class="text-slate-300 text-lg">Plan, launch, and track campaigns across email, SMS, social, and ads — from one screen.</p>
                         </div>
                     </div>
                 </div>
             </div>
             
             <!-- Card 2: Keywords, Market Trends & Sentiment Analytics -->
-            <div class="bg-gradient-to-r from-pink-500/40 via-violet-500/40 to-cyan-400/40 p-[1px] rounded-3xl">
-                <div class="bg-slate-900/90 rounded-3xl p-8">
+            <div class="bg-gradient-to-r from-pink-500/30 via-violet-500/30 to-cyan-400/30 p-[1px] rounded-3xl fade-in-up stagger-2 hover-lift">
+                <div class="bg-slate-900/80 backdrop-blur-sm rounded-3xl p-8">
                     <div class="flex items-start space-x-6">
-                        <div class="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-slate-800 flex-shrink-0">
+                        <div class="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-slate-800/60 flex-shrink-0">
                             <i class="fa-solid fa-chart-bar text-violet-400 text-xl"></i>
                         </div>
                         <div class="flex-1">
                             <h3 class="text-2xl font-bold text-slate-100 mb-3">Keywords, Market Trends & Sentiment Analytics</h3>
-                            <p class="text-slate-400 text-lg">Know what your market is talking about, which topics resonate, and how your brand is perceived.</p>
+                            <p class="text-slate-300 text-lg">Know what your market is talking about, which topics resonate, and how your brand is perceived.</p>
                         </div>
                     </div>
                 </div>
             </div>
             
             <!-- Card 3: AI Lead Generator & Content Studio -->
-            <div class="bg-gradient-to-r from-pink-500/40 via-violet-500/40 to-cyan-400/40 p-[1px] rounded-3xl">
-                <div class="bg-slate-900/90 rounded-3xl p-8">
-                    <div class="flex items-start space-x-6 mb-6">
-                        <div class="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-slate-800 flex-shrink-0">
+            <div class="bg-gradient-to-r from-pink-500/30 via-violet-500/30 to-cyan-400/30 p-[1px] rounded-3xl fade-in-up stagger-3 hover-lift">
+                <div class="bg-slate-900/80 backdrop-blur-sm rounded-3xl p-8">
+                    <div class="flex items-start space-x-6">
+                        <div class="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-slate-800/60 flex-shrink-0">
                             <i class="fa-solid fa-wand-magic-sparkles text-cyan-400 text-xl"></i>
                         </div>
                         <div class="flex-1">
                             <h3 class="text-2xl font-bold text-slate-100 mb-3">AI Lead Generator & Content Studio</h3>
-                            <ul class="space-y-2 text-slate-400">
+                            <ul class="space-y-2 text-slate-300">
                                 <li class="flex items-start space-x-3">
                                     <i class="fa-solid fa-envelope-circle-check text-cyan-400 mt-1"></i>
                                     <span>Generate targeted email sequences and subject lines.</span>
@@ -69,9 +73,9 @@
         </div>
         
         <!-- Bottom Subheading -->
-        <div class="mt-12 text-center">
+        <div class="text-center">
             <h4 class="text-xl font-semibold text-slate-200 mb-2">AI Mail and Targeted Content Generator</h4>
-            <p class="text-slate-400 max-w-2xl mx-auto">Send the right message, to the right people, at the right time — without staring at a blank page.</p>
+            <p class="text-slate-300 max-w-2xl mx-auto">Send the right message, to the right people, at the right time — without staring at a blank page.</p>
         </div>
     </div>
 </section>

@@ -1,84 +1,121 @@
-<!-- Who KaTek AI Is For - Persona Section -->
-<section class="py-16 md:py-24 px-6 md:px-10 bg-slate-950">
-    <div class="max-w-7xl mx-auto">
-        <div class="text-center mb-16">
-            <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
-                Built for Owners Who Are Done With Juggling 17 Different Tools.
+<!-- Built for Owners Section -->
+{% with personas_section=content.sections.personas|default:None %}
+<section class="section-spacing relative overflow-hidden">
+    <!-- Background Image - From Database or Fallback -->
+    <div class="absolute inset-0 z-0">
+        <img src="{% if personas_section.background_image_url %}{{ personas_section.background_image_url }}{% else %}https://images.unsplash.com/photo-1557683316-973673baf926?w=1920&h=1080&fit=crop{% endif %}" 
+             alt="Personas Background" 
+             class="w-full h-full object-cover"
+             onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+        <!-- Fallback gradient if image doesn't load -->
+        <div class="hidden absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950"></div>
+    </div>
+    
+    <!-- Abstract Glowing Light Streaks (Blue & Green) -->
+    <div class="neon-wave neon-wave-blue absolute top-0 left-0 opacity-20" style="width: 1200px; height: 1200px; filter: blur(80px);"></div>
+    <div class="neon-wave absolute top-0 right-0 opacity-20" style="width: 1000px; height: 1000px; background: radial-gradient(circle, rgba(34, 197, 94, 0.4) 0%, transparent 70%); filter: blur(80px);"></div>
+    
+    <div class="content-container relative z-10">
+        <!-- Section Header - Centered -->
+        <div class="text-center mb-16 fade-in-up">
+            <div class="pill-label mb-4">Who Is This For</div>
+            <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-white">
+                {% if personas_section.subtitle %}{{ personas_section.subtitle|linebreaksbr }}{% else %}Built for owners who are done<br>with juggling 17 different tools.{% endif %}
             </h2>
         </div>
         
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <!-- Service-Based Businesses -->
-            <div class="bg-slate-900/80 border border-slate-700/70 rounded-2xl p-8 shadow-xl hover:border-cyan-400 hover:shadow-[0_0_30px_rgba(34,211,238,0.4)] transition-all duration-300">
-                <div class="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-slate-800 mb-6">
-                    <i class="fa-solid fa-briefcase text-cyan-400 text-2xl"></i>
+        <!-- Three Columns - Side by Side -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+            <!-- Left Card: Service-Based Businesses -->
+            <div class="relative bg-slate-800/40 backdrop-blur-xl border border-cyan-400/25 rounded-2xl p-8 shadow-[0_8px_32px_rgba(0,0,0,0.4)] hover:border-cyan-400/40 hover:shadow-[0_8px_32px_rgba(56,189,248,0.25)] transition-all duration-300 hover-lift fade-in-up stagger-1">
+                <div class="absolute inset-0 bg-gradient-to-br from-cyan-500/3 to-transparent rounded-2xl pointer-events-none"></div>
+                <div class="absolute inset-0 rounded-2xl border border-cyan-400/15 pointer-events-none"></div>
+                
+                <div class="relative z-10">
+                    <h3 class="text-xl font-bold text-white mb-3">Service-Based Businesses</h3>
+                    <p class="text-slate-200 text-sm mb-6 leading-relaxed">Coaches, agencies, clinics, and local services that depend on booked appointments.</p>
+                    <ul class="space-y-3 text-slate-200 text-sm">
+                        <li class="flex items-start space-x-3">
+                            <i class="fa-solid fa-check text-cyan-400 mt-0.5 flex-shrink-0"></i>
+                            <span>Automated lead follow-up</span>
+                        </li>
+                        <li class="flex items-start space-x-3">
+                            <i class="fa-solid fa-check text-cyan-400 mt-0.5 flex-shrink-0"></i>
+                            <span>Fewer manual reports</span>
+                        </li>
+                        <li class="flex items-start space-x-3">
+                            <i class="fa-solid fa-check text-cyan-400 mt-0.5 flex-shrink-0"></i>
+                            <span>Consistent messaging across channels</span>
+                        </li>
+                    </ul>
                 </div>
-                <h3 class="text-2xl font-bold text-slate-100 mb-4">Service-Based Businesses</h3>
-                <p class="text-slate-400 mb-6">Coaches, agencies, clinics, and local services that depend on booked appointments.</p>
-                <ul class="space-y-2 text-slate-300">
-                    <li class="flex items-start space-x-2">
-                        <i class="fa-solid fa-check text-cyan-400 mt-1 text-sm"></i>
-                        <span class="text-sm">Automated lead follow-up</span>
-                    </li>
-                    <li class="flex items-start space-x-2">
-                        <i class="fa-solid fa-check text-cyan-400 mt-1 text-sm"></i>
-                        <span class="text-sm">Fewer manual reports</span>
-                    </li>
-                    <li class="flex items-start space-x-2">
-                        <i class="fa-solid fa-check text-cyan-400 mt-1 text-sm"></i>
-                        <span class="text-sm">Consistent messaging across channels</span>
-                    </li>
-                </ul>
             </div>
             
-            <!-- SMB Founders -->
-            <div class="bg-slate-900/80 border border-slate-700/70 rounded-2xl p-8 shadow-xl hover:border-violet-400 hover:shadow-[0_0_30px_rgba(139,92,246,0.4)] transition-all duration-300">
-                <div class="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-slate-800 mb-6">
-                    <i class="fa-solid fa-user-tie text-violet-400 text-2xl"></i>
+            <!-- Middle Card: SMB Founders -->
+            <div class="relative bg-slate-800/40 backdrop-blur-xl border border-cyan-400/25 rounded-2xl p-8 shadow-[0_8px_32px_rgba(0,0,0,0.4)] hover:border-cyan-400/40 hover:shadow-[0_8px_32px_rgba(56,189,248,0.25)] transition-all duration-300 hover-lift fade-in-up stagger-2">
+                <div class="absolute inset-0 bg-gradient-to-br from-cyan-500/3 to-transparent rounded-2xl pointer-events-none"></div>
+                <div class="absolute inset-0 rounded-2xl border border-cyan-400/15 pointer-events-none"></div>
+                
+                <div class="relative z-10">
+                    <h3 class="text-xl font-bold text-white mb-3">SMB Founders</h3>
+                    <p class="text-slate-200 text-sm mb-6 leading-relaxed">Owners who want real insight into what's working — and don't have time to be 'the tech person'.</p>
+                    <ul class="space-y-3 text-slate-200 text-sm">
+                        <li class="flex items-start space-x-3">
+                            <i class="fa-solid fa-check text-cyan-400 mt-0.5 flex-shrink-0"></i>
+                            <span>Real-time analytics dashboard</span>
+                        </li>
+                        <li class="flex items-start space-x-3">
+                            <i class="fa-solid fa-check text-cyan-400 mt-0.5 flex-shrink-0"></i>
+                            <span>One system, not 17 tools</span>
+                        </li>
+                        <li class="flex items-start space-x-3">
+                            <i class="fa-solid fa-check text-cyan-400 mt-0.5 flex-shrink-0"></i>
+                            <span>AI handles the heavy lifting</span>
+                        </li>
+                    </ul>
                 </div>
-                <h3 class="text-2xl font-bold text-slate-100 mb-4">SMB Founders</h3>
-                <p class="text-slate-400 mb-6">Owners who want real insight into what's working — and don't have time to be 'the tech person'.</p>
-                <ul class="space-y-2 text-slate-300">
-                    <li class="flex items-start space-x-2">
-                        <i class="fa-solid fa-check text-violet-400 mt-1 text-sm"></i>
-                        <span class="text-sm">Real-time analytics dashboard</span>
-                    </li>
-                    <li class="flex items-start space-x-2">
-                        <i class="fa-solid fa-check text-violet-400 mt-1 text-sm"></i>
-                        <span class="text-sm">One system, not 17 tools</span>
-                    </li>
-                    <li class="flex items-start space-x-2">
-                        <i class="fa-solid fa-check text-violet-400 mt-1 text-sm"></i>
-                        <span class="text-sm">AI handles the heavy lifting</span>
-                    </li>
-                </ul>
             </div>
             
-            <!-- Affiliate / Partner-Driven Brands -->
-            <div class="bg-slate-900/80 border border-slate-700/70 rounded-2xl p-8 shadow-xl hover:border-pink-400 hover:shadow-[0_0_30px_rgba(236,72,153,0.4)] transition-all duration-300">
-                <div class="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-slate-800 mb-6">
-                    <i class="fa-solid fa-users-between-lines text-pink-400 text-2xl"></i>
+            <!-- Right Card: Affiliate / Partner-Driven Brands -->
+            <div class="relative bg-slate-800/40 backdrop-blur-xl border border-cyan-400/25 rounded-2xl p-8 shadow-[0_8px_32px_rgba(0,0,0,0.4)] hover:border-cyan-400/40 hover:shadow-[0_8px_32px_rgba(56,189,248,0.25)] transition-all duration-300 hover-lift fade-in-up stagger-3">
+                <div class="absolute inset-0 bg-gradient-to-br from-cyan-500/3 to-transparent rounded-2xl pointer-events-none"></div>
+                <div class="absolute inset-0 rounded-2xl border border-cyan-400/15 pointer-events-none"></div>
+                
+                <div class="relative z-10">
+                    <h3 class="text-xl font-bold text-white mb-3">Affiliate / Partner-Driven Brands</h3>
+                    <p class="text-slate-200 text-sm mb-6 leading-relaxed">Businesses that rely on affiliate networks and referrals, and need to track performance clearly.</p>
+                    <ul class="space-y-3 text-slate-200 text-sm">
+                        <li class="flex items-start space-x-3">
+                            <i class="fa-solid fa-check text-cyan-400 mt-0.5 flex-shrink-0"></i>
+                            <span>Complete affiliate tracking</span>
+                        </li>
+                        <li class="flex items-start space-x-3">
+                            <i class="fa-solid fa-check text-cyan-400 mt-0.5 flex-shrink-0"></i>
+                            <span>Automated payout management</span>
+                        </li>
+                        <li class="flex items-start space-x-3">
+                            <i class="fa-solid fa-check text-cyan-400 mt-0.5 flex-shrink-0"></i>
+                            <span>Performance insights by partner</span>
+                        </li>
+                    </ul>
                 </div>
-                <h3 class="text-2xl font-bold text-slate-100 mb-4">Affiliate / Partner-Driven Brands</h3>
-                <p class="text-slate-400 mb-6">Businesses that rely on affiliate networks and referrals, and need to track performance clearly.</p>
-                <ul class="space-y-2 text-slate-300">
-                    <li class="flex items-start space-x-2">
-                        <i class="fa-solid fa-check text-pink-400 mt-1 text-sm"></i>
-                        <span class="text-sm">Complete affiliate tracking</span>
-                    </li>
-                    <li class="flex items-start space-x-2">
-                        <i class="fa-solid fa-check text-pink-400 mt-1 text-sm"></i>
-                        <span class="text-sm">Automated payout management</span>
-                    </li>
-                    <li class="flex items-start space-x-2">
-                        <i class="fa-solid fa-check text-pink-400 mt-1 text-sm"></i>
-                        <span class="text-sm">Performance insights by partner</span>
-                    </li>
-                </ul>
             </div>
+        </div>
+        
+        <!-- Bottom CTA - Matching Image Exactly -->
+        <div class="text-center flex flex-col sm:flex-row items-center justify-center gap-4">
+            <button class="btn-schedule-call">
+                Schedule Your Call
+            </button>
+            <a href="#" class="text-white hover:text-cyan-400 transition-colors flex items-center space-x-2 text-sm font-medium">
+                <span>Explore How It Works</span>
+                <i class="fa-solid fa-arrow-right text-sm"></i>
+            </a>
         </div>
     </div>
 </section>
+{% endwith %}
+
 
 
 

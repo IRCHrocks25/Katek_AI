@@ -1,64 +1,111 @@
-<!-- GEO Intelligence & Distribution Channels Section -->
-<section class="py-16 md:py-24 px-6 md:px-10 bg-slate-950">
-    <div class="max-w-7xl mx-auto">
-        <div class="text-center mb-16">
-            <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
-                Location-Aware Campaigns & Smart Distribution.
-            </h2>
-        </div>
-        
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            <!-- Left: GEO Card -->
-            <div class="bg-slate-900/80 border border-slate-700/70 rounded-2xl p-8 shadow-xl">
-                <div class="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-slate-800 mb-6">
-                    <i class="fa-solid fa-location-crosshairs text-cyan-400 text-xl"></i>
-                </div>
-                <h3 class="text-2xl font-bold text-slate-100 mb-4">GEO Intelligence</h3>
-                <ul class="space-y-3 text-slate-400">
-                    <li class="flex items-start space-x-3">
-                        <i class="fa-solid fa-check text-cyan-400 mt-1"></i>
-                        <span>Target by city, neighborhood, or region.</span>
-                    </li>
-                    <li class="flex items-start space-x-3">
-                        <i class="fa-solid fa-check text-cyan-400 mt-1"></i>
-                        <span>See which areas are generating the best leads.</span>
-                    </li>
-                    <li class="flex items-start space-x-3">
-                        <i class="fa-solid fa-check text-cyan-400 mt-1"></i>
-                        <span>Auto-adjust campaigns based on local performance.</span>
-                    </li>
-                </ul>
-            </div>
+<!-- Location-Aware Campaigns & GEO Intelligence -->
+<section class="relative overflow-hidden bg-slate-950">
+    <!-- Background glows -->
+    <div class="pointer-events-none absolute -left-40 top-10 h-80 w-80 rounded-full bg-[radial-gradient(circle_at_center,#22d3ee,transparent)] opacity-40 blur-3xl"></div>
+    <div class="pointer-events-none absolute -right-52 bottom-0 h-96 w-96 rounded-full bg-[radial-gradient(circle_at_center,#4f46e5,transparent)] opacity-40 blur-3xl"></div>
+
+    <div class="relative z-10 mx-auto max-w-7xl px-6 lg:px-10">
+        <div class="grid min-h-[420px] lg:min-h-[520px] grid-cols-1 lg:grid-cols-2">
             
-            <!-- Right: Distribution Channels Grid -->
-            <div>
-                <h3 class="text-2xl font-bold text-slate-100 mb-6">Distribution Channels</h3>
-                <div class="grid grid-cols-2 gap-4 mb-6">
-                    <div class="bg-slate-900/80 border border-slate-700/70 rounded-xl p-4 text-center">
-                        <i class="fa-solid fa-phone-volume text-cyan-400 text-2xl mb-2"></i>
-                        <div class="text-sm text-slate-300 font-medium">Voice Bot</div>
-                    </div>
-                    <div class="bg-slate-900/80 border border-slate-700/70 rounded-xl p-4 text-center">
-                        <i class="fa-solid fa-sms text-violet-400 text-2xl mb-2"></i>
-                        <div class="text-sm text-slate-300 font-medium">SMS</div>
-                    </div>
-                    <div class="bg-slate-900/80 border border-slate-700/70 rounded-xl p-4 text-center">
-                        <i class="fa-solid fa-envelope-bulk text-pink-400 text-2xl mb-2"></i>
-                        <div class="text-sm text-slate-300 font-medium">Targeted Email</div>
-                    </div>
-                    <div class="bg-slate-900/80 border border-slate-700/70 rounded-xl p-4 text-center">
-                        <i class="fa-solid fa-newspaper text-yellow-400 text-2xl mb-2"></i>
-                        <div class="text-sm text-slate-300 font-medium">AI-Generated Blogs</div>
-                    </div>
-                    <div class="bg-slate-900/80 border border-slate-700/70 rounded-xl p-4 text-center col-span-2">
-                        <i class="fa-solid fa-rectangle-ad text-green-400 text-2xl mb-2"></i>
-                        <div class="text-sm text-slate-300 font-medium">AI-Generated Social Media Ads</div>
+            <!-- LEFT COLUMN -->
+            <div class="relative flex items-stretch">
+                
+                <!-- Background image -->
+                <div class="absolute inset-0">
+                    {% with geo_section=content.sections.geo_distribution|default:None %}
+                    <img
+                        src="{% if geo_section and geo_section.background_image_url %}{{ geo_section.background_image_url }}{% else %}https://images.pexels.com/photos/1181671/pexels-photo-1181671.jpeg{% endif %}"
+                        alt="Location Campaigns Background"
+                        class="h-full w-full object-cover"
+                        onerror="this.style.display='none';"
+                    >
+                    {% endwith %}
+
+                    <!-- Dark base overlay -->
+                    <div class="absolute inset-0 bg-gradient-to-tr from-slate-950/90 via-slate-950/40 to-transparent"></div>
+
+                    <!-- Smooth fade into right panel (THE FIX) -->
+                    <div class="absolute inset-0 bg-gradient-to-r from-slate-950/70 via-slate-950/30 to-transparent"></div>
+                </div>
+
+                <!-- Text -->
+                <div class="relative flex items-center py-16 lg:py-20">
+                    <div class="max-w-xl slide-in-left">
+                        {% with geo_section=content.sections.geo_distribution|default:None %}
+                        <h2 class="text-3xl md:text-4xl lg:text-5xl font-semibold tracking-tight text-white leading-tight">
+                            {% if geo_section and geo_section.subtitle %}
+                                {{ geo_section.subtitle|safe }}
+                            {% else %}
+                                Location-aware<br>campaigns &<br>smart distribution.
+                            {% endif %}
+                        </h2>
+                        <p class="mt-6 max-w-md text-sm md:text-base lg:text-lg text-slate-100/90 leading-relaxed">
+                            {% if geo_section and geo_section.description %}
+                                {{ geo_section.description }}
+                            {% else %}
+                                Katalyst AI automatically chooses the right mix of channels for each segment —
+                                and learns from every click and reply.
+                            {% endif %}
+                        </p>
+                        {% endwith %}
                     </div>
                 </div>
-                <p class="text-slate-400 text-sm">KaTek AI automatically chooses the right mix of channels for each segment — and learns from every click and reply.</p>
             </div>
+
+            <!-- RIGHT COLUMN -->
+            <div class="relative flex items-center bg-[#020617] lg:border-l lg:border-slate-800/60">
+                <div class="w-full py-14 lg:py-20 lg:pl-12 lg:pr-6 slide-in-right">
+                     
+                    <!-- GEO INTELLIGENCE -->
+                    <div class="mb-10 fade-in-up stagger-1">
+                        <h3 class="text-2xl md:text-3xl font-semibold tracking-tight text-sky-100 mb-5">
+                            GEO Intelligence
+                        </h3>
+
+                        <ul class="space-y-3 text-slate-100/90">
+                            <li class="flex items-start gap-3">
+                                <span class="mt-1 flex-shrink-0 text-cyan-400"><i class="fa-solid fa-check"></i></span>
+                                <span class="text-sm md:text-base">Target by city, neighborhood, or region.</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="mt-1 flex-shrink-0 text-cyan-400"><i class="fa-solid fa-check"></i></span>
+                                <span class="text-sm md:text-base">See which areas are generating the best leads.</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="mt-1 flex-shrink-0 text-cyan-400"><i class="fa-solid fa-check"></i></span>
+                                <span class="text-sm md:text-base">Auto-adjust campaigns based on local performance.</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- DISTRIBUTION CHANNELS -->
+                    <div class="fade-in-up stagger-2">
+                        <h3 class="text-2xl md:text-3xl font-semibold tracking-tight text-sky-100 mb-5">
+                            Distribution Channels
+                        </h3>
+
+                        <div class="grid grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
+                            <div class="flex min-h-[64px] items-center justify-center rounded-xl border border-cyan-400/45 bg-slate-900/80 px-4 text-xs md:text-sm font-medium text-sky-100 shadow-[0_0_0_1px_rgba(8,47,73,0.7),0_0_35px_rgba(56,189,248,0.25)] hover-glow transition-all duration-300">
+                                 Voice Bot
+                            </div>
+                            <div class="flex min-h-[64px] items-center justify-center rounded-xl border border-cyan-400/45 bg-slate-900/80 px-4 text-xs md:text-sm font-medium text-sky-100 shadow-[0_0_0_1px_rgba(8,47,73,0.7),0_0_35px_rgba(56,189,248,0.25)] hover-glow transition-all duration-300">
+                                 SMS
+                            </div>
+                            <div class="flex min-h-[64px] items-center justify-center rounded-xl border border-cyan-400/45 bg-slate-900/80 px-4 text-xs md:text-sm font-medium text-sky-100 shadow-[0_0_0_1px_rgba(8,47,73,0.7),0_0_35px_rgba(56,189,248,0.25)] hover-glow transition-all duration-300">
+                                 AI-Generated Blogs
+                            </div>
+                            <div class="flex min-h-[64px] items-center justify-center rounded-xl border border-cyan-400/45 bg-slate-900/80 px-4 text-xs md:text-sm font-medium text-sky-100 shadow-[0_0_0_1px_rgba(8,47,73,0.7),0_0_35px_rgba(56,189,248,0.25)] hover-glow transition-all duration-300">
+                                 Targeted Email
+                            </div>
+                            <div class="col-span-2 lg:col-span-2 flex min-h-[64px] items-center justify-center rounded-xl border border-cyan-400/45 bg-slate-900/80 px-4 text-xs md:text-sm font-medium text-sky-100 shadow-[0_0_0_1px_rgba(8,47,73,0.7),0_0_35px_rgba(56,189,248,0.25)] hover-glow transition-all duration-300">
+                                 AI-Generated Social Media Ads
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
         </div>
     </div>
 </section>
-
-

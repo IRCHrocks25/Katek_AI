@@ -1,137 +1,73 @@
 <!-- Hero Section -->
-<section class="min-h-screen flex items-center justify-center pt-28 md:pt-36 pb-16 px-6 md:px-10">
-    <div class="max-w-7xl mx-auto w-full">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <!-- Left Content -->
-            <div class="space-y-8 pt-4 md:pt-6">
-                <!-- Eyebrow -->
-                <div class="text-xs uppercase tracking-[0.3em] text-cyan-300 font-semibold">
-                    ALL-IN-ONE AI CRM & GROWTH ENGINE
+{% with hero_content=content.hero|default:None %}
+<section class="min-h-screen flex flex-col items-center justify-center pt-32 pb-16 relative">
+    <!-- Hero Background Image - From Database or Fallback -->
+    <div class="absolute inset-0 z-0">
+        <img src="{% if hero_content.background_image_url %}{{ hero_content.background_image_url }}{% else %}https://images.unsplash.com/photo-1557683316-973673baf926?w=1920&h=1080&fit=crop{% endif %}" 
+             alt="Hero Background" 
+             class="w-full h-full object-cover"
+             onerror="this.style.display='none';">
                 </div>
                 
-                <!-- Headline -->
-                <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
-                    Turn Every Click, Call, and Comment Into Revenue — <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-violet-400">Automatically.</span>
-                </h1>
-                
-                <!-- Subheadline -->
-                <p class="text-lg md:text-xl text-slate-400 max-w-xl leading-relaxed">
-                    KaTek AI connects your CRM, campaigns, websites, bots, and reputation into one intelligent system that never sleeps — so your business can grow on autopilot.
-                </p>
-                
-                <!-- Value Points -->
-                <div class="space-y-4">
-                    <div class="flex items-start space-x-4">
-                        <div class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-slate-800 flex-shrink-0">
-                            <i class="fa-solid fa-robot text-cyan-400 text-lg"></i>
-                        </div>
-                        <div>
-                            <div class="font-semibold text-slate-100">AI Sales & Support</div>
-                            <div class="text-slate-400 text-sm">Voice, SMS, and chatbots that answer 24/7</div>
-                        </div>
-                    </div>
-                    
-                    <div class="flex items-start space-x-4">
-                        <div class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-slate-800 flex-shrink-0">
-                            <i class="fa-solid fa-chart-simple text-pink-400 text-lg"></i>
-                        </div>
-                        <div>
-                            <div class="font-semibold text-slate-100">Smart CRM & Analytics</div>
-                            <div class="text-slate-400 text-sm">See every lead, action, and result in one place</div>
-                        </div>
-                    </div>
-                    
-                    <div class="flex items-start space-x-4">
-                        <div class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-slate-800 flex-shrink-0">
-                            <i class="fa-solid fa-bullhorn text-violet-400 text-lg"></i>
-                        </div>
-                        <div>
-                            <div class="font-semibold text-slate-100">Campaigns That Learn</div>
-                            <div class="text-slate-400 text-sm">AI optimizes keywords, content, and channels automatically</div>
-                        </div>
-                    </div>
-                    
-                    <div class="flex items-start space-x-4">
-                        <div class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-slate-800 flex-shrink-0">
-                            <i class="fa-solid fa-star text-yellow-400 text-lg"></i>
-                        </div>
-                        <div>
-                            <div class="font-semibold text-slate-100">Reputation Engine</div>
-                            <div class="text-slate-400 text-sm">Monitor reviews, fix messaging, protect your brand</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- CTAs -->
-                <div class="flex flex-col sm:flex-row gap-4 pt-4">
-                    <button class="px-8 py-4 bg-gradient-to-r from-cyan-500 to-violet-500 text-white rounded-lg font-semibold text-lg hover:shadow-[0_0_40px_rgba(56,189,248,0.5)] transition-all duration-300 hover:-translate-y-1">
-                        See KaTek AI in Action
-                    </button>
-                    <button class="px-8 py-4 text-slate-300 border border-slate-700 rounded-lg font-semibold hover:border-cyan-400 hover:text-cyan-400 transition-all duration-300 flex items-center justify-center space-x-2">
-                        <span>Explore how it works</span>
-                        <i class="fa-solid fa-chevron-down"></i>
-                    </button>
-                </div>
-                
-                <p class="text-sm text-slate-500">Guided 30-min live demo</p>
-            </div>
+    <!-- Hero Background Waves -->
+    <div class="neon-wave neon-wave-blue" style="top: -500px; left: -300px; width: 1400px; height: 1400px;"></div>
+    <div class="neon-wave neon-wave-purple" style="top: -500px; right: -300px; width: 1400px; height: 1400px;"></div>
+    
+    <div class="content-container w-full relative z-10">
+        <!-- Text Layer - Centered -->
+        <div class="text-center space-y-6 mb-12">
+            <!-- Pill Label -->
+            <div class="pill-label mb-4 fade-in-up stagger-1">{% if hero_content.pill_label %}{{ hero_content.pill_label }}{% else %}ALL-IN-ONE AI CRM & GROWTH ENGINE{% endif %}</div>
             
-            <!-- Right Content - Command Center Card -->
-            <div class="relative">
-                <div class="bg-slate-900/70 border border-slate-700/80 rounded-3xl p-6 md:p-8 shadow-2xl hover:scale-105 transition-all duration-300">
-                    <!-- Top: Business Owner -->
-                    <div class="flex items-center justify-center mb-6">
-                        <div class="flex items-center space-x-3 bg-slate-800/60 px-4 py-2 rounded-xl">
-                            <i class="fa-solid fa-user-tie text-cyan-400 text-xl"></i>
-                            <span class="text-slate-200 font-medium">Business Owner</span>
-                        </div>
-                        <i class="fa-solid fa-arrow-down text-cyan-400 mx-4 text-2xl"></i>
-                    </div>
-                    
-                    <!-- Middle: KaTek AI CRM -->
-                    <div class="bg-gradient-to-br from-cyan-500/20 to-violet-500/20 border border-cyan-500/30 rounded-2xl p-4 mb-4">
-                        <div class="text-center font-bold text-lg text-cyan-300 mb-3">KaTek AI CRM</div>
-                        <div class="grid grid-cols-2 gap-2">
-                            <div class="bg-slate-800/60 rounded-lg p-2 text-center text-xs text-slate-300">CRM</div>
-                            <div class="bg-slate-800/60 rounded-lg p-2 text-center text-xs text-slate-300">Campaign Manager</div>
-                            <div class="bg-slate-800/60 rounded-lg p-2 text-center text-xs text-slate-300">AI Content</div>
-                            <div class="bg-slate-800/60 rounded-lg p-2 text-center text-xs text-slate-300">Voice Bot</div>
-                            <div class="bg-slate-800/60 rounded-lg p-2 text-center text-xs text-slate-300 col-span-2">Reputation</div>
-                        </div>
-                    </div>
-                    
-                    <!-- Bottom: Charts -->
-                    <div class="space-y-2 mb-4">
-                        <div class="bg-slate-800 h-24 rounded-xl flex items-end justify-around p-2">
-                            <div class="bg-gradient-to-t from-cyan-500/60 to-cyan-500/20 w-8 h-12 rounded-t"></div>
-                            <div class="bg-gradient-to-t from-violet-500/60 to-violet-500/20 w-8 h-16 rounded-t"></div>
-                            <div class="bg-gradient-to-t from-pink-500/60 to-pink-500/20 w-8 h-20 rounded-t"></div>
-                            <div class="bg-gradient-to-t from-cyan-500/60 to-cyan-500/20 w-8 h-14 rounded-t"></div>
-                        </div>
-                    </div>
-                    
-                    <!-- Bottom: Qualified Lead -->
-                    <div class="flex items-center justify-center">
-                        <i class="fa-solid fa-arrow-down text-cyan-400 mx-4 text-2xl"></i>
-                        <div class="flex items-center space-x-3 bg-slate-800/60 px-4 py-2 rounded-xl">
-                            <i class="fa-solid fa-user-check text-green-400 text-xl"></i>
-                            <span class="text-slate-200 font-medium">Qualified Lead / Customer</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Floating Stat Bubbles -->
-                <div class="absolute -top-4 -right-4 bg-gradient-to-br from-cyan-500/90 to-cyan-600/90 rounded-xl px-4 py-2 shadow-xl border border-cyan-400/50">
-                    <div class="text-white font-bold text-sm">+41% more qualified leads</div>
-                </div>
-                <div class="absolute -bottom-4 -left-4 bg-gradient-to-br from-violet-500/90 to-violet-600/90 rounded-xl px-4 py-2 shadow-xl border border-violet-400/50 animate-pulse">
-                    <div class="text-white font-bold text-sm">3x faster follow-up</div>
-                </div>
-                <div class="absolute top-1/2 -left-8 bg-gradient-to-br from-pink-500/90 to-pink-600/90 rounded-xl px-4 py-2 shadow-xl border border-pink-400/50">
-                    <div class="text-white font-bold text-sm">Save 10+ hours / week</div>
-                </div>
+            <!-- Main Heading -->
+            <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold leading-tight text-white fade-in-up stagger-2">
+                {% if hero_content.main_headline %}
+                    {{ hero_content.main_headline|linebreaksbr }}
+                {% else %}
+                    Get more for less.
+                {% endif %}
+            </h1>
+            
+            <!-- Subheadline -->
+            <p class="text-xl md:text-2xl text-white max-w-2xl mx-auto fade-in-up stagger-3">
+                {% if hero_content.subheadline %}
+                    {{ hero_content.subheadline }}
+                {% else %}
+                    Turn every click, call, and comment into revenue
+                {% endif %}
+            </p>
+            
+            <!-- CTA Group - Horizontal -->
+            <div class="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4 fade-in-up stagger-4">
+                {% if hero_content.primary_cta_text %}
+                    <a href="{% if hero_content.primary_cta_link %}{{ hero_content.primary_cta_link }}{% else %}#contact{% endif %}" class="btn-primary-pill">
+                        {{ hero_content.primary_cta_text }}
+                    </a>
+                {% else %}
+                    <a href="#contact" class="btn-primary-pill">Schedule Your Call</a>
+                {% endif %}
+                {% if hero_content.secondary_cta_text %}
+                    <a href="{% if hero_content.secondary_cta_link %}{{ hero_content.secondary_cta_link }}{% else %}#platform{% endif %}" class="btn-ghost-pill flex items-center space-x-2">
+                        <span>{{ hero_content.secondary_cta_text }}</span>
+                        <i class="fa-solid fa-arrow-right text-sm"></i>
+                    </a>
+                {% else %}
+                    <a href="#platform" class="btn-ghost-pill flex items-center space-x-2">
+                        <span>Explore How It Works</span>
+                        <i class="fa-solid fa-arrow-right text-sm"></i>
+                    </a>
+                {% endif %}
             </div>
+        </div>
+        
+        <!-- Dashboard Image - Simple, no extra containers or floating elements -->
+        <div class="relative max-w-6xl mx-auto mt-16 scale-in stagger-5">
+            <img src="{% if hero_content.dashboard_image_url %}{{ hero_content.dashboard_image_url }}{% else %}https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&h=800&fit=crop{% endif %}" 
+                 alt="KaTek AI Dashboard" 
+                 class="w-full h-auto rounded-2xl shadow-2xl hover-lift"
+                 onerror="this.style.display='none';">
         </div>
     </div>
 </section>
+{% endwith %}
 

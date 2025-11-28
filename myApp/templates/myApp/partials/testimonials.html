@@ -1,0 +1,253 @@
+<!-- Testimonials Band - The Proof is in the Pipeline -->
+<section class="section-spacing relative overflow-hidden">
+    <!-- Neon Wave Background Effects -->
+    <div class="neon-wave neon-wave-blue absolute top-0 left-0 opacity-15" style="width: 1400px; height: 1400px; filter: blur(100px);"></div>
+    <div class="neon-wave absolute top-0 right-0 opacity-15" style="width: 1200px; height: 1200px; background: radial-gradient(circle, rgba(56, 189, 248, 0.3) 0%, transparent 70%); filter: blur(100px);"></div>
+    
+    <div class="w-full px-4 sm:px-6 lg:px-8 relative z-10">
+        <!-- Section Header - Centered -->
+        {% with testimonials_section=content.sections.testimonials|default:None testimonials_list=content.testimonials|default:None %}
+        <div class="text-center mb-12 fade-in-up">
+            <div class="pill-label mb-4">Testimonials</div>
+            <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-white">
+                {% if testimonials_section.title %}{{ testimonials_section.title }}{% else %}The Proof Is In The Pipeline{% endif %}
+            </h2>
+        </div>
+        
+        <!-- Marquee Container for Testimonials -->
+        <div class="marquee-container mb-12">
+            <div class="marquee-track">
+                {% if testimonials_list %}
+                    <!-- First Set of Testimonials -->
+                    {% for testimonial in testimonials_list|slice:":5" %}
+                    <div class="marquee-item relative bg-slate-800/40 backdrop-blur-xl border border-cyan-400/25 rounded-2xl p-6 shadow-[0_8px_32px_rgba(0,0,0,0.4)] hover:border-cyan-400/40 hover:shadow-[0_8px_32px_rgba(56,189,248,0.25)] transition-all duration-300 flex flex-col hover-lift">
+                        <div class="absolute inset-0 bg-gradient-to-br from-cyan-500/3 to-transparent rounded-2xl pointer-events-none"></div>
+                        <div class="absolute inset-0 rounded-2xl border border-cyan-400/15 pointer-events-none"></div>
+                        
+                        <div class="relative z-10 text-center flex flex-col flex-1">
+                            <div class="h-16 w-16 rounded-full bg-slate-800 flex items-center justify-center mx-auto mb-6 overflow-hidden">
+                                {% if testimonial.avatar_url %}
+                                    <img src="{{ testimonial.avatar_url }}" 
+                                         alt="{{ testimonial.author_name }}" 
+                                         class="w-full h-full object-cover"
+                                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                {% else %}
+                                    <img src="https://i.pravatar.cc/128?img={{ forloop.counter }}" 
+                                         alt="{{ testimonial.author_name }}" 
+                                         class="w-full h-full object-cover"
+                                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                {% endif %}
+                                <i class="fa-solid fa-user text-slate-400 text-2xl hidden"></i>
+                            </div>
+                            <p class="text-base md:text-lg font-medium text-white mb-6 leading-relaxed flex-grow">"{{ testimonial.quote }}"</p>
+                            <div class="mt-auto">
+                                <div class="font-bold text-white mb-1 text-sm md:text-base">{{ testimonial.author_name }}</div>
+                                <div class="text-xs md:text-sm text-slate-300">{% if testimonial.author_title %}{{ testimonial.author_title }}{% endif %}</div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    <!-- Duplicate Set for Seamless Loop -->
+                    {% for testimonial in testimonials_list|slice:":5" %}
+                    <div class="marquee-item relative bg-slate-800/40 backdrop-blur-xl border border-cyan-400/25 rounded-2xl p-6 shadow-[0_8px_32px_rgba(0,0,0,0.4)] hover:border-cyan-400/40 hover:shadow-[0_8px_32px_rgba(56,189,248,0.25)] transition-all duration-300 flex flex-col hover-lift">
+                        <div class="absolute inset-0 bg-gradient-to-br from-cyan-500/3 to-transparent rounded-2xl pointer-events-none"></div>
+                        <div class="absolute inset-0 rounded-2xl border border-cyan-400/15 pointer-events-none"></div>
+                        
+                        <div class="relative z-10 text-center flex flex-col flex-1">
+                            <div class="h-16 w-16 rounded-full bg-slate-800 flex items-center justify-center mx-auto mb-6 overflow-hidden">
+                                {% if testimonial.avatar_url %}
+                                    <img src="{{ testimonial.avatar_url }}" 
+                                         alt="{{ testimonial.author_name }}" 
+                                         class="w-full h-full object-cover"
+                                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                {% else %}
+                                    <img src="https://i.pravatar.cc/128?img={{ forloop.counter }}" 
+                                         alt="{{ testimonial.author_name }}" 
+                                         class="w-full h-full object-cover"
+                                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                {% endif %}
+                                <i class="fa-solid fa-user text-slate-400 text-2xl hidden"></i>
+                            </div>
+                            <p class="text-base md:text-lg font-medium text-white mb-6 leading-relaxed flex-grow">"{{ testimonial.quote }}"</p>
+                            <div class="mt-auto">
+                                <div class="font-bold text-white mb-1 text-sm md:text-base">{{ testimonial.author_name }}</div>
+                                <div class="text-xs md:text-sm text-slate-300">{% if testimonial.author_title %}{{ testimonial.author_title }}{% endif %}</div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <!-- Fallback Testimonials - First Set -->
+                    <div class="marquee-item relative bg-slate-800/40 backdrop-blur-xl border border-cyan-400/25 rounded-2xl p-6 shadow-[0_8px_32px_rgba(0,0,0,0.4)] hover:border-cyan-400/40 hover:shadow-[0_8px_32px_rgba(56,189,248,0.25)] transition-all duration-300 flex flex-col hover-lift">
+                        <div class="absolute inset-0 bg-gradient-to-br from-cyan-500/3 to-transparent rounded-2xl pointer-events-none"></div>
+                        <div class="absolute inset-0 rounded-2xl border border-cyan-400/15 pointer-events-none"></div>
+                        <div class="relative z-10 text-center flex flex-col flex-1">
+                            <div class="h-16 w-16 rounded-full bg-slate-800 flex items-center justify-center mx-auto mb-6 overflow-hidden">
+                                <img src="https://i.pravatar.cc/128?img=1" alt="David Alemian" class="w-full h-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                <i class="fa-solid fa-user text-slate-400 text-2xl hidden"></i>
+                            </div>
+                            <p class="text-base md:text-lg font-medium text-white mb-6 leading-relaxed flex-grow">"If you ever have the opportunity and the good fortune to work with the team, consider yourself one of the luckiest people in the world!"</p>
+                            <div class="mt-auto">
+                                <div class="font-bold text-white mb-1 text-sm md:text-base">David Alemian</div>
+                                <div class="text-xs md:text-sm text-slate-300">Business Consultant</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="marquee-item relative bg-slate-800/40 backdrop-blur-xl border border-cyan-400/25 rounded-2xl p-6 shadow-[0_8px_32px_rgba(0,0,0,0.4)] hover:border-cyan-400/40 hover:shadow-[0_8px_32px_rgba(56,189,248,0.25)] transition-all duration-300 flex flex-col hover-lift">
+                        <div class="absolute inset-0 bg-gradient-to-br from-cyan-500/3 to-transparent rounded-2xl pointer-events-none"></div>
+                        <div class="absolute inset-0 rounded-2xl border border-cyan-400/15 pointer-events-none"></div>
+                        <div class="relative z-10 text-center flex flex-col flex-1">
+                            <div class="h-16 w-16 rounded-full bg-slate-800 flex items-center justify-center mx-auto mb-6 overflow-hidden">
+                                <img src="https://i.pravatar.cc/128?img=12" alt="Edoardo Costa" class="w-full h-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                <i class="fa-solid fa-user text-slate-400 text-2xl hidden"></i>
+                            </div>
+                            <p class="text-base md:text-lg font-medium text-white mb-6 leading-relaxed flex-grow">"The Katalyst CRM team set my CRM up and created my webinar landing page in 48 hours!"</p>
+                            <div class="mt-auto">
+                                <div class="font-bold text-white mb-1 text-sm md:text-base">Edoardo Costa</div>
+                                <div class="text-xs md:text-sm text-slate-300">Actor, Author & Mindset Breakthrough Mentor</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="marquee-item relative bg-slate-800/40 backdrop-blur-xl border border-cyan-400/25 rounded-2xl p-6 shadow-[0_8px_32px_rgba(0,0,0,0.4)] hover:border-cyan-400/40 hover:shadow-[0_8px_32px_rgba(56,189,248,0.25)] transition-all duration-300 flex flex-col hover-lift">
+                        <div class="absolute inset-0 bg-gradient-to-br from-cyan-500/3 to-transparent rounded-2xl pointer-events-none"></div>
+                        <div class="absolute inset-0 rounded-2xl border border-cyan-400/15 pointer-events-none"></div>
+                        <div class="relative z-10 text-center flex flex-col flex-1">
+                            <div class="h-16 w-16 rounded-full bg-slate-800 flex items-center justify-center mx-auto mb-6 overflow-hidden">
+                                <img src="https://i.pravatar.cc/128?img=47" alt="Andy Gupta" class="w-full h-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                <i class="fa-solid fa-user text-slate-400 text-2xl hidden"></i>
+                            </div>
+                            <p class="text-base md:text-lg font-medium text-white mb-6 leading-relaxed flex-grow">"The team totally got my brand and message and designed my landing page and funnel in 3 days"</p>
+                            <div class="mt-auto">
+                                <div class="font-bold text-white mb-1 text-sm md:text-base">Andy Gupta</div>
+                                <div class="text-xs md:text-sm text-slate-300">Ex-Goldman Sachs, Private Equity Investor</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="marquee-item relative bg-slate-800/40 backdrop-blur-xl border border-cyan-400/25 rounded-2xl p-6 shadow-[0_8px_32px_rgba(0,0,0,0.4)] hover:border-cyan-400/40 hover:shadow-[0_8px_32px_rgba(56,189,248,0.25)] transition-all duration-300 flex flex-col hover-lift">
+                        <div class="absolute inset-0 bg-gradient-to-br from-cyan-500/3 to-transparent rounded-2xl pointer-events-none"></div>
+                        <div class="absolute inset-0 rounded-2xl border border-cyan-400/15 pointer-events-none"></div>
+                        <div class="relative z-10 text-center flex flex-col flex-1">
+                            <div class="h-16 w-16 rounded-full bg-slate-800 flex items-center justify-center mx-auto mb-6 overflow-hidden">
+                                <img src="https://i.pravatar.cc/128?img=33" alt="Rita Esterly" class="w-full h-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                <i class="fa-solid fa-user text-slate-400 text-2xl hidden"></i>
+                            </div>
+                            <p class="text-base md:text-lg font-medium text-white mb-6 leading-relaxed flex-grow">"Working with the team behind is like sailing on a smooth ocean with a gentle breeze!"</p>
+                            <div class="mt-auto">
+                                <div class="font-bold text-white mb-1 text-sm md:text-base">Rita Esterly</div>
+                                <div class="text-xs md:text-sm text-slate-300">Business Consultant</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="marquee-item relative bg-slate-800/40 backdrop-blur-xl border border-cyan-400/25 rounded-2xl p-6 shadow-[0_8px_32px_rgba(0,0,0,0.4)] hover:border-cyan-400/40 hover:shadow-[0_8px_32px_rgba(56,189,248,0.25)] transition-all duration-300 flex flex-col hover-lift">
+                        <div class="absolute inset-0 bg-gradient-to-br from-cyan-500/3 to-transparent rounded-2xl pointer-events-none"></div>
+                        <div class="absolute inset-0 rounded-2xl border border-cyan-400/15 pointer-events-none"></div>
+                        <div class="relative z-10 text-center flex flex-col flex-1">
+                            <div class="h-16 w-16 rounded-full bg-slate-800 flex items-center justify-center mx-auto mb-6 overflow-hidden">
+                                <img src="https://i.pravatar.cc/128?img=68" alt="Coralsz" class="w-full h-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                <i class="fa-solid fa-user text-slate-400 text-2xl hidden"></i>
+                            </div>
+                            <p class="text-base md:text-lg font-medium text-white mb-6 leading-relaxed flex-grow">"When it came to landing pages, websites, and anything tech, Katalyst made it possible"</p>
+                            <div class="mt-auto">
+                                <div class="font-bold text-white mb-1 text-sm md:text-base">Coralsz</div>
+                                <div class="text-xs md:text-sm text-slate-300">Co-founder of the Speak Up and Lead Academy</div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Duplicate Set for Seamless Loop -->
+                    <div class="marquee-item relative bg-slate-800/40 backdrop-blur-xl border border-cyan-400/25 rounded-2xl p-6 shadow-[0_8px_32px_rgba(0,0,0,0.4)] hover:border-cyan-400/40 hover:shadow-[0_8px_32px_rgba(56,189,248,0.25)] transition-all duration-300 flex flex-col hover-lift">
+                        <div class="absolute inset-0 bg-gradient-to-br from-cyan-500/3 to-transparent rounded-2xl pointer-events-none"></div>
+                        <div class="absolute inset-0 rounded-2xl border border-cyan-400/15 pointer-events-none"></div>
+                        <div class="relative z-10 text-center flex flex-col flex-1">
+                            <div class="h-16 w-16 rounded-full bg-slate-800 flex items-center justify-center mx-auto mb-6 overflow-hidden">
+                                <img src="https://i.pravatar.cc/128?img=1" alt="David Alemian" class="w-full h-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                <i class="fa-solid fa-user text-slate-400 text-2xl hidden"></i>
+                            </div>
+                            <p class="text-base md:text-lg font-medium text-white mb-6 leading-relaxed flex-grow">"If you ever have the opportunity and the good fortune to work with the team, consider yourself one of the luckiest people in the world!"</p>
+                            <div class="mt-auto">
+                                <div class="font-bold text-white mb-1 text-sm md:text-base">David Alemian</div>
+                                <div class="text-xs md:text-sm text-slate-300">Business Consultant</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="marquee-item relative bg-slate-800/40 backdrop-blur-xl border border-cyan-400/25 rounded-2xl p-6 shadow-[0_8px_32px_rgba(0,0,0,0.4)] hover:border-cyan-400/40 hover:shadow-[0_8px_32px_rgba(56,189,248,0.25)] transition-all duration-300 flex flex-col hover-lift">
+                        <div class="absolute inset-0 bg-gradient-to-br from-cyan-500/3 to-transparent rounded-2xl pointer-events-none"></div>
+                        <div class="absolute inset-0 rounded-2xl border border-cyan-400/15 pointer-events-none"></div>
+                        <div class="relative z-10 text-center flex flex-col flex-1">
+                            <div class="h-16 w-16 rounded-full bg-slate-800 flex items-center justify-center mx-auto mb-6 overflow-hidden">
+                                <img src="https://i.pravatar.cc/128?img=12" alt="Edoardo Costa" class="w-full h-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                <i class="fa-solid fa-user text-slate-400 text-2xl hidden"></i>
+                            </div>
+                            <p class="text-base md:text-lg font-medium text-white mb-6 leading-relaxed flex-grow">"The Katalyst CRM team set my CRM up and created my webinar landing page in 48 hours!"</p>
+                            <div class="mt-auto">
+                                <div class="font-bold text-white mb-1 text-sm md:text-base">Edoardo Costa</div>
+                                <div class="text-xs md:text-sm text-slate-300">Actor, Author & Mindset Breakthrough Mentor</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="marquee-item relative bg-slate-800/40 backdrop-blur-xl border border-cyan-400/25 rounded-2xl p-6 shadow-[0_8px_32px_rgba(0,0,0,0.4)] hover:border-cyan-400/40 hover:shadow-[0_8px_32px_rgba(56,189,248,0.25)] transition-all duration-300 flex flex-col hover-lift">
+                        <div class="absolute inset-0 bg-gradient-to-br from-cyan-500/3 to-transparent rounded-2xl pointer-events-none"></div>
+                        <div class="absolute inset-0 rounded-2xl border border-cyan-400/15 pointer-events-none"></div>
+                        <div class="relative z-10 text-center flex flex-col flex-1">
+                            <div class="h-16 w-16 rounded-full bg-slate-800 flex items-center justify-center mx-auto mb-6 overflow-hidden">
+                                <img src="https://i.pravatar.cc/128?img=47" alt="Andy Gupta" class="w-full h-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                <i class="fa-solid fa-user text-slate-400 text-2xl hidden"></i>
+                            </div>
+                            <p class="text-base md:text-lg font-medium text-white mb-6 leading-relaxed flex-grow">"The team totally got my brand and message and designed my landing page and funnel in 3 days"</p>
+                            <div class="mt-auto">
+                                <div class="font-bold text-white mb-1 text-sm md:text-base">Andy Gupta</div>
+                                <div class="text-xs md:text-sm text-slate-300">Ex-Goldman Sachs, Private Equity Investor</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="marquee-item relative bg-slate-800/40 backdrop-blur-xl border border-cyan-400/25 rounded-2xl p-6 shadow-[0_8px_32px_rgba(0,0,0,0.4)] hover:border-cyan-400/40 hover:shadow-[0_8px_32px_rgba(56,189,248,0.25)] transition-all duration-300 flex flex-col hover-lift">
+                        <div class="absolute inset-0 bg-gradient-to-br from-cyan-500/3 to-transparent rounded-2xl pointer-events-none"></div>
+                        <div class="absolute inset-0 rounded-2xl border border-cyan-400/15 pointer-events-none"></div>
+                        <div class="relative z-10 text-center flex flex-col flex-1">
+                            <div class="h-16 w-16 rounded-full bg-slate-800 flex items-center justify-center mx-auto mb-6 overflow-hidden">
+                                <img src="https://i.pravatar.cc/128?img=33" alt="Rita Esterly" class="w-full h-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                <i class="fa-solid fa-user text-slate-400 text-2xl hidden"></i>
+                            </div>
+                            <p class="text-base md:text-lg font-medium text-white mb-6 leading-relaxed flex-grow">"Working with the team behind is like sailing on a smooth ocean with a gentle breeze!"</p>
+                            <div class="mt-auto">
+                                <div class="font-bold text-white mb-1 text-sm md:text-base">Rita Esterly</div>
+                                <div class="text-xs md:text-sm text-slate-300">Business Consultant</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="marquee-item relative bg-slate-800/40 backdrop-blur-xl border border-cyan-400/25 rounded-2xl p-6 shadow-[0_8px_32px_rgba(0,0,0,0.4)] hover:border-cyan-400/40 hover:shadow-[0_8px_32px_rgba(56,189,248,0.25)] transition-all duration-300 flex flex-col hover-lift">
+                        <div class="absolute inset-0 bg-gradient-to-br from-cyan-500/3 to-transparent rounded-2xl pointer-events-none"></div>
+                        <div class="absolute inset-0 rounded-2xl border border-cyan-400/15 pointer-events-none"></div>
+                        <div class="relative z-10 text-center flex flex-col flex-1">
+                            <div class="h-16 w-16 rounded-full bg-slate-800 flex items-center justify-center mx-auto mb-6 overflow-hidden">
+                                <img src="https://i.pravatar.cc/128?img=68" alt="Coralsz" class="w-full h-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                <i class="fa-solid fa-user text-slate-400 text-2xl hidden"></i>
+                            </div>
+                            <p class="text-base md:text-lg font-medium text-white mb-6 leading-relaxed flex-grow">"When it came to landing pages, websites, and anything tech, Katalyst made it possible"</p>
+                            <div class="mt-auto">
+                                <div class="font-bold text-white mb-1 text-sm md:text-base">Coralsz</div>
+                                <div class="text-xs md:text-sm text-slate-300">Co-founder of the Speak Up and Lead Academy</div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <!-- Trust Statement with Stars -->
+        <div class="text-center">
+            <p class="text-white text-xl md:text-2xl lg:text-3xl font-medium mb-6 max-w-4xl mx-auto leading-relaxed">
+                {% if testimonials_section.subtitle %}{{ testimonials_section.subtitle }}{% else %}We've helped 100s of coaches and entrepreneurs build automated marketing systems, without the stress, tech overwhelm, or huge price tag.{% endif %}
+            </p>
+            <p class="text-white mb-3 text-sm md:text-base">1k+ Users Trust Us</p>
+            <div class="flex items-center justify-center space-x-1">
+                <i class="fa-solid fa-star text-yellow-400 text-lg md:text-xl"></i>
+                <i class="fa-solid fa-star text-yellow-400 text-lg md:text-xl"></i>
+                <i class="fa-solid fa-star text-yellow-400 text-lg md:text-xl"></i>
+                <i class="fa-solid fa-star text-yellow-400 text-lg md:text-xl"></i>
+                <i class="fa-solid fa-star text-yellow-400 text-lg md:text-xl"></i>
+            </div>
+        </div>
+        {% endwith %}
+    </div>
+</section>
+

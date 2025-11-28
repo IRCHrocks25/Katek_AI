@@ -1,55 +1,85 @@
-<!-- Online Reputation Manager + Feedback Loop Section -->
-<section class="py-16 md:py-24 px-6 md:px-10 bg-slate-950">
-    <div class="max-w-7xl mx-auto">
-        <div class="text-center mb-16">
-            <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
-                Protect Your Reputation. Fix Your Messaging in Real Time.
-            </h2>
-        </div>
-        
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <!-- Left: Online Reputation Manager -->
-            <div class="bg-slate-900/80 border border-red-500/60 rounded-2xl p-8 shadow-xl">
-                <div class="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-slate-800 mb-6">
-                    <i class="fa-solid fa-star-half-stroke text-red-400 text-xl"></i>
+<!-- Protect Your Reputation Section -->
+<section class="section-spacing relative">
+    <div class="content-container relative z-10">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+            <!-- Left Column - Text & Feature Boxes -->
+            <div class="slide-in-left">
+                {% with reputation_section=content.sections.reputation|default:None %}
+                <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-8 text-white leading-tight fade-in-up stagger-1">
+                    {% if reputation_section and reputation_section.subtitle %}{{ reputation_section.subtitle|safe }}{% else %}Protect your reputation.<br>Fix your messaging in<br>real time.{% endif %}
+                </h2>
+                {% endwith %}
+                
+                <!-- Online Reputation Manager Box -->
+                <div class="relative mb-6 fade-in-up stagger-2">
+                    <!-- Glass Container - Title Only -->
+                    <div class="relative bg-slate-900/40 backdrop-blur-xl border border-cyan-400/30 rounded-2xl p-6 shadow-[0_8px_32px_rgba(0,0,0,0.3)] mb-4 hover-lift">
+                        <div class="absolute inset-0 bg-gradient-to-br from-cyan-500/5 to-transparent rounded-2xl pointer-events-none"></div>
+                        <div class="absolute inset-0 rounded-2xl border border-cyan-400/20 pointer-events-none"></div>
+                        <div class="relative z-10">
+                            <h3 class="text-xl font-bold text-white">Online Reputation Manager</h3>
+                        </div>
+                    </div>
+                    <!-- Check Items - Outside Container -->
+                    <ul class="space-y-3 text-slate-200 pl-2">
+                        <li class="flex items-start space-x-3">
+                            <i class="fa-solid fa-check text-cyan-400 mt-1 flex-shrink-0"></i>
+                            <span class="text-sm">Track reviews, comments, and brand mentions across major platforms.</span>
+                        </li>
+                        <li class="flex items-start space-x-3">
+                            <i class="fa-solid fa-check text-cyan-400 mt-1 flex-shrink-0"></i>
+                            <span class="text-sm">Instant alerts for negative sentiment or low-star reviews.</span>
+                        </li>
+                        <li class="flex items-start space-x-3">
+                            <i class="fa-solid fa-check text-cyan-400 mt-1 flex-shrink-0"></i>
+                            <span class="text-sm">Guided response templates so your team always replies with empathy and clarity.</span>
+                        </li>
+                    </ul>
                 </div>
-                <h3 class="text-2xl font-bold text-slate-100 mb-4">Online Reputation Manager</h3>
-                <ul class="space-y-3 text-slate-400">
-                    <li class="flex items-start space-x-3">
-                        <i class="fa-solid fa-check text-green-400 mt-1"></i>
-                        <span>Track reviews, comments, and brand mentions across major platforms.</span>
-                    </li>
-                    <li class="flex items-start space-x-3">
-                        <i class="fa-solid fa-check text-green-400 mt-1"></i>
-                        <span>Instant alerts for negative sentiment or low-star reviews.</span>
-                    </li>
-                    <li class="flex items-start space-x-3">
-                        <i class="fa-solid fa-check text-green-400 mt-1"></i>
-                        <span>Guided response templates so your team always replies with empathy and clarity.</span>
-                    </li>
-                </ul>
+                
+                <!-- Feedback Analysis / Corrective Messaging Module Box -->
+                <div class="relative fade-in-up stagger-3">
+                    <!-- Glass Container - Title Only -->
+                    <div class="relative bg-slate-900/40 backdrop-blur-xl border border-cyan-400/30 rounded-2xl p-6 shadow-[0_8px_32px_rgba(0,0,0,0.3)] mb-4 hover-lift">
+                        <div class="absolute inset-0 bg-gradient-to-br from-cyan-500/5 to-transparent rounded-2xl pointer-events-none"></div>
+                        <div class="absolute inset-0 rounded-2xl border border-cyan-400/20 pointer-events-none"></div>
+                        <div class="relative z-10">
+                            <h3 class="text-xl font-bold text-white">Feedback Analysis / Corrective Messaging Module</h3>
+                        </div>
+                    </div>
+                    <!-- Check Items - Outside Container -->
+                    <ul class="space-y-3 text-slate-200 pl-2">
+                        <li class="flex items-start space-x-3">
+                            <i class="fa-solid fa-check text-cyan-400 mt-1 flex-shrink-0"></i>
+                            <span class="text-sm">AI analyzes feedback and finds patterns in what customers love — and what confuses them.</span>
+                        </li>
+                        <li class="flex items-start space-x-3">
+                            <i class="fa-solid fa-check text-cyan-400 mt-1 flex-shrink-0"></i>
+                            <span class="text-sm">Automatically suggests new headlines, offers, and nurture flows to fix weak spots in your messaging.</span>
+                        </li>
+                        <li class="flex items-start space-x-3">
+                            <i class="fa-solid fa-check text-cyan-400 mt-1 flex-shrink-0"></i>
+                            <span class="text-sm">Close the loop: updated copy pushes back into your websites, emails, and bots.</span>
+                        </li>
+                    </ul>
+                </div>
             </div>
             
-            <!-- Right: Feedback Analysis / Corrective Messaging -->
-            <div class="bg-slate-900/80 border border-red-500/60 rounded-2xl p-8 shadow-xl">
-                <div class="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-slate-800 mb-6">
-                    <i class="fa-solid fa-comments-dollar text-red-400 text-xl"></i>
+            <!-- Right Column - Dashboard Image -->
+            <div class="flex items-center justify-center slide-in-right">
+                <!-- Dashboard UI Image - Replace URL with your actual dashboard screenshot -->
+                <div class="w-full rounded-2xl overflow-hidden shadow-2xl">
+                    {% with reputation_section=content.sections.reputation|default:None %}
+                    <img src="{% if reputation_section and reputation_section.background_image_url %}{{ reputation_section.background_image_url }}{% else %}https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=1000&fit=crop{% endif %}" 
+                         alt="Reputation Dashboard UI" 
+                         class="w-full h-auto object-cover hover-lift"
+                         onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    {% endwith %}
+                    <!-- Fallback if image doesn't exist -->
+                    <div class="hidden bg-slate-900/60 backdrop-blur-xl border border-cyan-400/30 rounded-2xl p-8 min-h-[600px]">
+                        <div class="text-center text-slate-400">Dashboard UI Image Placeholder</div>
+                    </div>
                 </div>
-                <h3 class="text-2xl font-bold text-slate-100 mb-4">Feedback Analysis / Corrective Messaging Module</h3>
-                <ul class="space-y-3 text-slate-400">
-                    <li class="flex items-start space-x-3">
-                        <i class="fa-solid fa-check text-green-400 mt-1"></i>
-                        <span>AI analyzes feedback and finds patterns in what customers love — and what confuses them.</span>
-                    </li>
-                    <li class="flex items-start space-x-3">
-                        <i class="fa-solid fa-check text-green-400 mt-1"></i>
-                        <span>Automatically suggests new headlines, offers, and nurture flows to fix weak spots in your messaging.</span>
-                    </li>
-                    <li class="flex items-start space-x-3">
-                        <i class="fa-solid fa-check text-green-400 mt-1"></i>
-                        <span>Close the loop: updated copy pushes back into your websites, emails, and bots.</span>
-                    </li>
-                </ul>
             </div>
         </div>
     </div>

@@ -1,118 +1,91 @@
-<!-- Story Section - One Brain for Your Whole Growth System -->
-<section id="how-it-works" class="py-16 md:py-24 px-6 md:px-10 bg-slate-950">
-    <div class="max-w-7xl mx-auto">
-        <div class="text-center mb-16">
-            <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
-                KaTek AI Connects Every Step of the Journey
+<!-- Story Section - Journey -->
+<section id="how-it-works" class="section-spacing relative">
+    <!-- Background Wave - Left Edge -->
+    <div class="neon-wave neon-wave-blue" style="bottom: -400px; left: -500px; width: 1000px; height: 1000px;"></div>
+    
+    <div class="content-container relative z-10">
+        <!-- Section Header - Centered -->
+        <div class="text-center mb-16 fade-in-up">
+            {% with story_section=content.sections.story|default:None %}
+            <div class="pill-label mb-4">{% if story_section and story_section.title %}{{ story_section.title }}{% else %}Product{% endif %}</div>
+            <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-white">
+                {% if story_section and story_section.subtitle %}{{ story_section.subtitle|safe }}{% else %}KaTek AI Connects<br>Every Step of the Journey{% endif %}
             </h2>
-            <p class="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto">
-                From first click to loyal customer, everything talks to everything.
+            <p class="text-lg text-slate-300 max-w-xl mx-auto">
+                {% if story_section and story_section.description %}{{ story_section.description }}{% else %}From first click to loyal customer, everything talks to everything.{% endif %}
             </p>
+            {% endwith %}
         </div>
         
-        <!-- Flow Steps - Vertical Timeline -->
-        <div class="relative max-w-4xl mx-auto">
-            <!-- Vertical Connecting Line (Desktop) -->
-            <div class="hidden md:block absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-cyan-500/50 via-violet-500/50 to-pink-500/50"></div>
+        <!-- Vertical Journey Stack - Centered -->
+        <div class="relative max-w-2xl mx-auto">
+            <!-- Vertical Connecting Line -->
+            <div class="absolute left-6 top-0 bottom-0 w-0.5 bg-gradient-to-b from-cyan-500/40 via-violet-500/40 to-pink-500/40"></div>
             
-            <div class="space-y-8 md:space-y-12">
-                <!-- Step 1: Business Owner -->
-                <div class="relative flex items-start gap-6">
-                    <!-- Icon Circle -->
-                    <div class="flex-shrink-0 relative z-10">
-                        <div class="h-16 w-16 md:h-20 md:w-20 flex items-center justify-center rounded-2xl bg-slate-900 border-2 border-cyan-400/50 shadow-[0_0_25px_rgba(56,189,248,0.35)] hover:shadow-[0_0_40px_rgba(56,189,248,0.55)] transition-all duration-300">
-                            <i class="fa-solid fa-user-tie text-cyan-400 text-xl md:text-2xl"></i>
-                        </div>
+            <div class="space-y-4">
+                <!-- Step 1 -->
+                <div class="relative flex items-center gap-4 pl-16 fade-in-up stagger-1 hover-lift">
+                    <div class="absolute left-0 w-12 h-12 rounded-full bg-gradient-to-br from-cyan-500/30 to-cyan-600/30 border-2 border-cyan-400/50 flex items-center justify-center z-10">
+                        <div class="w-3 h-3 rounded-full bg-cyan-400"></div>
                     </div>
-                    <!-- Content -->
-                    <div class="flex-1 pt-2">
-                        <h3 class="text-xl md:text-2xl font-bold text-slate-100 mb-2">Business Owner</h3>
-                        <p class="text-slate-400 text-base md:text-lg">You define your goals: more leads, better follow-up, higher reviews.</p>
-                    </div>
-                    <!-- Arrow (Mobile) -->
-                    <div class="md:hidden flex-shrink-0 pt-2">
-                        <i class="fa-solid fa-arrow-down text-cyan-400 text-xl"></i>
+                    <div class="flex-1 bg-gradient-to-r from-cyan-500/20 to-cyan-600/10 rounded-2xl p-4 border border-cyan-400/30 transition-all duration-300 hover:border-cyan-400/50">
+                        <div class="font-bold text-slate-100 mb-1">Business Owner</div>
+                        <div class="text-sm text-slate-300">You define your goals: more leads, better follow-up, higher reviews.</div>
                     </div>
                 </div>
                 
-                <!-- Step 2: KaTek AI CRM -->
-                <div class="relative flex items-start gap-6">
-                    <div class="flex-shrink-0 relative z-10">
-                        <div class="h-16 w-16 md:h-20 md:w-20 flex items-center justify-center rounded-2xl bg-slate-900 border-2 border-violet-400/50 shadow-[0_0_25px_rgba(139,92,246,0.35)] hover:shadow-[0_0_40px_rgba(139,92,246,0.55)] transition-all duration-300">
-                            <i class="fa-solid fa-database text-violet-400 text-xl md:text-2xl"></i>
-                        </div>
+                <!-- Step 2 -->
+                <div class="relative flex items-center gap-4 pl-16 fade-in-up stagger-2 hover-lift">
+                    <div class="absolute left-0 w-12 h-12 rounded-full bg-gradient-to-br from-violet-500/30 to-violet-600/30 border-2 border-violet-400/50 flex items-center justify-center z-10">
+                        <div class="w-3 h-3 rounded-full bg-violet-400"></div>
                     </div>
-                    <div class="flex-1 pt-2">
-                        <h3 class="text-xl md:text-2xl font-bold text-slate-100 mb-2">KaTek AI CRM (Core)</h3>
-                        <p class="text-slate-400 text-base md:text-lg">All your contacts, affiliates, and conversations live in one intelligent hub.</p>
-                    </div>
-                    <div class="md:hidden flex-shrink-0 pt-2">
-                        <i class="fa-solid fa-arrow-down text-violet-400 text-xl"></i>
+                    <div class="flex-1 bg-gradient-to-r from-violet-500/20 to-violet-600/10 rounded-2xl p-4 border border-violet-400/30 transition-all duration-300 hover:border-violet-400/50">
+                        <div class="font-bold text-slate-100 mb-1">KaTek AI CRM (Core)</div>
+                        <div class="text-sm text-slate-300">All your contacts, affiliates, and conversations live in one intelligent hub.</div>
                     </div>
                 </div>
                 
-                <!-- Step 3: Campaign & Content Engine -->
-                <div class="relative flex items-start gap-6">
-                    <div class="flex-shrink-0 relative z-10">
-                        <div class="h-16 w-16 md:h-20 md:w-20 flex items-center justify-center rounded-2xl bg-slate-900 border-2 border-pink-400/50 shadow-[0_0_25px_rgba(236,72,153,0.35)] hover:shadow-[0_0_40px_rgba(236,72,153,0.55)] transition-all duration-300">
-                            <i class="fa-solid fa-bullhorn text-pink-400 text-xl md:text-2xl"></i>
-                        </div>
+                <!-- Step 3 -->
+                <div class="relative flex items-center gap-4 pl-16 fade-in-up stagger-3 hover-lift">
+                    <div class="absolute left-0 w-12 h-12 rounded-full bg-gradient-to-br from-pink-500/30 to-pink-600/30 border-2 border-pink-400/50 flex items-center justify-center z-10">
+                        <div class="w-3 h-3 rounded-full bg-pink-400"></div>
                     </div>
-                    <div class="flex-1 pt-2">
-                        <h3 class="text-xl md:text-2xl font-bold text-slate-100 mb-2">Campaign & Content Engine</h3>
-                        <p class="text-slate-400 text-base md:text-lg">AI generates campaigns, content, and offers tailored to your ideal customers.</p>
-                    </div>
-                    <div class="md:hidden flex-shrink-0 pt-2">
-                        <i class="fa-solid fa-arrow-down text-pink-400 text-xl"></i>
+                    <div class="flex-1 bg-gradient-to-r from-pink-500/20 to-pink-600/10 rounded-2xl p-4 border border-pink-400/30 transition-all duration-300 hover:border-pink-400/50">
+                        <div class="font-bold text-slate-100 mb-1">Campaign & Content Engine</div>
+                        <div class="text-sm text-slate-300">AI generates campaigns, content, and offers tailored to your ideal customers.</div>
                     </div>
                 </div>
                 
-                <!-- Step 4: Websites, Bots & Socials -->
-                <div class="relative flex items-start gap-6">
-                    <div class="flex-shrink-0 relative z-10">
-                        <div class="h-16 w-16 md:h-20 md:w-20 flex items-center justify-center rounded-2xl bg-slate-900 border-2 border-cyan-400/50 shadow-[0_0_25px_rgba(94,234,212,0.35)] hover:shadow-[0_0_40px_rgba(94,234,212,0.55)] transition-all duration-300">
-                            <div class="flex flex-col space-y-0.5">
-                                <i class="fa-solid fa-globe text-cyan-400 text-sm md:text-base"></i>
-                                <i class="fa-solid fa-comments text-violet-400 text-sm md:text-base"></i>
-                                <i class="fa-solid fa-hashtag text-pink-400 text-sm md:text-base"></i>
-                            </div>
-                        </div>
+                <!-- Step 4 -->
+                <div class="relative flex items-center gap-4 pl-16 fade-in-up stagger-4 hover-lift">
+                    <div class="absolute left-0 w-12 h-12 rounded-full bg-gradient-to-br from-cyan-500/30 to-cyan-600/30 border-2 border-cyan-400/50 flex items-center justify-center z-10">
+                        <div class="w-3 h-3 rounded-full bg-cyan-400"></div>
                     </div>
-                    <div class="flex-1 pt-2">
-                        <h3 class="text-xl md:text-2xl font-bold text-slate-100 mb-2">Websites, Bots & Socials</h3>
-                        <p class="text-slate-400 text-base md:text-lg">AI-generated sites, landing pages, chatbots, and social media meet people where they are.</p>
-                    </div>
-                    <div class="md:hidden flex-shrink-0 pt-2">
-                        <i class="fa-solid fa-arrow-down text-cyan-400 text-xl"></i>
+                    <div class="flex-1 bg-gradient-to-r from-cyan-500/20 to-cyan-600/10 rounded-2xl p-4 border border-cyan-400/30 transition-all duration-300 hover:border-cyan-400/50">
+                        <div class="font-bold text-slate-100 mb-1">Websites, Bots & Socials</div>
+                        <div class="text-sm text-slate-300">AI-generated sites, landing pages, chatbots, and social media meet people where they are.</div>
                     </div>
                 </div>
                 
-                <!-- Step 5: Reputation & Feedback Loop -->
-                <div class="relative flex items-start gap-6">
-                    <div class="flex-shrink-0 relative z-10">
-                        <div class="h-16 w-16 md:h-20 md:w-20 flex items-center justify-center rounded-2xl bg-slate-900 border-2 border-yellow-400/50 shadow-[0_0_25px_rgba(250,204,21,0.35)] hover:shadow-[0_0_40px_rgba(250,204,21,0.55)] transition-all duration-300">
-                            <i class="fa-solid fa-star-half-stroke text-yellow-400 text-xl md:text-2xl"></i>
-                        </div>
+                <!-- Step 5 -->
+                <div class="relative flex items-center gap-4 pl-16 fade-in-up stagger-5 hover-lift">
+                    <div class="absolute left-0 w-12 h-12 rounded-full bg-gradient-to-br from-yellow-500/30 to-yellow-600/30 border-2 border-yellow-400/50 flex items-center justify-center z-10">
+                        <div class="w-3 h-3 rounded-full bg-yellow-400"></div>
                     </div>
-                    <div class="flex-1 pt-2">
-                        <h3 class="text-xl md:text-2xl font-bold text-slate-100 mb-2">Reputation & Feedback Loop</h3>
-                        <p class="text-slate-400 text-base md:text-lg">Track reviews, feedback, and sentiment — then correct messaging automatically.</p>
-                    </div>
-                    <div class="md:hidden flex-shrink-0 pt-2">
-                        <i class="fa-solid fa-arrow-down text-yellow-400 text-xl"></i>
+                    <div class="flex-1 bg-gradient-to-r from-yellow-500/20 to-yellow-600/10 rounded-2xl p-4 border border-yellow-400/30 transition-all duration-300 hover:border-yellow-400/50">
+                        <div class="font-bold text-slate-100 mb-1">Reputation & Feedback Loop</div>
+                        <div class="text-sm text-slate-300">Track reviews, feedback, and sentiment — then correct messaging automatically.</div>
                     </div>
                 </div>
                 
-                <!-- Step 6: Qualified Lead / Customer -->
-                <div class="relative flex items-start gap-6">
-                    <div class="flex-shrink-0 relative z-10">
-                        <div class="h-16 w-16 md:h-20 md:w-20 flex items-center justify-center rounded-2xl bg-slate-900 border-2 border-green-400/50 shadow-[0_0_25px_rgba(52,211,153,0.35)] hover:shadow-[0_0_40px_rgba(52,211,153,0.55)] transition-all duration-300">
-                            <i class="fa-solid fa-user-check text-green-400 text-xl md:text-2xl"></i>
-                        </div>
+                <!-- Step 6 -->
+                <div class="relative flex items-center gap-4 pl-16 fade-in-up stagger-6 hover-lift">
+                    <div class="absolute left-0 w-12 h-12 rounded-full bg-gradient-to-br from-green-500/30 to-green-600/30 border-2 border-green-400/50 flex items-center justify-center z-10">
+                        <div class="w-3 h-3 rounded-full bg-green-400"></div>
                     </div>
-                    <div class="flex-1 pt-2">
-                        <h3 class="text-xl md:text-2xl font-bold text-green-400 mb-2">Qualified Lead / Customer</h3>
-                        <p class="text-slate-400 text-base md:text-lg">Warm, ready-to-buy leads passed straight to your sales or booking system.</p>
+                    <div class="flex-1 bg-gradient-to-r from-green-500/20 to-green-600/10 rounded-2xl p-4 border border-green-400/30 transition-all duration-300 hover:border-green-400/50">
+                        <div class="font-bold text-green-400 mb-1">Qualified Lead / Customer</div>
+                        <div class="text-sm text-slate-300">Warm, ready-to-buy leads passed straight to your sales or booking system.</div>
                     </div>
                 </div>
             </div>

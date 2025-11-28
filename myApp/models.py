@@ -269,3 +269,139 @@ class Task(models.Model):
     
     def __str__(self):
         return f"{self.title} - {self.session}"
+
+
+# ==================== WEBSITE CONTENT MODELS ====================
+
+class MediaAsset(models.Model):
+    """Cloudinary image assets for website content"""
+    title = models.CharField(max_length=255, blank=True)
+    description = models.TextField(blank=True)
+    cloudinary_url = models.URLField(max_length=500)
+    cloudinary_public_id = models.CharField(max_length=255, blank=True)
+    original_url = models.URLField(max_length=500, blank=True)
+    web_url = models.URLField(max_length=500, blank=True)
+    thumbnail_url = models.URLField(max_length=500, blank=True)
+    folder = models.CharField(max_length=255, default='katek_ai/uploads')
+    width = models.IntegerField(null=True, blank=True)
+    height = models.IntegerField(null=True, blank=True)
+    file_size = models.IntegerField(null=True, blank=True)
+    format = models.CharField(max_length=10, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        ordering = ['-created_at']
+    
+    def __str__(self):
+        return self.title or self.cloudinary_public_id or 'Untitled Asset'
+
+
+class SEO(models.Model):
+    """SEO metadata for homepage"""
+    page_title = models.CharField(max_length=200, default='KaTek AI - All-in-One AI CRM & Growth Engine')
+    meta_description = models.TextField(max_length=500, default='Transform your business with KaTek AI - the complete CRM and growth platform.')
+    meta_keywords = models.CharField(max_length=500, blank=True)
+    og_title = models.CharField(max_length=200, blank=True)
+    og_description = models.TextField(max_length=500, blank=True)
+    og_image_url = models.URLField(max_length=500, blank=True)
+    twitter_card = models.CharField(max_length=50, default='summary_large_image', blank=True)
+    canonical_url = models.URLField(max_length=500, blank=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        verbose_name = "SEO"
+        verbose_name_plural = "SEO"
+    
+    def __str__(self):
+        return f"SEO - {self.page_title}"
+
+
+class WebsiteHero(models.Model):
+    """Hero section content"""
+    pill_label = models.CharField(max_length=100, default='ALL-IN-ONE AI CRM')
+    main_headline = models.CharField(max_length=500, default='Stop juggling 17 tools. One system that connects everything.')
+    subheadline = models.TextField(blank=True)
+    primary_cta_text = models.CharField(max_length=100, default='Schedule Your Call')
+    primary_cta_link = models.URLField(max_length=500, blank=True)
+    secondary_cta_text = models.CharField(max_length=100, blank=True)
+    secondary_cta_link = models.URLField(max_length=500, blank=True)
+    background_image_url = models.URLField(max_length=500, blank=True)
+    dashboard_image_url = models.URLField(max_length=500, blank=True)
+    is_active = models.BooleanField(default=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        verbose_name = "Hero Section"
+        verbose_name_plural = "Hero Section"
+    
+    def __str__(self):
+        return f"Hero - {self.main_headline[:50]}"
+
+
+class WebsiteSection(models.Model):
+    """Generic website section content"""
+    SECTION_TYPES = [
+        ('story', 'Story Section'),
+        ('platform', 'Platform Section'),
+        ('outcomes', 'Outcomes Section'),
+        ('ai_sales', 'AI Sales Section'),
+        ('campaign_manager', 'Campaign Manager Section'),
+        ('geo_distribution', 'GEO Distribution Section'),
+        ('reputation', 'Reputation Section'),
+        ('ai_websites', 'AI Websites Section'),
+        ('personas', 'Personas Section'),
+        ('testimonials', 'Testimonials Section'),
+        ('final_cta', 'Final CTA Section'),
+    ]
+    
+    section_type = models.CharField(max_length=50, choices=SECTION_TYPES, unique=True)
+    title = models.CharField(max_length=500, blank=True)
+    subtitle = models.TextField(blank=True)
+    description = models.TextField(blank=True)
+    content = models.JSONField(default=dict, blank=True)  # Flexible JSON for section-specific content
+    background_image_url = models.URLField(max_length=500, blank=True)
+    is_active = models.BooleanField(default=True)
+    sort_order = models.IntegerField(default=0)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        ordering = ['sort_order', 'section_type']
+        verbose_name = "Website Section"
+        verbose_name_plural = "Website Sections"
+    
+    def __str__(self):
+        return f"{self.get_section_type_display()} - {self.title or 'Untitled'}"
+
+
+class WebsiteTestimonial(models.Model):
+    """Testimonials for website"""
+    quote = models.TextField()
+    author_name = models.CharField(max_length=200)
+    author_title = models.CharField(max_length=200, blank=True)
+    avatar_url = models.URLField(max_length=500, blank=True)
+    sort_order = models.IntegerField(default=0)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        ordering = ['sort_order', '-created_at']
+    
+    def __str__(self):
+        return f"{self.author_name} - {self.quote[:50]}"
+
+
+class WebsiteFooter(models.Model):
+    """Footer content"""
+    copyright_text = models.CharField(max_length=500, default='© 2024 KaTek AI. All rights reserved.')
+    social_links = models.JSONField(default=dict, blank=True)  # {platform: url}
+    footer_links = models.JSONField(default=list, blank=True)  # [{title, url}]
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        verbose_name = "Footer"
+        verbose_name_plural = "Footer"
+    
+    def __str__(self):
+        return "Website Footer"

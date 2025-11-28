@@ -1,5 +1,8 @@
 from django.contrib import admin
-from .models import OnboardingSession, Client, Tag, SessionTag, InternalNote, Task
+from .models import (
+    OnboardingSession, Client, Tag, SessionTag, InternalNote, Task,
+    MediaAsset, SEO, WebsiteHero, WebsiteSection, WebsiteTestimonial, WebsiteFooter
+)
 
 
 @admin.register(Client)
@@ -61,3 +64,45 @@ class OnboardingSessionAdmin(admin.ModelAdmin):
             'classes': ('collapse',)
         }),
     )
+
+
+# Website Content Admin
+@admin.register(MediaAsset)
+class MediaAssetAdmin(admin.ModelAdmin):
+    list_display = ['title', 'folder', 'width', 'height', 'format', 'created_at']
+    list_filter = ['folder', 'format', 'created_at']
+    search_fields = ['title', 'cloudinary_public_id']
+    readonly_fields = ['cloudinary_url', 'cloudinary_public_id', 'original_url', 'web_url', 'thumbnail_url', 'width', 'height', 'file_size', 'format', 'created_at', 'updated_at']
+
+
+@admin.register(SEO)
+class SEOAdmin(admin.ModelAdmin):
+    list_display = ['page_title', 'updated_at']
+    readonly_fields = ['updated_at']
+
+
+@admin.register(WebsiteHero)
+class WebsiteHeroAdmin(admin.ModelAdmin):
+    list_display = ['main_headline', 'is_active', 'updated_at']
+    readonly_fields = ['updated_at']
+
+
+@admin.register(WebsiteSection)
+class WebsiteSectionAdmin(admin.ModelAdmin):
+    list_display = ['section_type', 'title', 'is_active', 'sort_order', 'updated_at']
+    list_filter = ['section_type', 'is_active']
+    readonly_fields = ['updated_at']
+
+
+@admin.register(WebsiteTestimonial)
+class WebsiteTestimonialAdmin(admin.ModelAdmin):
+    list_display = ['author_name', 'author_title', 'is_active', 'sort_order', 'created_at']
+    list_filter = ['is_active', 'created_at']
+    search_fields = ['author_name', 'quote']
+    readonly_fields = ['created_at', 'updated_at']
+
+
+@admin.register(WebsiteFooter)
+class WebsiteFooterAdmin(admin.ModelAdmin):
+    list_display = ['copyright_text', 'updated_at']
+    readonly_fields = ['updated_at']

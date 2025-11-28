@@ -1,35 +1,27 @@
 <!-- Sticky Header & Navigation -->
-<header class="fixed top-0 inset-x-0 z-50 bg-slate-950/70 backdrop-blur-md border-b border-slate-800/50">
-    <nav class="max-w-7xl mx-auto px-6 md:px-10 py-4 flex items-center justify-between">
+<header class="fixed top-0 inset-x-0 z-50 bg-transparent backdrop-blur-sm transition-all duration-300">
+    <nav class="content-container py-5 flex items-center justify-between">
         <!-- Logo -->
-        <div class="flex items-center space-x-2">
-            <div class="h-10 w-10 rounded-lg bg-gradient-to-br from-cyan-400 to-violet-500 flex items-center justify-center">
-                <i class="fa-solid fa-robot text-white text-xl"></i>
-            </div>
-            <span class="text-xl font-bold text-slate-100">KATEK AI</span>
+        <div class="flex items-center space-x-2 fade-in">
+            <span class="text-lg font-bold text-slate-100 hover:text-cyan-400 transition-colors duration-300 cursor-pointer">KATEK AI</span>
         </div>
         
-        <!-- Navigation Links -->
-        <div class="hidden md:flex items-center space-x-8">
-            <a href="#platform" class="text-slate-300 hover:text-cyan-400 transition-colors duration-300">Platform</a>
-            <a href="#how-it-works" class="text-slate-300 hover:text-cyan-400 transition-colors duration-300">How It Works</a>
-            <a href="#solutions" class="text-slate-300 hover:text-cyan-400 transition-colors duration-300">Solutions</a>
-            <a href="#results" class="text-slate-300 hover:text-cyan-400 transition-colors duration-300">Results</a>
-            <a href="#pricing" class="text-slate-300 hover:text-cyan-400 transition-colors duration-300">Pricing</a>
+        <!-- Navigation Links - Centered -->
+        <div class="hidden md:flex items-center space-x-8 flex-1 justify-center">
+            <a href="#platform" class="text-slate-300 hover:text-cyan-400 transition-all duration-300 text-sm font-medium hover:scale-105">Home</a>
+            <a href="#how-it-works" class="text-slate-300 hover:text-cyan-400 transition-all duration-300 text-sm font-medium hover:scale-105">Product</a>
+            <a href="#solutions" class="text-slate-300 hover:text-cyan-400 transition-all duration-300 text-sm font-medium hover:scale-105">Solutions</a>
+            <a href="#results" class="text-slate-300 hover:text-cyan-400 transition-all duration-300 text-sm font-medium hover:scale-105">Results</a>
+            <a href="#pricing" class="text-slate-300 hover:text-cyan-400 transition-all duration-300 text-sm font-medium hover:scale-105">Pricing</a>
         </div>
         
-        <!-- CTA Buttons -->
-        <div class="flex items-center space-x-4">
-            <!-- Theme Toggle -->
-            <button onclick="toggleTheme()" class="p-2.5 rounded-lg bg-slate-800/50 hover:bg-slate-700/50 border border-slate-700/50 hover:border-cyan-400/50 transition-all duration-300 text-slate-300 hover:text-cyan-400" aria-label="Toggle theme">
-                <i id="theme-icon" class="fa-solid fa-moon text-lg"></i>
+        <!-- CTA Buttons - Right Side -->
+        <div class="flex items-center space-x-3 fade-in">
+            <button class="btn-ghost-pill text-sm py-2 px-4 hover:scale-105">
+                Sign in
             </button>
-            <button class="hidden md:flex items-center space-x-2 text-slate-300 hover:text-cyan-400 transition-colors duration-300 text-sm">
-                <span>Watch 2-min overview</span>
-                <i class="fa-solid fa-chevron-down text-xs"></i>
-            </button>
-            <button class="px-6 py-2.5 bg-gradient-to-r from-cyan-500 to-violet-500 text-white rounded-lg font-semibold hover:shadow-[0_0_30px_rgba(56,189,248,0.5)] transition-all duration-300 hover:-translate-y-0.5">
-                Book a Live Demo
+            <button class="btn-primary-pill text-sm py-2 px-6 hover:scale-105">
+                Book a demo
             </button>
         </div>
     </nav>

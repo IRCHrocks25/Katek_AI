@@ -18,7 +18,17 @@ import openai
 
 
 def home(request):
-    return render(request, 'myApp/home.html')
+    """Homepage view - uses database content if available"""
+    from .content_helpers import get_website_content_from_db
+    
+    # Get content from database
+    website_content = get_website_content_from_db()
+    
+    context = {
+        'content': website_content,
+    }
+    
+    return render(request, 'myApp/home.html', context)
 
 
 def onboarding(request):

@@ -1,0 +1,59 @@
+{% extends 'myApp/website_dashboard/base.html' %}
+
+{% block title %}Edit Footer - Website CMS{% endblock %}
+{% block page_title %}Footer{% endblock %}
+{% block page_subtitle %}Edit footer content and links{% endblock %}
+
+{% block content %}
+<form method="POST" class="space-y-6">
+    {% csrf_token %}
+    
+    <div class="bg-slate-800/50 border border-slate-700/50 rounded-lg p-6">
+        <h3 class="text-lg font-bold text-slate-100 mb-4">Footer Content</h3>
+        
+        <div class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium text-slate-300 mb-2">Copyright Text</label>
+                <input type="text" name="copyright_text" value="{{ footer.copyright_text }}" class="w-full px-4 py-2 bg-slate-700/50 border border-slate-600/50 rounded-lg text-slate-100">
+            </div>
+        </div>
+    </div>
+    
+    <div class="bg-slate-800/50 border border-slate-700/50 rounded-lg p-6">
+        <h3 class="text-lg font-bold text-slate-100 mb-4">Social Media Links</h3>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+                <label class="block text-sm font-medium text-slate-300 mb-2">Facebook</label>
+                <input type="url" name="social_facebook" value="{{ footer.social_links.facebook|default:'' }}" class="w-full px-4 py-2 bg-slate-700/50 border border-slate-600/50 rounded-lg text-slate-100">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-slate-300 mb-2">Twitter</label>
+                <input type="url" name="social_twitter" value="{{ footer.social_links.twitter|default:'' }}" class="w-full px-4 py-2 bg-slate-700/50 border border-slate-600/50 rounded-lg text-slate-100">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-slate-300 mb-2">Instagram</label>
+                <input type="url" name="social_instagram" value="{{ footer.social_links.instagram|default:'' }}" class="w-full px-4 py-2 bg-slate-700/50 border border-slate-600/50 rounded-lg text-slate-100">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-slate-300 mb-2">LinkedIn</label>
+                <input type="url" name="social_linkedin" value="{{ footer.social_links.linkedin|default:'' }}" class="w-full px-4 py-2 bg-slate-700/50 border border-slate-600/50 rounded-lg text-slate-100">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-slate-300 mb-2">YouTube</label>
+                <input type="url" name="social_youtube" value="{{ footer.social_links.youtube|default:'' }}" class="w-full px-4 py-2 bg-slate-700/50 border border-slate-600/50 rounded-lg text-slate-100">
+            </div>
+        </div>
+    </div>
+    
+    <div class="flex justify-end space-x-4">
+        <a href="{% url 'website_dashboard:home' %}" class="px-6 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg text-slate-200 transition-colors">
+            Cancel
+        </a>
+        <button type="submit" class="px-6 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-white font-medium transition-colors">
+            <i class="fas fa-save mr-2"></i>Save Changes
+        </button>
+    </div>
+</form>
+{% endblock %}
+

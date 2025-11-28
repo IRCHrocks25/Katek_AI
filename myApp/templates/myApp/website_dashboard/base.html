@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Website Dashboard - KaTek AI{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            min-height: 100vh;
+        }
+        .sidebar-link.active {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(139, 92, 246, 0.2) 50%, rgba(236, 72, 153, 0.2) 100%);
+            border-left: 3px solid #3b82f6;
+        }
+        /* Custom scrollbar for sidebar */
+        .sidebar-nav::-webkit-scrollbar {
+            width: 6px;
+        }
+        .sidebar-nav::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.5);
+        }
+        .sidebar-nav::-webkit-scrollbar-thumb {
+            background: rgba(100, 116, 139, 0.5);
+            border-radius: 3px;
+        }
+        .sidebar-nav::-webkit-scrollbar-thumb:hover {
+            background: rgba(100, 116, 139, 0.7);
+        }
+    </style>
+</head>
+<body class="text-slate-100">
+    <div class="flex h-screen overflow-hidden">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-slate-900/50 border-r border-slate-700/50 flex flex-col">
+            <div class="p-6 border-b border-slate-700/50">
+                <h1 class="text-xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+                    Website CMS
+                </h1>
+                <p class="text-xs text-slate-400 mt-1">Content Management</p>
+            </div>
+            
+            <nav class="flex-1 p-4 space-y-1 overflow-y-auto sidebar-nav">
+                <a href="{% url 'website_dashboard:home' %}" class="sidebar-link flex items-center px-4 py-3 rounded-lg text-slate-300 hover:bg-slate-800/50 transition-colors {% if request.resolver_match.url_name == 'home' %}active{% endif %}">
+                    <i class="fas fa-home w-5 mr-3"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="{% url 'website_dashboard:gallery' %}" class="sidebar-link flex items-center px-4 py-3 rounded-lg text-slate-300 hover:bg-slate-800/50 transition-colors {% if request.resolver_match.url_name == 'gallery' %}active{% endif %}">
+                    <i class="fas fa-images w-5 mr-3"></i>
+                    <span>Gallery</span>
+                </a>
+                <a href="{% url 'website_dashboard:seo_edit' %}" class="sidebar-link flex items-center px-4 py-3 rounded-lg text-slate-300 hover:bg-slate-800/50 transition-colors {% if request.resolver_match.url_name == 'seo_edit' %}active{% endif %}">
+                    <i class="fas fa-search w-5 mr-3"></i>
+                    <span>SEO</span>
+                </a>
+                <a href="{% url 'website_dashboard:hero_edit' %}" class="sidebar-link flex items-center px-4 py-3 rounded-lg text-slate-300 hover:bg-slate-800/50 transition-colors {% if request.resolver_match.url_name == 'hero_edit' %}active{% endif %}">
+                    <i class="fas fa-star w-5 mr-3"></i>
+                    <span>Hero Section</span>
+                </a>
+                <a href="{% url 'website_dashboard:section_edit' 'story' %}" class="sidebar-link flex items-center px-4 py-3 rounded-lg text-slate-300 hover:bg-slate-800/50 transition-colors">
+                    <i class="fas fa-book w-5 mr-3"></i>
+                    <span>Story Section</span>
+                </a>
+                <a href="{% url 'website_dashboard:section_edit' 'platform' %}" class="sidebar-link flex items-center px-4 py-3 rounded-lg text-slate-300 hover:bg-slate-800/50 transition-colors">
+                    <i class="fas fa-cube w-5 mr-3"></i>
+                    <span>Platform Section</span>
+                </a>
+                <a href="{% url 'website_dashboard:section_edit' 'outcomes' %}" class="sidebar-link flex items-center px-4 py-3 rounded-lg text-slate-300 hover:bg-slate-800/50 transition-colors">
+                    <i class="fas fa-chart-line w-5 mr-3"></i>
+                    <span>Outcomes Section</span>
+                </a>
+                <a href="{% url 'website_dashboard:section_edit' 'ai_sales' %}" class="sidebar-link flex items-center px-4 py-3 rounded-lg text-slate-300 hover:bg-slate-800/50 transition-colors">
+                    <i class="fas fa-robot w-5 mr-3"></i>
+                    <span>AI Sales Section</span>
+                </a>
+                <a href="{% url 'website_dashboard:section_edit' 'campaign_manager' %}" class="sidebar-link flex items-center px-4 py-3 rounded-lg text-slate-300 hover:bg-slate-800/50 transition-colors">
+                    <i class="fas fa-bullhorn w-5 mr-3"></i>
+                    <span>Campaign Manager</span>
+                </a>
+                <a href="{% url 'website_dashboard:section_edit' 'geo_distribution' %}" class="sidebar-link flex items-center px-4 py-3 rounded-lg text-slate-300 hover:bg-slate-800/50 transition-colors">
+                    <i class="fas fa-globe w-5 mr-3"></i>
+                    <span>GEO Distribution</span>
+                </a>
+                <a href="{% url 'website_dashboard:section_edit' 'reputation' %}" class="sidebar-link flex items-center px-4 py-3 rounded-lg text-slate-300 hover:bg-slate-800/50 transition-colors">
+                    <i class="fas fa-star w-5 mr-3"></i>
+                    <span>Reputation Section</span>
+                </a>
+                <a href="{% url 'website_dashboard:section_edit' 'ai_websites' %}" class="sidebar-link flex items-center px-4 py-3 rounded-lg text-slate-300 hover:bg-slate-800/50 transition-colors">
+                    <i class="fas fa-laptop-code w-5 mr-3"></i>
+                    <span>AI Websites Section</span>
+                </a>
+                <a href="{% url 'website_dashboard:section_edit' 'personas' %}" class="sidebar-link flex items-center px-4 py-3 rounded-lg text-slate-300 hover:bg-slate-800/50 transition-colors">
+                    <i class="fas fa-users w-5 mr-3"></i>
+                    <span>Personas Section</span>
+                </a>
+                <a href="{% url 'website_dashboard:testimonials_list' %}" class="sidebar-link flex items-center px-4 py-3 rounded-lg text-slate-300 hover:bg-slate-800/50 transition-colors {% if 'testimonial' in request.resolver_match.url_name %}active{% endif %}">
+                    <i class="fas fa-quote-left w-5 mr-3"></i>
+                    <span>Testimonials</span>
+                </a>
+                <a href="{% url 'website_dashboard:section_edit' 'final_cta' %}" class="sidebar-link flex items-center px-4 py-3 rounded-lg text-slate-300 hover:bg-slate-800/50 transition-colors">
+                    <i class="fas fa-bullhorn w-5 mr-3"></i>
+                    <span>Final CTA</span>
+                </a>
+                <a href="{% url 'website_dashboard:footer_edit' %}" class="sidebar-link flex items-center px-4 py-3 rounded-lg text-slate-300 hover:bg-slate-800/50 transition-colors {% if request.resolver_match.url_name == 'footer_edit' %}active{% endif %}">
+                    <i class="fas fa-ellipsis-h w-5 mr-3"></i>
+                    <span>Footer</span>
+                </a>
+            </nav>
+            
+            <div class="p-4 border-t border-slate-700/50">
+                <a href="{% url 'dashboard_overview' %}" class="block w-full px-4 py-2 bg-slate-700/50 border border-slate-600/50 rounded-lg text-slate-300 hover:bg-slate-700 transition-colors text-center text-sm mb-2">
+                    <i class="fas fa-arrow-left mr-2"></i>Back to Main Dashboard
+                </a>
+                <a href="{% url 'logout' %}" class="block w-full px-4 py-2 bg-slate-700/50 border border-slate-600/50 rounded-lg text-slate-300 hover:bg-slate-700 transition-colors text-center text-sm">
+                    <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                </a>
+            </div>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="flex-1 overflow-y-auto">
+            <!-- Top Bar -->
+            <header class="bg-slate-800/30 border-b border-slate-700/50 px-6 py-4">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h2 class="text-2xl font-bold text-slate-100">{% block page_title %}Website Dashboard{% endblock %}</h2>
+                        <p class="text-sm text-slate-400 mt-1">{% block page_subtitle %}{% endblock %}</p>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <a href="/" target="_blank" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-white text-sm font-medium transition-colors">
+                            <i class="fas fa-external-link-alt mr-2"></i>View Website
+                        </a>
+                    </div>
+                </div>
+            </header>
+            
+            <!-- Page Content -->
+            <div class="p-6">
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="mb-4 p-4 rounded-lg {% if message.tags == 'error' %}bg-red-900/50 border border-red-700/50 text-red-200{% else %}bg-green-900/50 border border-green-700/50 text-green-200{% endif %}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+                
+                {% block content %}{% endblock %}
+            </div>
+        </main>
+    </div>
+    
+    {% block extra_js %}{% endblock %}
+    
+    <!-- Gallery Picker Component -->
+    {% include 'myApp/website_dashboard/gallery_picker.html' %}
+</body>
+</html>
+

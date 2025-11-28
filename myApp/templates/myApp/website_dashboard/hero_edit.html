@@ -1,0 +1,118 @@
+{% extends 'myApp/website_dashboard/base.html' %}
+
+{% block title %}Edit Hero Section - Website CMS{% endblock %}
+{% block page_title %}Hero Section{% endblock %}
+{% block page_subtitle %}Edit the main hero section of your website{% endblock %}
+
+{% block content %}
+<form method="POST" class="space-y-6">
+    {% csrf_token %}
+    
+    <div class="bg-slate-800/50 border border-slate-700/50 rounded-lg p-6">
+        <h3 class="text-lg font-bold text-slate-100 mb-4">Hero Content</h3>
+        
+        <div class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium text-slate-300 mb-2">Pill Label</label>
+                <input type="text" name="pill_label" value="{{ hero.pill_label }}" class="w-full px-4 py-2 bg-slate-700/50 border border-slate-600/50 rounded-lg text-slate-100">
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium text-slate-300 mb-2">Main Headline</label>
+                <input type="text" name="main_headline" value="{{ hero.main_headline }}" class="w-full px-4 py-2 bg-slate-700/50 border border-slate-600/50 rounded-lg text-slate-100">
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium text-slate-300 mb-2">Subheadline</label>
+                <textarea name="subheadline" rows="3" class="w-full px-4 py-2 bg-slate-700/50 border border-slate-600/50 rounded-lg text-slate-100">{{ hero.subheadline }}</textarea>
+            </div>
+        </div>
+    </div>
+    
+    <div class="bg-slate-800/50 border border-slate-700/50 rounded-lg p-6">
+        <h3 class="text-lg font-bold text-slate-100 mb-4">Call-to-Action Buttons</h3>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+                <label class="block text-sm font-medium text-slate-300 mb-2">Primary CTA Text</label>
+                <input type="text" name="primary_cta_text" value="{{ hero.primary_cta_text }}" class="w-full px-4 py-2 bg-slate-700/50 border border-slate-600/50 rounded-lg text-slate-100">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-slate-300 mb-2">Primary CTA Link</label>
+                <input type="url" name="primary_cta_link" value="{{ hero.primary_cta_link }}" class="w-full px-4 py-2 bg-slate-700/50 border border-slate-600/50 rounded-lg text-slate-100">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-slate-300 mb-2">Secondary CTA Text</label>
+                <input type="text" name="secondary_cta_text" value="{{ hero.secondary_cta_text }}" class="w-full px-4 py-2 bg-slate-700/50 border border-slate-600/50 rounded-lg text-slate-100">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-slate-300 mb-2">Secondary CTA Link</label>
+                <input type="url" name="secondary_cta_link" value="{{ hero.secondary_cta_link }}" class="w-full px-4 py-2 bg-slate-700/50 border border-slate-600/50 rounded-lg text-slate-100">
+            </div>
+        </div>
+    </div>
+    
+    <div class="bg-slate-800/50 border border-slate-700/50 rounded-lg p-6">
+        <h3 class="text-lg font-bold text-slate-100 mb-4">Images</h3>
+        
+        <div class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium text-slate-300 mb-2">Background Image URL</label>
+                <div class="flex space-x-2">
+                    <input type="url" id="background_image_url" name="background_image_url" value="{{ hero.background_image_url }}" class="flex-1 px-4 py-2 bg-slate-700/50 border border-slate-600/50 rounded-lg text-slate-100">
+                    <button type="button" onclick="openGalleryPicker('background_image_url', 'original')" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-white text-sm font-medium transition-colors whitespace-nowrap">
+                        <i class="fas fa-images mr-2"></i>Select from Gallery
+                    </button>
+                </div>
+                {% if hero.background_image_url %}
+                <div class="mt-2">
+                    <img id="background_image_url_preview" src="{{ hero.background_image_url }}" alt="Preview" class="max-w-xs h-32 object-cover rounded-lg border border-slate-600/50">
+                </div>
+                {% else %}
+                <div class="mt-2 hidden">
+                    <img id="background_image_url_preview" src="" alt="Preview" class="max-w-xs h-32 object-cover rounded-lg border border-slate-600/50">
+                </div>
+                {% endif %}
+                <p class="text-xs text-slate-400 mt-1">Use image URL from gallery or external URL</p>
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium text-slate-300 mb-2">Dashboard Image URL</label>
+                <div class="flex space-x-2">
+                    <input type="url" id="dashboard_image_url" name="dashboard_image_url" value="{{ hero.dashboard_image_url }}" class="flex-1 px-4 py-2 bg-slate-700/50 border border-slate-600/50 rounded-lg text-slate-100">
+                    <button type="button" onclick="openGalleryPicker('dashboard_image_url', 'original')" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-white text-sm font-medium transition-colors whitespace-nowrap">
+                        <i class="fas fa-images mr-2"></i>Select from Gallery
+                    </button>
+                </div>
+                {% if hero.dashboard_image_url %}
+                <div class="mt-2">
+                    <img id="dashboard_image_url_preview" src="{{ hero.dashboard_image_url }}" alt="Preview" class="max-w-xs h-32 object-cover rounded-lg border border-slate-600/50">
+                </div>
+                {% else %}
+                <div class="mt-2 hidden">
+                    <img id="dashboard_image_url_preview" src="" alt="Preview" class="max-w-xs h-32 object-cover rounded-lg border border-slate-600/50">
+                </div>
+                {% endif %}
+                <p class="text-xs text-slate-400 mt-1">Dashboard mockup image URL</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="bg-slate-800/50 border border-slate-700/50 rounded-lg p-6">
+        <label class="flex items-center space-x-3">
+            <input type="checkbox" name="is_active" {% if hero.is_active %}checked{% endif %} class="w-5 h-5 rounded bg-slate-700/50 border-slate-600/50 text-blue-600">
+            <span class="text-slate-200">Active (show on website)</span>
+        </label>
+    </div>
+    
+    <div class="flex justify-end space-x-4">
+        <a href="{% url 'website_dashboard:home' %}" class="px-6 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg text-slate-200 transition-colors">
+            Cancel
+        </a>
+        <button type="submit" class="px-6 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-white font-medium transition-colors">
+            <i class="fas fa-save mr-2"></i>Save Changes
+        </button>
+    </div>
+</form>
+{% endblock %}
+

@@ -1,0 +1,96 @@
+{% extends 'myApp/website_dashboard/base.html' %}
+
+{% block title %}Dashboard - Website CMS{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+{% block page_subtitle %}Manage your website content and assets{% endblock %}
+
+{% block content %}
+<!-- KPI Cards -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+    <div class="bg-slate-800/50 border border-slate-700/50 rounded-lg p-6">
+        <div class="flex items-center justify-between mb-2">
+            <h3 class="text-sm font-medium text-slate-400">Total Images</h3>
+            <i class="fas fa-images text-blue-400"></i>
+        </div>
+        <p class="text-3xl font-bold text-slate-100 mb-1">{{ total_images }}</p>
+        <p class="text-xs text-slate-400">In gallery</p>
+    </div>
+    
+    <div class="bg-slate-800/50 border border-slate-700/50 rounded-lg p-6">
+        <div class="flex items-center justify-between mb-2">
+            <h3 class="text-sm font-medium text-slate-400">Active Sections</h3>
+            <i class="fas fa-cube text-purple-400"></i>
+        </div>
+        <p class="text-3xl font-bold text-slate-100 mb-1">{{ active_sections }}</p>
+        <p class="text-xs text-slate-400">Published sections</p>
+    </div>
+    
+    <div class="bg-slate-800/50 border border-slate-700/50 rounded-lg p-6">
+        <div class="flex items-center justify-between mb-2">
+            <h3 class="text-sm font-medium text-slate-400">Testimonials</h3>
+            <i class="fas fa-quote-left text-pink-400"></i>
+        </div>
+        <p class="text-3xl font-bold text-slate-100 mb-1">{{ total_testimonials }}</p>
+        <p class="text-xs text-slate-400">Active testimonials</p>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+    <div class="bg-slate-800/50 border border-slate-700/50 rounded-lg p-6">
+        <h3 class="text-lg font-bold text-slate-100 mb-4">Quick Actions</h3>
+        <div class="space-y-2">
+            <a href="{% url 'website_dashboard:hero_edit' %}" class="block px-4 py-3 bg-slate-700/50 hover:bg-slate-700 rounded-lg text-slate-200 transition-colors">
+                <i class="fas fa-star mr-2"></i>Edit Hero Section
+            </a>
+            <a href="{% url 'website_dashboard:gallery' %}" class="block px-4 py-3 bg-slate-700/50 hover:bg-slate-700 rounded-lg text-slate-200 transition-colors">
+                <i class="fas fa-images mr-2"></i>Manage Images
+            </a>
+            <a href="{% url 'website_dashboard:testimonials_list' %}" class="block px-4 py-3 bg-slate-700/50 hover:bg-slate-700 rounded-lg text-slate-200 transition-colors">
+                <i class="fas fa-quote-left mr-2"></i>Manage Testimonials
+            </a>
+            <a href="{% url 'website_dashboard:seo_edit' %}" class="block px-4 py-3 bg-slate-700/50 hover:bg-slate-700 rounded-lg text-slate-200 transition-colors">
+                <i class="fas fa-search mr-2"></i>Edit SEO Settings
+            </a>
+        </div>
+    </div>
+    
+    <div class="bg-slate-800/50 border border-slate-700/50 rounded-lg p-6">
+        <h3 class="text-lg font-bold text-slate-100 mb-4">Recent Images</h3>
+        {% if recent_images %}
+            <div class="grid grid-cols-3 gap-2">
+                {% for image in recent_images %}
+                    <div class="aspect-square bg-slate-700/50 rounded-lg overflow-hidden">
+                        <img src="{{ image.thumbnail_url|default:image.cloudinary_url }}" alt="{{ image.title }}" class="w-full h-full object-cover">
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="text-slate-400 text-sm">No images uploaded yet.</p>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Sections Status -->
+<div class="bg-slate-800/50 border border-slate-700/50 rounded-lg p-6">
+    <h3 class="text-lg font-bold text-slate-100 mb-4">Sections Status</h3>
+    <div class="space-y-2">
+        {% for section in sections %}
+            <div class="flex items-center justify-between px-4 py-3 bg-slate-700/50 rounded-lg">
+                <div class="flex items-center space-x-3">
+                    <span class="{% if section.is_active %}text-green-400{% else %}text-slate-500{% endif %}">
+                        <i class="fas fa-circle text-xs"></i>
+                    </span>
+                    <span class="text-slate-200">{{ section.get_section_type_display }}</span>
+                </div>
+                <a href="{% url 'website_dashboard:section_edit' section.section_type %}" class="px-3 py-1 bg-blue-600 hover:bg-blue-700 rounded text-sm text-white transition-colors">
+                    Edit
+                </a>
+            </div>
+        {% empty %}
+            <p class="text-slate-400 text-sm">No sections configured yet.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
