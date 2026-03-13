@@ -213,6 +213,11 @@ def onboarding_save(request):
             # Build list of fields to update
             update_fields = ['steps_completed', 'updated_at']
             
+            # Add the step JSON fields that were updated (critical - without this, step data is never saved!)
+            for step_key in saved_steps:
+                if step_key in step_mapping:
+                    update_fields.append(step_mapping[step_key])
+            
             # Add denormalized fields if they were updated
             if any(step_key in ['course_idea', 'transformation_outcomes', 'platform_money'] for step_key in saved_steps):
                 update_fields.extend(['course_title', 'audience_summary', 'main_outcomes', 'access_model'])
@@ -220,7 +225,7 @@ def onboarding_save(request):
             if data.get('submit', False):
                 update_fields.extend(['status', 'submitted_at'])
             
-            session.save(update_fields=update_fields)
+            session.save(update_fields=list(dict.fromkeys(update_fields)))  # dedupe while preserving order
         except Exception as save_error:
             return JsonResponse({
                 'success': False,
@@ -312,18 +317,50 @@ def onboarding_ai_help(request):
                 'file_descriptions': f"Uploaded files for this course may include course outlines, supplementary materials, reference documents, and resources that support the learning objectives and enhance the student experience.",
                 'secret_notes': f"Additional context for this course on {context.get('topic', 'your subject')}: {context.get('pitch', 'This course aims to provide comprehensive learning')}. Special considerations include maintaining high quality standards and ensuring student engagement throughout."
             }
-            result = suggestions.get(field_type, ['No suggestions available'])
+            # Add missing field types used by the onboarding form
+            suggestions['expertise'] = [
+                f"{context.get('topic', 'Your subject')} fundamentals and practical applications",
+                f"Professional {context.get('topic', 'expertise')} with real-world experience",
+                f"Advanced {context.get('topic', 'skills')} and best practices"
+            ]
+            suggestions['audience'] = f"{context.get('audience', 'Learners')} who want to {context.get('outcome', 'improve their skills')} in {context.get('topic', 'this area')}."
+            
+            result = suggestions.get(field_type, [f"Enter your {field_type.replace('_', ' ')} here."])
             return JsonResponse({
                 'success': True,
                 'suggestions': result if isinstance(result, list) else [result],
                 'field_type': field_type
             })
         
+        # Helper to get fallback suggestions when OpenAI fails
+        def get_fallback_suggestions():
+            fallback = {
+                'course_title': [f"Master {context.get('topic', 'Your Subject')}: A Complete Guide", f"The Ultimate {context.get('topic', 'Course')} Course"],
+                'pitch': f"This course helps {context.get('audience', 'learners')} to {context.get('outcome', 'achieve their goals')}.",
+                'outcomes': [f"Understand {context.get('topic', 'the subject')}", f"Apply key concepts in practice", f"Build confidence in your skills"],
+                'expertise': [f"{context.get('topic', 'Your subject')} fundamentals", f"Professional expertise in {context.get('topic', 'this area')}"],
+                'audience': f"{context.get('audience', 'Learners')} who want to improve in {context.get('topic', 'this area')}.",
+                'main_transformation': f"Students will gain practical skills in {context.get('topic', 'the subject')} and apply them confidently.",
+                'existing_content': f"Typical materials: slides, recordings, documents. Adapt for {context.get('topic', 'your course')}.",
+                'brand_description': f"Expert, clear, student-focused. Professional yet approachable style for {context.get('topic', 'education')}.",
+                'structure_notes': f"Logical progression from basics to advanced. Modules with clear lessons for {context.get('topic', 'the course')}.",
+                'media_notes': f"Clear presentation with good audio. Focus on engagement for {context.get('topic', 'learners')}.",
+                'legal_notes': f"Original or properly licensed content. Protect IP and comply with regulations for {context.get('topic', 'education')}.",
+                'revenue_goals': f"Sustainable income through appropriate pricing. Build student base for {context.get('topic', 'this course')}.",
+                'timeline_notes': f"Balanced development pace. Target launch aligned with quality for {context.get('topic', 'the course')}.",
+                'decision_makers': f"Course creator, subject experts, stakeholders review before launch.",
+                'secret_notes': f"Additional context for {context.get('topic', 'this course')}. Special considerations for quality and engagement.",
+            }
+            result = fallback.get(field_type, [f"Enter your {field_type.replace('_', ' ')}."])
+            return result if isinstance(result, list) else [result]
+        
         # Initialize OpenAI client
         client = openai.OpenAI(api_key=settings.OPENAI_API_KEY)
         
         # Build prompts based on field type
         prompts = {
+            'expertise': f"Suggest 3 brief expertise descriptions for someone teaching: {context.get('topic', 'a subject')}. Return only the descriptions, one per line. Each should be 5-10 words.",
+            'audience': f"Write a one-sentence target audience description for a course about: {context.get('topic', 'a subject')} titled '{context.get('title', '')}'. Be specific about who would benefit.",
             'course_title': f"Generate 3 compelling course title suggestions for a course about: {context.get('topic', 'a subject')}. Target audience: {context.get('audience', 'learners')}. Make them engaging and clear. Return only the titles, one per line.",
             'pitch': f"Write a compelling one-sentence course pitch. Course topic: {context.get('topic', 'a subject')}. Target audience: {context.get('audience', 'learners')}. Format: 'This course helps [who] to [result] without [pain].'",
             'outcomes': f"Generate 3 specific, measurable learning outcomes for a course about: {context.get('topic', 'a subject')}. Course description: {context.get('pitch', '')}. Return only the outcomes, one per line.",
@@ -354,22 +391,29 @@ def onboarding_ai_help(request):
         
         prompt = prompts.get(field_type, f"Help me with: {field_type}")
         
-        # Call OpenAI API
-        response = client.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=[
-                {"role": "system", "content": "You are a helpful course creation assistant. Provide concise, actionable suggestions."},
-                {"role": "user", "content": prompt}
-            ],
-            max_tokens=200,
-            temperature=0.7
-        )
-        
-        # Parse response
-        ai_response = response.choices[0].message.content.strip()
+        try:
+            # Call OpenAI API
+            response = client.chat.completions.create(
+                model="gpt-4o-mini",
+                messages=[
+                    {"role": "system", "content": "You are a helpful course creation assistant. Provide concise, actionable suggestions."},
+                    {"role": "user", "content": prompt}
+                ],
+                max_tokens=200,
+                temperature=0.7
+            )
+            ai_response = response.choices[0].message.content.strip()
+        except (openai.OpenAIError, Exception) as e:
+            # Fall back to placeholder suggestions when API fails (invalid key, rate limit, network, etc.)
+            suggestions = get_fallback_suggestions()
+            return JsonResponse({
+                'success': True,
+                'suggestions': suggestions,
+                'field_type': field_type
+            })
         
         # Format suggestions based on field type
-        if field_type in ['course_title', 'outcomes', 'taglines']:
+        if field_type in ['course_title', 'outcomes', 'taglines', 'expertise']:
             suggestions = [line.strip() for line in ai_response.split('\n') if line.strip()][:3]
         elif field_type == 'tone':
             suggestions = [word.strip() for word in ai_response.split(',') if word.strip()][:4]

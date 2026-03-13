@@ -3,2095 +3,1655 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Course Onboarding - KaTek AI</title>
-    
-    <!-- Tailwind CSS CDN -->
+    <title>Course Onboarding – KaTek AI</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+
     <style>
+        :root {
+            --ink: #0a0a0f;
+            --ink-2: #1a1a26;
+            --ink-3: #2a2a3a;
+            --surface: #12121c;
+            --surface-2: #1c1c2a;
+            --surface-3: #252536;
+            --border: rgba(255,255,255,0.07);
+            --border-2: rgba(255,255,255,0.12);
+            --accent: #7c6cf0;
+            --accent-2: #a594f9;
+            --accent-glow: rgba(124,108,240,0.25);
+            --text: #f0f0ff;
+            --text-2: #9898b8;
+            --text-3: #5a5a78;
+            --success: #34d399;
+            --warning: #fbbf24;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'DM Sans', sans-serif;
+            background: var(--ink);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
         }
-        h1, h2, h3, h4, h5, h6 {
-            font-family: 'Poppins', sans-serif;
+        h1,h2,h3 { font-family: 'DM Serif Display', serif; }
+
+        /* ─── AMBIENT BACKGROUND ─── */
+        .ambient {
+            position: fixed; inset: 0; pointer-events: none; z-index: 0;
+            overflow: hidden;
         }
-        
-        /* Custom gradient text */
-        .gradient-text {
-            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 50%, #ec4899 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+        .ambient::before {
+            content: '';
+            position: absolute;
+            top: -40%; left: -20%;
+            width: 70%; height: 80%;
+            background: radial-gradient(ellipse, rgba(124,108,240,0.12) 0%, transparent 65%);
+            animation: drift1 18s ease-in-out infinite alternate;
         }
-        
-        /* Step transition */
-        .step-panel {
+        .ambient::after {
+            content: '';
+            position: absolute;
+            bottom: -30%; right: -20%;
+            width: 60%; height: 70%;
+            background: radial-gradient(ellipse, rgba(165,148,249,0.08) 0%, transparent 65%);
+            animation: drift2 22s ease-in-out infinite alternate;
+        }
+        @keyframes drift1 {
+            from { transform: translate(0,0) scale(1); }
+            to   { transform: translate(6%, 4%) scale(1.1); }
+        }
+        @keyframes drift2 {
+            from { transform: translate(0,0) scale(1); }
+            to   { transform: translate(-5%, -6%) scale(1.08); }
+        }
+
+        /* ─── INTRO OVERLAY ─── */
+        #intro-overlay {
+            position: fixed; inset: 0; z-index: 100;
+            background: var(--ink);
+            display: flex; align-items: center; justify-content: center;
+            transition: opacity 0.7s cubic-bezier(0.4,0,0.2,1);
+        }
+        #intro-overlay.fade-out { opacity: 0; pointer-events: none; }
+
+        /* Canvas for particle grid */
+        #particle-canvas {
+            position: absolute; inset: 0;
+            opacity: 0.25;
+        }
+
+        /* Intro content */
+        .intro-card {
+            position: relative; z-index: 2;
+            max-width: 600px; width: 100%;
+            padding: 0 2rem;
+            text-align: center;
+        }
+
+        /* Typewriter cursor */
+        .cursor {
+            display: inline-block;
+            width: 2px; height: 1.1em;
+            background: var(--accent-2);
+            margin-left: 3px;
+            vertical-align: middle;
+            animation: blink 1s step-end infinite;
+        }
+        @keyframes blink { 50% { opacity: 0; } }
+
+        /* KaTek wordmark */
+        .wordmark {
+            font-family: 'DM Serif Display', serif;
+            font-size: clamp(3rem, 8vw, 5.5rem);
+            line-height: 1;
+            color: var(--text);
+            letter-spacing: -0.02em;
+            margin-bottom: 1.5rem;
+        }
+        .wordmark em {
+            font-style: italic;
+            color: var(--accent-2);
+        }
+
+        /* Subtitle line */
+        .intro-sub {
+            font-size: 1.05rem;
+            color: var(--text-2);
+            font-weight: 300;
+            letter-spacing: 0.02em;
+            margin-bottom: 3rem;
+            min-height: 1.6em;
+        }
+
+        /* Step pills */
+        .step-pills {
+            display: flex; gap: 0.5rem;
+            justify-content: center; flex-wrap: wrap;
+            margin-bottom: 3rem;
+            opacity: 0;
+            transform: translateY(12px);
+            transition: all 0.6s ease 1.2s;
+        }
+        .step-pills.visible { opacity: 1; transform: translateY(0); }
+        .pill {
+            font-size: 0.7rem; font-weight: 500; letter-spacing: 0.06em;
+            text-transform: uppercase;
+            padding: 0.3rem 0.75rem;
+            border-radius: 100px;
+            border: 1px solid var(--border-2);
+            color: var(--text-3);
+            background: var(--surface-2);
+        }
+        .pill.active {
+            background: var(--accent-glow);
+            border-color: var(--accent);
+            color: var(--accent-2);
+        }
+
+        /* Begin button */
+        .btn-begin {
+            display: inline-flex; align-items: center; gap: 0.625rem;
+            padding: 0.875rem 2.25rem;
+            background: var(--accent);
+            color: #fff;
+            border: none; cursor: pointer;
+            border-radius: 100px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.95rem; font-weight: 500;
+            letter-spacing: 0.01em;
+            transition: all 0.2s;
+            opacity: 0;
+            transform: translateY(8px);
+        }
+        .btn-begin.visible { opacity: 1; transform: translateY(0); }
+        .btn-begin:hover {
+            background: var(--accent-2);
+            transform: translateY(-1px);
+            box-shadow: 0 8px 32px var(--accent-glow);
+        }
+        .btn-begin .arrow {
+            transition: transform 0.2s;
+        }
+        .btn-begin:hover .arrow { transform: translateX(3px); }
+
+        /* Estimated time */
+        .time-note {
+            margin-top: 1.25rem;
+            font-size: 0.8rem; color: var(--text-3);
+            opacity: 0;
+            transition: opacity 0.6s ease 1.8s;
+        }
+        .time-note.visible { opacity: 1; }
+
+        /* ─── STEP TRANSITION OVERLAY ─── */
+        #step-transition {
+            position: fixed; inset: 0; z-index: 90;
+            background: var(--ink);
+            display: flex; align-items: center; justify-content: center;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        #step-transition.active { opacity: 1; pointer-events: all; }
+
+        .transition-inner {
+            display: flex; flex-direction: column;
+            align-items: center; gap: 1.25rem;
+            text-align: center;
+        }
+        /* Orbital spinner */
+        .orbital {
+            width: 48px; height: 48px;
+            position: relative;
+        }
+        .orbital::before, .orbital::after {
+            content: '';
+            position: absolute; inset: 0;
+            border-radius: 50%;
+        }
+        .orbital::before {
+            border: 1.5px solid var(--surface-3);
+        }
+        .orbital::after {
+            border: 1.5px solid transparent;
+            border-top-color: var(--accent-2);
+            border-right-color: rgba(165,148,249,0.4);
+            animation: orbit 0.9s linear infinite;
+        }
+        @keyframes orbit { to { transform: rotate(360deg); } }
+
+        .orbital-inner {
+            position: absolute;
+            top: 8px; left: 8px; right: 8px; bottom: 8px;
+            border-radius: 50%;
+            border: 1.5px solid transparent;
+            border-bottom-color: var(--accent);
+            border-left-color: rgba(124,108,240,0.3);
+            animation: orbit 0.65s linear infinite reverse;
+        }
+
+        .transition-label {
+            font-size: 0.875rem; color: var(--text-2);
+            font-weight: 400;
+        }
+        .transition-step-name {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.5rem; color: var(--text);
+            font-style: italic;
+        }
+
+        /* ─── MAIN LAYOUT ─── */
+        #onboarding-main { display: none; }
+        #onboarding-main.visible { display: flex; }
+
+        .layout-desktop {
+            width: 100%; height: 100vh;
             display: none;
-            animation: fadeIn 0.3s ease-in;
         }
-        
-        .step-panel.active {
-            display: block;
+        @media (min-width: 1024px) {
+            .layout-desktop { display: flex; }
         }
-        
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 280px;
+            background: var(--surface);
+            border-right: 1px solid var(--border);
+            display: flex; flex-direction: column;
+            flex-shrink: 0;
         }
-        
-        /* Input card styling */
-        .input-card {
-            background: rgba(30, 41, 59, 0.6);
-            border: 1px solid rgba(51, 65, 85, 0.5);
+        .sidebar-brand {
+            padding: 1.5rem 1.25rem 1.25rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .sidebar-brand .name {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.2rem;
+            color: var(--text);
+            font-style: italic;
+        }
+        .sidebar-brand .sub {
+            font-size: 0.7rem; color: var(--text-3);
+            text-transform: uppercase; letter-spacing: 0.1em;
+            margin-top: 0.2rem;
+        }
+
+        .sidebar-steps {
+            flex: 1; overflow-y: auto;
+            padding: 1rem 0.75rem;
+        }
+        .sidebar-steps::-webkit-scrollbar { width: 3px; }
+        .sidebar-steps::-webkit-scrollbar-track { background: transparent; }
+        .sidebar-steps::-webkit-scrollbar-thumb { background: var(--surface-3); border-radius: 2px; }
+
+        .step-item {
+            display: flex; align-items: flex-start; gap: 0.75rem;
+            padding: 0.625rem 0.75rem;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-bottom: 0.25rem;
+            transition: background 0.15s;
+            position: relative;
+        }
+        .step-item::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 0; bottom: 0;
+            width: 2px; border-radius: 2px;
+            background: transparent;
+            transition: background 0.2s;
+        }
+        .step-item:hover { background: var(--surface-2); }
+        .step-item.current { background: rgba(124,108,240,0.1); }
+        .step-item.current::before { background: var(--accent); }
+        .step-item.done { opacity: 0.7; }
+        .step-item.done:hover { opacity: 1; }
+
+        .step-num {
+            width: 28px; height: 28px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.65rem; font-weight: 600; letter-spacing: 0.04em;
+            flex-shrink: 0;
+            background: var(--surface-3);
+            color: var(--text-3);
             transition: all 0.2s;
         }
-        
-        .input-card:focus-within {
-            border-color: rgba(59, 130, 246, 0.5);
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        .step-item.current .step-num {
+            background: var(--accent);
+            color: #fff;
+            box-shadow: 0 0 16px var(--accent-glow);
         }
-        
-        /* Progress bar */
-        .progress-bar {
-            transition: width 0.3s ease;
+        .step-item.done .step-num {
+            background: rgba(52,211,153,0.15);
+            color: var(--success);
         }
-        
-        /* AI button hover */
-        .ai-help-btn:hover {
-            background: linear-gradient(135deg, #ec4899 0%, #f472b6 100%);
+        .step-item.done .step-num::after {
+            content: '✓';
+            font-size: 0.7rem;
         }
-        
-        /* AI loading spinner */
-        .ai-loading {
+        .step-item.done .step-num-text { display: none; }
+
+        .step-meta { flex: 1; min-width: 0; }
+        .step-title {
+            font-size: 0.8125rem; font-weight: 500;
+            color: var(--text-2);
+            line-height: 1.3;
+        }
+        .step-item.current .step-title { color: var(--text); }
+        .step-desc {
+            font-size: 0.7rem; color: var(--text-3);
+            margin-top: 0.15rem;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+
+        /* Connector line between steps */
+        .step-connector {
+            width: 1px; height: 8px;
+            background: var(--border);
+            margin-left: calc(0.75rem + 14px);
+        }
+
+        /* Sidebar footer */
+        .sidebar-footer {
+            padding: 1rem 1.25rem;
+            border-top: 1px solid var(--border);
+        }
+        .progress-track {
+            height: 3px;
+            background: var(--surface-3);
+            border-radius: 100px;
+            overflow: hidden;
+            margin-bottom: 0.625rem;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), var(--accent-2));
+            border-radius: 100px;
+            transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
+        }
+        .progress-label {
+            font-size: 0.7rem; color: var(--text-3);
+            display: flex; justify-content: space-between;
+        }
+        .progress-label span:last-child { color: var(--accent-2); }
+
+        /* ─── MAIN CONTENT ─── */
+        .main-area {
+            flex: 1; overflow-y: auto;
+            position: relative;
+        }
+        .main-area::-webkit-scrollbar { width: 5px; }
+        .main-area::-webkit-scrollbar-track { background: transparent; }
+        .main-area::-webkit-scrollbar-thumb { background: var(--surface-3); border-radius: 3px; }
+
+        .step-content-wrap {
+            max-width: 680px; margin: 0 auto;
+            padding: 3rem 2.5rem 6rem;
+        }
+
+        /* Step header */
+        .step-header { margin-bottom: 2.5rem; }
+        .step-eyebrow {
+            font-size: 0.7rem; font-weight: 600; letter-spacing: 0.1em;
+            text-transform: uppercase; color: var(--accent-2);
+            margin-bottom: 0.625rem;
+            display: flex; align-items: center; gap: 0.5rem;
+        }
+        .step-eyebrow::before {
+            content: '';
+            display: inline-block;
+            width: 16px; height: 1px;
+            background: var(--accent);
+        }
+        .step-main-title {
+            font-family: 'DM Serif Display', serif;
+            font-size: clamp(1.75rem, 3vw, 2.5rem);
+            line-height: 1.15;
+            color: var(--text);
+            margin-bottom: 0.75rem;
+        }
+        .step-subtitle {
+            font-size: 0.9375rem; color: var(--text-2);
+            font-weight: 300; line-height: 1.6;
+        }
+
+        /* Step panels */
+        .step-panel { display: none; }
+        .step-panel.active {
+            display: block;
+            animation: panelIn 0.35s cubic-bezier(0.4,0,0.2,1);
+        }
+        @keyframes panelIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ─── FORM ELEMENTS ─── */
+        .field-group { margin-bottom: 1.75rem; }
+        .field-label {
+            display: block;
+            font-size: 0.8125rem; font-weight: 500;
+            color: var(--text-2);
+            margin-bottom: 0.5rem;
+            letter-spacing: 0.01em;
+        }
+        .field-label .req { color: var(--accent); margin-left: 2px; }
+        .field-hint {
+            font-size: 0.75rem; color: var(--text-3);
+            margin-top: 0.4rem;
+            font-weight: 300;
+        }
+
+        .input-wrap {
+            position: relative;
+        }
+        .form-input, .form-textarea, .form-select {
+            width: 100%;
+            background: var(--surface-2);
+            border: 1px solid var(--border-2);
+            border-radius: 10px;
+            color: var(--text);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.9375rem;
+            transition: all 0.2s;
+            outline: none;
+        }
+        .form-input { padding: 0.75rem 1rem; }
+        .form-input.with-ai { padding-right: 5.5rem; }
+        .form-textarea { padding: 0.875rem 1rem; resize: vertical; min-height: 100px; line-height: 1.6; }
+        .form-textarea.with-ai { padding-right: 5.5rem; }
+        .form-select { padding: 0.75rem 1rem; cursor: pointer; appearance: none; }
+
+        .form-input:focus, .form-textarea:focus, .form-select:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-glow);
+        }
+        .form-input::placeholder, .form-textarea::placeholder { color: var(--text-3); }
+
+        /* AI assist button — inline on inputs */
+        .ai-pill {
+            position: absolute;
+            right: 0.625rem;
+            top: 50%;
+            transform: translateY(-50%);
+            display: inline-flex; align-items: center; gap: 0.3rem;
+            padding: 0.3rem 0.7rem;
+            background: rgba(124,108,240,0.15);
+            border: 1px solid rgba(124,108,240,0.3);
+            border-radius: 100px;
+            color: var(--accent-2);
+            font-size: 0.7rem; font-weight: 500; letter-spacing: 0.02em;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        .ai-pill:hover {
+            background: rgba(124,108,240,0.3);
+            border-color: var(--accent);
+        }
+        .ai-pill .sparkle { font-size: 0.65rem; }
+        /* For textareas, ai pill is positioned at bottom-right */
+        .input-wrap.textarea-wrap .ai-pill {
+            top: auto; bottom: 0.625rem; transform: none;
+        }
+
+        /* AI pill loading state */
+        .ai-pill.loading {
             pointer-events: none;
             opacity: 0.7;
         }
-        
-        .ai-loading i {
-            animation: spin 1s linear infinite;
+        .ai-pill.loading .sparkle {
+            animation: spin 0.8s linear infinite;
+            display: inline-block;
         }
-        
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* AI pill success flash */
+        @keyframes successFlash {
+            0%, 100% { background: rgba(124,108,240,0.15); border-color: rgba(124,108,240,0.3); }
+            50% { background: rgba(52,211,153,0.2); border-color: rgba(52,211,153,0.5); color: var(--success); }
         }
-        
-        /* Step Preloader Styles */
-        .step-preloader {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(30, 41, 59, 0.98) 100%);
-            backdrop-filter: blur(10px);
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
+        .ai-pill.success { animation: successFlash 0.8s ease; }
+
+        /* Radio cards */
+        .radio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 0.75rem;
         }
-        
-        .step-preloader.active {
-            opacity: 1;
-            pointer-events: all;
+        .radio-grid.col-2 { grid-template-columns: repeat(2, 1fr); }
+        .radio-grid.col-3 { grid-template-columns: repeat(3, 1fr); }
+
+        .radio-card input[type="radio"] {
+            display: none;
         }
-        
-        .preloader-content {
-            text-align: center;
-            max-width: 500px;
-            padding: 2rem;
-        }
-        
-        .preloader-spinner {
-            width: 80px;
-            height: 80px;
-            margin: 0 auto 2rem;
-            position: relative;
-        }
-        
-        .preloader-spinner::before {
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            border: 4px solid transparent;
-            border-top: 4px solid #3b82f6;
-            border-right: 4px solid #8b5cf6;
-            border-bottom: 4px solid #ec4899;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-        
-        .preloader-spinner::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 60px;
-            height: 60px;
-            border: 3px solid transparent;
-            border-top: 3px solid #8b5cf6;
-            border-right: 3px solid #ec4899;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite reverse;
-        }
-        
-        .preloader-message {
-            font-size: 1.25rem;
-            font-weight: 600;
-            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 50%, #ec4899 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 1rem;
-            line-height: 1.6;
-            animation: fadeInUp 0.5s ease;
-        }
-        
-        .preloader-subtitle {
-            font-size: 0.875rem;
-            color: #94a3b8;
-            animation: fadeInUp 0.5s ease 0.2s both;
-        }
-        
-        .preloader-dots {
-            display: inline-flex;
-            gap: 0.5rem;
-            margin-top: 1.5rem;
-        }
-        
-        .preloader-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #3b82f6, #ec4899);
-            animation: pulse 1.4s ease-in-out infinite;
-        }
-        
-        .preloader-dot:nth-child(2) {
-            animation-delay: 0.2s;
-        }
-        
-        .preloader-dot:nth-child(3) {
-            animation-delay: 0.4s;
-        }
-        
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        @keyframes pulse {
-            0%, 100% {
-                opacity: 0.4;
-                transform: scale(0.8);
-            }
-            50% {
-                opacity: 1;
-                transform: scale(1.2);
-            }
-        }
-        
-        /* Mobile preloader adjustments */
-        @media (max-width: 768px) {
-            .preloader-content {
-                max-width: 90%;
-                padding: 1.5rem;
-            }
-            
-            .preloader-spinner {
-                width: 60px;
-                height: 60px;
-                margin-bottom: 1.5rem;
-            }
-            
-            .preloader-spinner::after {
-                width: 45px;
-                height: 45px;
-            }
-            
-            .preloader-message {
-                font-size: 1.1rem;
-            }
-        }
-        
-        /* Sidebar text – keep it simple so it wraps normally */
-        .sidebar-step-text {
-            white-space: normal;
-            overflow-wrap: anywhere;
-        }
-        
-        /* Radio button checked state styling - more aggressive */
-        input[type="radio"] {
-            appearance: none !important;
-            -webkit-appearance: none !important;
-            -moz-appearance: none !important;
-            width: 1rem !important;
-            height: 1rem !important;
-            min-width: 1rem !important;
-            min-height: 1rem !important;
-            border: 2px solid rgb(71, 85, 105) !important;
-            border-radius: 50% !important;
-            background-color: rgb(30, 41, 59) !important;
+        .radio-card label {
+            display: flex; align-items: center; gap: 0.75rem;
+            padding: 0.875rem 1rem;
+            background: var(--surface-2);
+            border: 1px solid var(--border-2);
+            border-radius: 10px;
             cursor: pointer;
-            position: relative;
+            font-size: 0.875rem; color: var(--text-2);
             transition: all 0.2s;
+            line-height: 1.35;
+        }
+        .radio-card label:hover { border-color: rgba(124,108,240,0.4); color: var(--text); }
+        .radio-card input:checked + label {
+            background: rgba(124,108,240,0.12);
+            border-color: var(--accent);
+            color: var(--text);
+        }
+        .radio-dot {
+            width: 16px; height: 16px;
+            border-radius: 50%;
+            border: 1.5px solid var(--text-3);
             flex-shrink: 0;
-            margin: 0;
-            padding: 0;
-        }
-        
-        input[type="radio"]:checked,
-        input[type="radio"].radio-checked {
-            background-color: #3b82f6 !important;
-            border-color: #3b82f6 !important;
-        }
-        
-        input[type="radio"]:checked::after,
-        input[type="radio"].radio-checked::after {
-            content: '' !important;
-            position: absolute !important;
-            top: 50% !important;
-            left: 50% !important;
-            transform: translate(-50%, -50%) !important;
-            width: 6px !important;
-            height: 6px !important;
-            border-radius: 50% !important;
-            background-color: white !important;
-            display: block !important;
-        }
-        
-        /* Radio button label card when selected */
-        label.radio-selected {
-            background-color: rgba(59, 130, 246, 0.2) !important;
-            border-color: rgba(59, 130, 246, 0.6) !important;
-        }
-        
-        /* Checkbox checked state */
-        input[type="checkbox"] {
-            appearance: none;
-            -webkit-appearance: none;
-            width: 1rem;
-            height: 1rem;
-            border: 2px solid rgb(71, 85, 105);
-            border-radius: 0.25rem;
-            background-color: rgb(30, 41, 59);
-            cursor: pointer;
+            transition: all 0.15s;
             position: relative;
+        }
+        .radio-card input:checked + label .radio-dot {
+            border-color: var(--accent);
+            background: var(--accent);
+        }
+        .radio-card input:checked + label .radio-dot::after {
+            content: '';
+            position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 6px; height: 6px;
+            border-radius: 50%; background: #fff;
+        }
+        .radio-card .rc-icon { font-size: 1rem; margin-right: 0.25rem; opacity: 0.7; }
+
+        /* Checkbox cards */
+        .checkbox-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 0.625rem;
+        }
+        .checkbox-card input[type="checkbox"] { display: none; }
+        .checkbox-card label {
+            display: flex; align-items: center; gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            background: var(--surface-2);
+            border: 1px solid var(--border-2);
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.8125rem; color: var(--text-2);
             transition: all 0.2s;
         }
-        
-        input[type="checkbox"]:checked {
-            background-color: #3b82f6;
-            border-color: #3b82f6;
+        .checkbox-card label:hover { border-color: rgba(124,108,240,0.4); }
+        .checkbox-card input:checked + label {
+            background: rgba(124,108,240,0.1);
+            border-color: var(--accent);
+            color: var(--text);
         }
-        
-        input[type="checkbox"]:checked::after {
-            content: '✓';
+        .check-box {
+            width: 16px; height: 16px;
+            border-radius: 4px;
+            border: 1.5px solid var(--text-3);
+            flex-shrink: 0; position: relative;
+            transition: all 0.15s;
+        }
+        .checkbox-card input:checked + label .check-box {
+            background: var(--accent); border-color: var(--accent);
+        }
+        .checkbox-card input:checked + label .check-box::after {
+            content: '';
+            position: absolute; top: 2px; left: 4px;
+            width: 6px; height: 4px;
+            border-left: 1.5px solid #fff; border-bottom: 1.5px solid #fff;
+            transform: rotate(-45deg);
+        }
+
+        /* ─── NAVIGATION ─── */
+        .nav-bar {
+            position: sticky; bottom: 0;
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+            padding: 1rem 2.5rem;
+            display: flex; align-items: center; justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .btn {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            padding: 0.625rem 1.25rem;
+            border-radius: 8px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.875rem; font-weight: 500;
+            cursor: pointer; transition: all 0.2s;
+            border: none; outline: none;
+        }
+        .btn-ghost {
+            background: transparent;
+            border: 1px solid var(--border-2);
+            color: var(--text-2);
+        }
+        .btn-ghost:hover { background: var(--surface-2); color: var(--text); }
+        .btn-ghost:disabled { opacity: 0.35; pointer-events: none; }
+
+        .btn-primary {
+            background: var(--accent);
+            color: #fff;
+            padding: 0.625rem 1.75rem;
+        }
+        .btn-primary:hover {
+            background: var(--accent-2);
+            box-shadow: 0 4px 20px var(--accent-glow);
+            transform: translateY(-1px);
+        }
+
+        .btn-save {
+            background: transparent;
+            border: 1px solid var(--border-2);
+            color: var(--text-3);
+            font-size: 0.8rem;
+        }
+        .btn-save:hover { color: var(--text-2); background: var(--surface-2); }
+
+        /* Skip menu */
+        .skip-wrap { position: relative; }
+        .skip-menu {
+            display: none;
+            position: absolute; bottom: calc(100% + 8px); left: 0;
+            width: 220px;
+            background: var(--surface-2);
+            border: 1px solid var(--border-2);
+            border-radius: 12px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            overflow: hidden;
+            z-index: 50;
+        }
+        .skip-menu.open { display: block; }
+        .skip-menu-header {
+            padding: 0.625rem 0.875rem;
+            font-size: 0.7rem; color: var(--text-3);
+            text-transform: uppercase; letter-spacing: 0.08em;
+            border-bottom: 1px solid var(--border);
+        }
+        .skip-menu-list {
+            max-height: 280px; overflow-y: auto;
+            padding: 0.375rem;
+        }
+        .skip-menu-list::-webkit-scrollbar { width: 3px; }
+        .skip-menu-list::-webkit-scrollbar-thumb { background: var(--surface-3); }
+        .jump-btn {
+            width: 100%; text-align: left;
+            display: flex; align-items: center; gap: 0.625rem;
+            padding: 0.5rem 0.625rem;
+            border-radius: 6px;
+            background: transparent; border: none;
+            color: var(--text-2); font-size: 0.8rem;
+            cursor: pointer; transition: all 0.15s;
+            font-family: 'DM Sans', sans-serif;
+        }
+        .jump-btn:hover { background: var(--surface-3); color: var(--text); }
+        .jump-num {
+            font-size: 0.65rem; font-weight: 600;
+            color: var(--accent-2); min-width: 18px;
+        }
+
+        /* ─── AI SUGGESTION TOOLTIP ─── */
+        .ai-tooltip {
             position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: white;
-            font-size: 0.75rem;
-            font-weight: bold;
+            left: 0; top: calc(100% + 8px);
+            right: 0;
+            background: var(--surface-3);
+            border: 1px solid rgba(124,108,240,0.35);
+            border-radius: 10px;
+            padding: 0.875rem 1rem;
+            z-index: 20;
+            box-shadow: 0 12px 32px rgba(0,0,0,0.3);
+            animation: tooltipIn 0.2s ease;
+        }
+        @keyframes tooltipIn {
+            from { opacity: 0; transform: translateY(-4px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .ai-tooltip-label {
+            font-size: 0.65rem; font-weight: 600; letter-spacing: 0.08em;
+            text-transform: uppercase; color: var(--accent-2);
+            margin-bottom: 0.5rem;
+            display: flex; align-items: center; gap: 0.3rem;
+        }
+        .ai-tooltip-text {
+            font-size: 0.875rem; color: var(--text);
+            line-height: 1.5;
+        }
+        .ai-tooltip-actions {
+            display: flex; gap: 0.5rem; margin-top: 0.75rem;
+        }
+        .tooltip-accept, .tooltip-dismiss {
+            padding: 0.3rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.75rem; font-weight: 500;
+            cursor: pointer; border: none;
+            font-family: 'DM Sans', sans-serif;
+            transition: all 0.15s;
+        }
+        .tooltip-accept {
+            background: var(--accent); color: #fff;
+        }
+        .tooltip-accept:hover { background: var(--accent-2); }
+        .tooltip-dismiss {
+            background: transparent;
+            border: 1px solid var(--border-2);
+            color: var(--text-3);
+        }
+        .tooltip-dismiss:hover { color: var(--text-2); }
+
+        /* ─── MOBILE LAYOUT ─── */
+        .layout-mobile {
+            display: flex; flex-direction: column;
+            min-height: 100vh;
+        }
+        @media (min-width: 1024px) {
+            .layout-mobile { display: none; }
+        }
+        .mobile-header {
+            position: sticky; top: 0; z-index: 10;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem;
+        }
+        .mobile-brand {
+            font-family: 'DM Serif Display', serif;
+            font-style: italic;
+            font-size: 1rem; color: var(--text);
+            margin-bottom: 0.75rem;
+        }
+        .mobile-step-label {
+            font-size: 0.7rem; color: var(--accent-2);
+            text-transform: uppercase; letter-spacing: 0.08em;
+            margin-bottom: 0.5rem;
+        }
+        .mobile-content {
+            flex: 1;
+            padding: 1.5rem 1rem 8rem;
+        }
+        .mobile-nav {
+            position: fixed; bottom: 0; left: 0; right: 0;
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+            padding: 0.875rem 1rem;
+            z-index: 20;
+        }
+        .mobile-nav-row {
+            display: flex; gap: 0.625rem; margin-bottom: 0.5rem;
+        }
+        .mobile-nav-row .btn-primary { flex: 1; justify-content: center; }
+        .mobile-nav-row .btn-ghost { flex: 1; justify-content: center; }
+
+        /* ─── DEMO STEP CONTENT (Step 1) ─── */
+        .name-row {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
+        }
+        @media (max-width: 640px) { .name-row { grid-template-columns: 1fr; } }
+
+        /* Divider */
+        .section-divider {
+            height: 1px;
+            background: var(--border);
+            margin: 2rem 0;
+        }
+
+        /* Section label */
+        .section-label {
+            font-size: 0.7rem; font-weight: 600;
+            text-transform: uppercase; letter-spacing: 0.1em;
+            color: var(--text-3); margin-bottom: 1.25rem;
         }
     </style>
 </head>
-<body class="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 min-h-screen text-slate-100">
-    
-    <!-- Preloader Overlay -->
-    <div id="preloader-overlay" class="fixed inset-0 z-50 min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 overflow-y-auto">
-        <!-- Preloader Screen 1 - Warm Welcome -->
-        <div id="preloader-step-1" class="w-full max-w-2xl mx-auto px-4 sm:px-6 pt-16 sm:pt-20 pb-6 sm:pb-12">
-            <div class="bg-slate-800/60 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-blue-500/30 shadow-2xl p-6 sm:p-8 md:p-12 text-center">
-                <div class="mb-6 sm:mb-8">
-                    <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold gradient-text mb-3 sm:mb-4 leading-tight">
-                        Welcome to KaTek AI Course Creator
-                    </h1>
-                    <p class="text-base sm:text-lg text-slate-300 mb-4 sm:mb-6">
-                        We're about to co-create a course blueprint your future students will love.
-                    </p>
-                    <p class="text-sm sm:text-base text-slate-400 mb-3 sm:mb-4">
-                        This isn't a boring form. It's a guided, 12-step journey where we help you think, clarify, and design.
-                    </p>
-                    <p class="text-xs sm:text-sm text-slate-500 mt-4 sm:mt-6">
-                        You'll go through 12 fun steps: Meet You, Course Idea, Transformation, Brand & Vibe, Structure, and more.
-                    </p>
-                </div>
-                
-                <div class="mt-6 sm:mt-10">
-                    <button id="preloader-next-1" class="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white font-semibold rounded-full hover:from-blue-600 hover:via-purple-600 hover:to-pink-600 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 text-sm sm:text-base">
-                        Let's Begin
-                    </button>
-                    <p class="text-xs text-slate-500 mt-3 sm:mt-4">
-                        You can save and come back any time.
-                    </p>
-                </div>
-            </div>
+<body>
+
+<!-- Ambient background -->
+<div class="ambient"></div>
+
+<!-- ═══════════════════════════════════════
+     INTRO OVERLAY (replaces old preloader)
+════════════════════════════════════════ -->
+<div id="intro-overlay">
+    <canvas id="particle-canvas"></canvas>
+
+    <div class="intro-card">
+        <p style="font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-3);margin-bottom:1.5rem;">
+            KaTek &nbsp;·&nbsp; Course Creator
+        </p>
+
+        <h1 class="wordmark">
+            Build your<br><em>course</em>.
+        </h1>
+
+        <p class="intro-sub" id="intro-typewriter">&nbsp;</p>
+
+        <div class="step-pills" id="step-pills">
+            <span class="pill active">Meet You</span>
+            <span class="pill">Course Idea</span>
+            <span class="pill">Transformation</span>
+            <span class="pill">Brand & Vibe</span>
+            <span class="pill">Structure</span>
+            <span class="pill">+ 7 more</span>
         </div>
-        
-        <!-- Preloader Screen 2 - What to Expect -->
-        <div id="preloader-step-2" class="hidden w-full max-w-4xl mx-auto px-4 sm:px-6 pt-16 sm:pt-20 pb-6 sm:pb-12">
-            <div class="bg-slate-800/60 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-blue-500/30 shadow-2xl p-6 sm:p-8 md:p-12">
-                <div class="text-center mb-6 sm:mb-10">
-                    <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold gradient-text mb-3 sm:mb-4 leading-tight">
-                        Here's how this 12-step journey works
-                    </h2>
-                    <p class="text-sm sm:text-base md:text-lg text-slate-300">
-                        We'll ask you about your course idea, your audience, the transformation you want, your brand & vibe, and how you like to teach. You don't need perfect answers — we have AI to help with wording.
-                    </p>
-                </div>
-                
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-10">
-                    <!-- Card 1 - Time & Focus -->
-                    <div class="bg-slate-700/40 rounded-xl p-4 sm:p-6 border border-slate-600/30">
-                        <div class="text-center mb-3 sm:mb-4">
-                            <i class="fas fa-clock text-2xl sm:text-3xl text-blue-400 mb-2 sm:mb-3"></i>
-                            <h3 class="text-base sm:text-lg font-semibold text-slate-200 mb-2">Time & Focus</h3>
-                        </div>
-                        <p class="text-xs sm:text-sm text-slate-300 text-center">
-                            <strong class="text-blue-400">Time needed: ~15–25 minutes.</strong>
-                        </p>
-                        <p class="text-xs text-slate-400 text-center mt-2">
-                            You can always save and return later.
-                        </p>
-                    </div>
-                    
-                    <!-- Card 2 - What you'll share -->
-                    <div class="bg-slate-700/40 rounded-xl p-4 sm:p-6 border border-slate-600/30">
-                        <div class="text-center mb-3 sm:mb-4">
-                            <i class="fas fa-list-check text-2xl sm:text-3xl text-purple-400 mb-2 sm:mb-3"></i>
-                            <h3 class="text-base sm:text-lg font-semibold text-slate-200 mb-2">What You'll Share</h3>
-                        </div>
-                        <ul class="text-xs sm:text-sm text-slate-300 space-y-1.5 sm:space-y-2 text-left">
-                            <li class="flex items-start">
-                                <i class="fas fa-check text-purple-400 mr-2 mt-0.5 sm:mt-1 text-xs flex-shrink-0"></i>
-                                <span>Who you are and who this is for</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fas fa-check text-purple-400 mr-2 mt-0.5 sm:mt-1 text-xs flex-shrink-0"></i>
-                                <span>What change your learners should experience</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fas fa-check text-purple-400 mr-2 mt-0.5 sm:mt-1 text-xs flex-shrink-0"></i>
-                                <span>What materials you already have</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fas fa-check text-purple-400 mr-2 mt-0.5 sm:mt-1 text-xs flex-shrink-0"></i>
-                                <span>Your brand, tone, and preferred structure</span>
-                            </li>
-                        </ul>
-                    </div>
-                    
-                    <!-- Card 3 - How we help -->
-                    <div class="bg-slate-700/40 rounded-xl p-4 sm:p-6 border border-slate-600/30">
-                        <div class="text-center mb-3 sm:mb-4">
-                            <i class="fas fa-wand-magic-sparkles text-2xl sm:text-3xl text-pink-400 mb-2 sm:mb-3"></i>
-                            <h3 class="text-base sm:text-lg font-semibold text-slate-200 mb-2">How We Help</h3>
-                        </div>
-                        <p class="text-xs sm:text-sm text-slate-300 text-center mb-2 sm:mb-3">
-                            AI helps you with titles, outcomes, and taglines.
-                        </p>
-                        <p class="text-xs text-slate-400 text-center">
-                            We turn your answers into a clear, editable course blueprint.
-                        </p>
-                    </div>
-                </div>
-                
-                <div class="text-center border-t border-slate-700/50 pt-6 sm:pt-8">
-                    <p class="text-sm sm:text-base text-slate-400 mb-2">
-                        Ready? Step 1 is just getting to know you.
-                    </p>
-                    <p class="text-xs text-slate-500 mb-4 sm:mb-6">
-                        0 of 12 steps answered yet — let's go.
-                    </p>
-                    <button id="preloader-start-wizard" class="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white font-semibold rounded-full hover:from-blue-600 hover:via-purple-600 hover:to-pink-600 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 text-sm sm:text-base">
-                        Start Step 1 – Meet You
-                    </button>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Mini loading transition -->
-        <div id="preloader-transition" class="hidden fixed inset-0 bg-slate-950/95 backdrop-blur-sm z-50 flex items-center justify-center">
-            <div class="text-center px-4">
-                <div class="inline-block w-12 h-12 sm:w-16 sm:h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mb-3 sm:mb-4"></div>
-                <p class="text-slate-300 text-base sm:text-lg">Setting up your course canvas…</p>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Main Onboarding Wizard (Hidden Initially) -->
-    <div id="onboarding-main" class="hidden">
-    <!-- Desktop Layout -->
-    <div class="hidden lg:flex h-screen overflow-hidden">
-        <!-- Sidebar -->
-        <aside class="w-80 xl:w-96 bg-slate-900/80 border-r border-slate-700/50 flex flex-col flex-shrink-0">
-            <!-- Logo/Brand -->
-            <div class="p-4 border-b border-slate-700/50 flex-shrink-0">
-                <h1 class="text-lg font-bold gradient-text">KaTek AI</h1>
-                <p class="text-xs text-slate-400 mt-0.5">Course Creator</p>
-            </div>
-            
-            <!-- Steps List -->
-            <div class="flex-1 overflow-y-auto p-4">
-                <div class="space-y-2" id="steps-list">
-                    <!-- Step 1 -->
-                    <div class="step-item" data-step="1">
-                        <div class="flex items-start gap-3 p-3 rounded-lg transition-all cursor-pointer hover:bg-slate-800/50">
-                            <div class="w-9 h-9 rounded-full bg-blue-500/20 border border-blue-500/50 flex items-center justify-center text-xs font-bold text-blue-400 flex-shrink-0">
-                                01
-                            </div>
-                            <div class="flex-1 min-w-0 flex flex-col sidebar-step-text">
-                                <div class="text-sm font-semibold text-slate-100 leading-snug">
-                                    Meet You
-                                </div>
-                                <div class="text-xs text-slate-400 mt-1 leading-snug">
-                                    Introduction & contact
-                                </div>
-                            </div>
-                            <i class="fas fa-check-circle text-green-400 hidden step-complete flex-shrink-0 text-sm mt-1"></i>
-                        </div>
-                    </div>
-                    
-                    <!-- Step 2 -->
-                    <div class="step-item" data-step="2">
-                        <div class="flex items-start gap-3 p-3 rounded-lg transition-all cursor-pointer hover:bg-slate-800/50">
-                            <div class="w-9 h-9 rounded-full bg-slate-700/50 border border-slate-600/50 flex items-center justify-center text-xs font-bold text-slate-400 flex-shrink-0">
-                                02
-                            </div>
-                            <div class="flex-1 min-w-0 flex flex-col sidebar-step-text">
-                                <div class="text-sm font-semibold text-slate-200 leading-snug">
-                                    Course Idea
-                                </div>
-                                <div class="text-xs text-slate-400 mt-1 leading-snug">
-                                    Core concept & vision
-                                </div>
-                            </div>
-                            <i class="fas fa-check-circle text-green-400 hidden step-complete flex-shrink-0 text-sm mt-1"></i>
-                        </div>
-                    </div>
-                    
-                    <!-- Step 3 -->
-                    <div class="step-item" data-step="3">
-                        <div class="flex items-start gap-3 p-3 rounded-lg transition-all cursor-pointer hover:bg-slate-800/50">
-                            <div class="w-9 h-9 rounded-full bg-slate-700/50 border border-slate-600/50 flex items-center justify-center text-xs font-bold text-slate-400 flex-shrink-0">
-                                03
-                            </div>
-                            <div class="flex-1 min-w-0 flex flex-col sidebar-step-text">
-                                <div class="text-sm font-semibold text-slate-200 leading-snug">
-                                    Transformation
-                                </div>
-                                <div class="text-xs text-slate-400 mt-1 leading-snug">
-                                    Outcomes & results
-                                </div>
-                            </div>
-                            <i class="fas fa-check-circle text-green-400 hidden step-complete flex-shrink-0 text-sm mt-1"></i>
-                        </div>
-                    </div>
-                    
-                    <!-- Step 4 -->
-                    <div class="step-item" data-step="4">
-                        <div class="flex items-start gap-3 p-3 rounded-lg transition-all cursor-pointer hover:bg-slate-800/50">
-                            <div class="w-9 h-9 rounded-full bg-slate-700/50 border border-slate-600/50 flex items-center justify-center text-xs font-bold text-slate-400 flex-shrink-0">
-                                04
-                            </div>
-                            <div class="flex-1 min-w-0 flex flex-col sidebar-step-text">
-                                <div class="text-sm font-semibold text-slate-200 leading-snug">
-                                    Existing Materials
-                                </div>
-                                <div class="text-xs text-slate-400 mt-1 leading-snug">
-                                    What you already have
-                                </div>
-                            </div>
-                            <i class="fas fa-check-circle text-green-400 hidden step-complete flex-shrink-0 text-sm mt-1"></i>
-                        </div>
-                    </div>
-                    
-                    <!-- Step 5 -->
-                    <div class="step-item" data-step="5">
-                        <div class="flex items-start gap-3 p-3 rounded-lg transition-all cursor-pointer hover:bg-slate-800/50">
-                            <div class="w-9 h-9 rounded-full bg-slate-700/50 border border-slate-600/50 flex items-center justify-center text-xs font-bold text-slate-400 flex-shrink-0">
-                                05
-                            </div>
-                            <div class="flex-1 min-w-0 flex flex-col sidebar-step-text">
-                                <div class="text-sm font-semibold text-slate-200 leading-snug">
-                                    Brand & Vibe
-                                </div>
-                                <div class="text-xs text-slate-400 mt-1 leading-snug">
-                                    Personality & tone
-                                </div>
-                            </div>
-                            <i class="fas fa-check-circle text-green-400 hidden step-complete flex-shrink-0 text-sm mt-1"></i>
-                        </div>
-                    </div>
-                    
-                    <!-- Step 6 -->
-                    <div class="step-item" data-step="6">
-                        <div class="flex items-start gap-3 p-3 rounded-lg transition-all cursor-pointer hover:bg-slate-800/50">
-                            <div class="w-9 h-9 rounded-full bg-slate-700/50 border border-slate-600/50 flex items-center justify-center text-xs font-bold text-slate-400 flex-shrink-0">
-                                06
-                            </div>
-                            <div class="flex-1 min-w-0 flex flex-col sidebar-step-text">
-                                <div class="text-sm font-semibold text-slate-200 leading-snug">
-                                    Course Structure
-                                </div>
-                                <div class="text-xs text-slate-400 mt-1 leading-snug">
-                                    Format & interactivity
-                                </div>
-                            </div>
-                            <i class="fas fa-check-circle text-green-400 hidden step-complete flex-shrink-0 text-sm mt-1"></i>
-                        </div>
-                    </div>
-                    
-                    <!-- Step 7 -->
-                    <div class="step-item" data-step="7">
-                        <div class="flex items-start gap-3 p-3 rounded-lg transition-all cursor-pointer hover:bg-slate-800/50">
-                            <div class="w-9 h-9 rounded-full bg-slate-700/50 border border-slate-600/50 flex items-center justify-center text-xs font-bold text-slate-400 flex-shrink-0">
-                                07
-                            </div>
-                            <div class="flex-1 min-w-0 flex flex-col sidebar-step-text">
-                                <div class="text-sm font-semibold text-slate-200 leading-snug">
-                                    Face & Voice
-                                </div>
-                                <div class="text-xs text-slate-400 mt-1 leading-snug">
-                                    Media preferences
-                                </div>
-                            </div>
-                            <i class="fas fa-check-circle text-green-400 hidden step-complete flex-shrink-0 text-sm mt-1"></i>
-                        </div>
-                    </div>
-                    
-                    <!-- Step 8 -->
-                    <div class="step-item" data-step="8">
-                        <div class="flex items-start gap-3 p-3 rounded-lg transition-all cursor-pointer hover:bg-slate-800/50">
-                            <div class="w-9 h-9 rounded-full bg-slate-700/50 border border-slate-600/50 flex items-center justify-center text-xs font-bold text-slate-400 flex-shrink-0">
-                                08
-                            </div>
-                            <div class="flex-1 min-w-0 flex flex-col sidebar-step-text">
-                                <div class="text-sm font-semibold text-slate-200 leading-snug">
-                                    Legal & Rights
-                                </div>
-                                <div class="text-xs text-slate-400 mt-1 leading-snug">
-                                    Permissions & ownership
-                                </div>
-                            </div>
-                            <i class="fas fa-check-circle text-green-400 hidden step-complete flex-shrink-0 text-sm mt-1"></i>
-                        </div>
-                    </div>
-                    
-                    <!-- Step 9 -->
-                    <div class="step-item" data-step="9">
-                        <div class="flex items-start gap-3 p-3 rounded-lg transition-all cursor-pointer hover:bg-slate-800/50">
-                            <div class="w-9 h-9 rounded-full bg-slate-700/50 border border-slate-600/50 flex items-center justify-center text-xs font-bold text-slate-400 flex-shrink-0">
-                                09
-                            </div>
-                            <div class="flex-1 min-w-0 flex flex-col sidebar-step-text">
-                                <div class="text-sm font-semibold text-slate-200 leading-snug">
-                                    Platform & Money
-                                </div>
-                                <div class="text-xs text-slate-400 mt-1 leading-snug">
-                                    Distribution & pricing
-                                </div>
-                            </div>
-                            <i class="fas fa-check-circle text-green-400 hidden step-complete flex-shrink-0 text-sm mt-1"></i>
-                        </div>
-                    </div>
-                    
-                    <!-- Step 10 -->
-                    <div class="step-item" data-step="10">
-                        <div class="flex items-start gap-3 p-3 rounded-lg transition-all cursor-pointer hover:bg-slate-800/50">
-                            <div class="w-9 h-9 rounded-full bg-slate-700/50 border border-slate-600/50 flex items-center justify-center text-xs font-bold text-slate-400 flex-shrink-0">
-                                10
-                            </div>
-                            <div class="flex-1 min-w-0 flex flex-col sidebar-step-text">
-                                <div class="text-sm font-semibold text-slate-200 leading-snug">
-                                    Timelines
-                                </div>
-                                <div class="text-xs text-slate-400 mt-1 leading-snug">
-                                    Schedule & priorities
-                                </div>
-                            </div>
-                            <i class="fas fa-check-circle text-green-400 hidden step-complete flex-shrink-0 text-sm mt-1"></i>
-                        </div>
-                    </div>
-                    
-                    <!-- Step 11 -->
-                    <div class="step-item" data-step="11">
-                        <div class="flex items-start gap-3 p-3 rounded-lg transition-all cursor-pointer hover:bg-slate-800/50">
-                            <div class="w-9 h-9 rounded-full bg-slate-700/50 border border-slate-600/50 flex items-center justify-center text-xs font-bold text-slate-400 flex-shrink-0">
-                                11
-                            </div>
-                            <div class="flex-1 min-w-0 flex flex-col sidebar-step-text">
-                                <div class="text-sm font-semibold text-slate-200 leading-snug">
-                                    Reviews
-                                </div>
-                                <div class="text-xs text-slate-400 mt-1 leading-snug">
-                                    Decision-makers
-                                </div>
-                            </div>
-                            <i class="fas fa-check-circle text-green-400 hidden step-complete flex-shrink-0 text-sm mt-1"></i>
-                        </div>
-                    </div>
-                    
-                    <!-- Step 12 -->
-                    <div class="step-item" data-step="12">
-                        <div class="flex items-start gap-3 p-3 rounded-lg transition-all cursor-pointer hover:bg-slate-800/50">
-                            <div class="w-9 h-9 rounded-full bg-slate-700/50 border border-slate-600/50 flex items-center justify-center text-xs font-bold text-slate-400 flex-shrink-0">
-                                12
-                            </div>
-                            <div class="flex-1 min-w-0 flex flex-col sidebar-step-text">
-                                <div class="text-sm font-semibold text-slate-200 leading-snug">
-                                    Final Uploads
-                                </div>
-                                <div class="text-xs text-slate-400 mt-1 leading-snug">
-                                    Files & notes
-                                </div>
-                            </div>
-                            <i class="fas fa-check-circle text-green-400 hidden step-complete flex-shrink-0 text-sm mt-1"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Progress Indicator -->
-            <div class="p-4 border-t border-slate-700/50 flex-shrink-0">
-                <div class="text-xs uppercase tracking-wider text-slate-400 mb-2">Progress</div>
-                <div class="h-2 bg-slate-800 rounded-full overflow-hidden">
-                    <div class="h-full bg-gradient-to-r from-blue-500 via-violet-500 to-pink-500 progress-bar" id="sidebar-progress" style="width: 8.33%"></div>
-                </div>
-                <div class="text-sm text-slate-300 mt-2" id="progress-text">Step 1 of 12</div>
-            </div>
-        </aside>
-        
-        <!-- Step Preloader -->
-        <div id="step-preloader" class="step-preloader">
-            <div class="preloader-content">
-                <div class="preloader-spinner"></div>
-                <div class="preloader-message" id="preloader-message">Loading...</div>
-                <div class="preloader-subtitle" id="preloader-subtitle">Please wait while we prepare your step</div>
-                <div class="preloader-dots">
-                    <div class="preloader-dot"></div>
-                    <div class="preloader-dot"></div>
-                    <div class="preloader-dot"></div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Main Content -->
-        <main class="flex-1 overflow-y-auto">
-            <div class="max-w-4xl mx-auto p-8">
-                <!-- Step Content Container -->
-                <div id="steps-container">
-                    {% include 'myApp/onboarding/step_01_meet_you.html' %}
-                    {% include 'myApp/onboarding/step_02_course_idea.html' %}
-                    {% include 'myApp/onboarding/step_03_transformation.html' %}
-                    {% include 'myApp/onboarding/step_04_existing_materials.html' %}
-                    {% include 'myApp/onboarding/step_05_brand_vibe.html' %}
-                    {% include 'myApp/onboarding/step_06_course_structure.html' %}
-                    {% include 'myApp/onboarding/step_07_media.html' %}
-                    {% include 'myApp/onboarding/step_08_legal.html' %}
-                    {% include 'myApp/onboarding/step_09_platform_money.html' %}
-                    {% include 'myApp/onboarding/step_10_timelines.html' %}
-                    {% include 'myApp/onboarding/step_11_reviews.html' %}
-                    {% include 'myApp/onboarding/step_12_final.html' %}
-                </div>
-                
-                <!-- Navigation -->
-                <div class="flex justify-between items-center mt-8 pt-6 border-t border-slate-700/50">
-                    <button id="btn-back" class="px-6 py-3 bg-slate-800/50 hover:bg-slate-700/50 border border-slate-600/50 rounded-lg text-slate-300 transition-all disabled:opacity-50 disabled:cursor-not-allowed" disabled>
-                        <i class="fas fa-arrow-left mr-2"></i> Back
-                    </button>
-                    <div class="flex items-center gap-3">
-                        <!-- Skip/Jump Button -->
-                        <div class="relative">
-                            <button id="btn-skip" class="px-4 py-3 bg-slate-800/50 hover:bg-slate-700/50 border border-slate-600/50 rounded-lg text-slate-300 transition-all text-sm">
-                                <i class="fas fa-forward mr-2"></i> Skip to Step
-                            </button>
-                            <div id="skip-menu" class="hidden absolute bottom-full left-0 mb-2 w-48 bg-slate-800 border border-slate-600/50 rounded-lg shadow-xl z-50 max-h-96 overflow-y-auto">
-                                <div class="p-2">
-                                    <div class="text-xs text-slate-400 px-3 py-2 mb-1">Jump to any step:</div>
-                                    <button data-jump-step="1" class="w-full text-left px-3 py-2 rounded hover:bg-slate-700/50 text-sm text-slate-300 transition-all">
-                                        <span class="font-semibold text-blue-400">01</span> - Meet You
-                                    </button>
-                                    <button data-jump-step="2" class="w-full text-left px-3 py-2 rounded hover:bg-slate-700/50 text-sm text-slate-300 transition-all">
-                                        <span class="font-semibold text-blue-400">02</span> - Course Idea
-                                    </button>
-                                    <button data-jump-step="3" class="w-full text-left px-3 py-2 rounded hover:bg-slate-700/50 text-sm text-slate-300 transition-all">
-                                        <span class="font-semibold text-blue-400">03</span> - Transformation
-                                    </button>
-                                    <button data-jump-step="4" class="w-full text-left px-3 py-2 rounded hover:bg-slate-700/50 text-sm text-slate-300 transition-all">
-                                        <span class="font-semibold text-blue-400">04</span> - Existing Materials
-                                    </button>
-                                    <button data-jump-step="5" class="w-full text-left px-3 py-2 rounded hover:bg-slate-700/50 text-sm text-slate-300 transition-all">
-                                        <span class="font-semibold text-blue-400">05</span> - Brand & Vibe
-                                    </button>
-                                    <button data-jump-step="6" class="w-full text-left px-3 py-2 rounded hover:bg-slate-700/50 text-sm text-slate-300 transition-all">
-                                        <span class="font-semibold text-blue-400">06</span> - Course Structure
-                                    </button>
-                                    <button data-jump-step="7" class="w-full text-left px-3 py-2 rounded hover:bg-slate-700/50 text-sm text-slate-300 transition-all">
-                                        <span class="font-semibold text-blue-400">07</span> - Media
-                                    </button>
-                                    <button data-jump-step="8" class="w-full text-left px-3 py-2 rounded hover:bg-slate-700/50 text-sm text-slate-300 transition-all">
-                                        <span class="font-semibold text-blue-400">08</span> - Legal & Rights
-                                    </button>
-                                    <button data-jump-step="9" class="w-full text-left px-3 py-2 rounded hover:bg-slate-700/50 text-sm text-slate-300 transition-all">
-                                        <span class="font-semibold text-blue-400">09</span> - Platform & Money
-                                    </button>
-                                    <button data-jump-step="10" class="w-full text-left px-3 py-2 rounded hover:bg-slate-700/50 text-sm text-slate-300 transition-all">
-                                        <span class="font-semibold text-blue-400">10</span> - Timelines
-                                    </button>
-                                    <button data-jump-step="11" class="w-full text-left px-3 py-2 rounded hover:bg-slate-700/50 text-sm text-slate-300 transition-all">
-                                        <span class="font-semibold text-blue-400">11</span> - Reviews
-                                    </button>
-                                    <button data-jump-step="12" class="w-full text-left px-3 py-2 rounded hover:bg-slate-700/50 text-sm text-slate-300 transition-all">
-                                        <span class="font-semibold text-blue-400">12</span> - Final Uploads
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        <button id="btn-save-exit" class="px-6 py-3 bg-slate-800/50 hover:bg-slate-700/50 border border-slate-600/50 rounded-lg text-slate-300 transition-all">
-                            <i class="fas fa-save mr-2"></i> Save & Exit
-                        </button>
-                    </div>
-                    <button id="btn-next" data-action="next" class="px-8 py-3 bg-gradient-to-r from-blue-500 via-violet-500 to-pink-500 hover:from-blue-600 hover:via-violet-600 hover:to-pink-600 rounded-lg text-white font-semibold transition-all shadow-lg shadow-blue-500/20">
-                        Next <i class="fas fa-arrow-right ml-2"></i>
-                    </button>
-                </div>
-            </div>
-        </main>
-    </div>
-    
-    <!-- Mobile Step Preloader -->
-    <div id="step-preloader-mobile" class="step-preloader">
-        <div class="preloader-content">
-            <div class="preloader-spinner"></div>
-            <div class="preloader-message" id="preloader-message-mobile">Loading...</div>
-            <div class="preloader-subtitle" id="preloader-subtitle-mobile">Please wait while we prepare your step</div>
-            <div class="preloader-dots">
-                <div class="preloader-dot"></div>
-                <div class="preloader-dot"></div>
-                <div class="preloader-dot"></div>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Mobile Layout -->
-    <div class="lg:hidden min-h-screen pb-40">
-        <!-- Mobile Header -->
-        <div class="sticky top-0 z-10 bg-slate-900/95 backdrop-blur-sm border-b border-slate-700/50 p-4">
-            <div class="mb-3">
-                <h1 class="text-lg font-bold gradient-text">KaTek AI Course Creator</h1>
-            </div>
-            <div class="text-xs uppercase tracking-wider text-blue-400 mb-2" id="mobile-step-label">Step 1 of 12</div>
-            <div class="h-2 bg-slate-800 rounded-full overflow-hidden">
-                <div class="h-full bg-gradient-to-r from-blue-500 via-violet-500 to-pink-500 progress-bar" id="mobile-progress" style="width: 8.33%"></div>
-            </div>
-        </div>
-        
-        <!-- Mobile Content -->
-        <div class="p-4 pb-32">
-            <div id="mobile-steps-container">
-                {% include 'myApp/onboarding/step_01_meet_you.html' %}
-                {% include 'myApp/onboarding/step_02_course_idea.html' %}
-                {% include 'myApp/onboarding/step_03_transformation.html' %}
-                {% include 'myApp/onboarding/step_04_existing_materials.html' %}
-                {% include 'myApp/onboarding/step_05_brand_vibe.html' %}
-                {% include 'myApp/onboarding/step_06_course_structure.html' %}
-                {% include 'myApp/onboarding/step_07_media.html' %}
-                {% include 'myApp/onboarding/step_08_legal.html' %}
-                {% include 'myApp/onboarding/step_09_platform_money.html' %}
-                {% include 'myApp/onboarding/step_10_timelines.html' %}
-                {% include 'myApp/onboarding/step_11_reviews.html' %}
-                {% include 'myApp/onboarding/step_12_final.html' %}
-            </div>
-        </div>
-        
-        <!-- Mobile Navigation (Sticky Bottom) -->
-        <div class="fixed bottom-0 left-0 right-0 bg-slate-900/95 backdrop-blur-sm border-t border-slate-700/50 p-4 space-y-2">
-            <div class="flex gap-2">
-                <button id="btn-back-mobile" class="flex-1 px-4 py-3 bg-slate-800/50 hover:bg-slate-700/50 border border-slate-600/50 rounded-lg text-slate-300 transition-all disabled:opacity-50 disabled:cursor-not-allowed" disabled>
-                    <i class="fas fa-arrow-left mr-2"></i> Back
-                </button>
-                <div class="relative">
-                    <button id="btn-skip-mobile" class="px-3 py-3 bg-slate-800/50 hover:bg-slate-700/50 border border-slate-600/50 rounded-lg text-slate-300 transition-all">
-                        <i class="fas fa-forward"></i>
-                    </button>
-                    <div id="skip-menu-mobile" class="hidden absolute bottom-full left-0 mb-2 w-56 bg-slate-800 border border-slate-600/50 rounded-lg shadow-xl z-50 max-h-96 overflow-y-auto">
-                        <div class="p-2">
-                            <div class="text-xs text-slate-400 px-3 py-2 mb-1">Jump to any step:</div>
-                            <button data-jump-step="1" class="w-full text-left px-3 py-2 rounded hover:bg-slate-700/50 text-sm text-slate-300 transition-all">
-                                <span class="font-semibold text-blue-400">01</span> - Meet You
-                            </button>
-                            <button data-jump-step="2" class="w-full text-left px-3 py-2 rounded hover:bg-slate-700/50 text-sm text-slate-300 transition-all">
-                                <span class="font-semibold text-blue-400">02</span> - Course Idea
-                            </button>
-                            <button data-jump-step="3" class="w-full text-left px-3 py-2 rounded hover:bg-slate-700/50 text-sm text-slate-300 transition-all">
-                                <span class="font-semibold text-blue-400">03</span> - Transformation
-                            </button>
-                            <button data-jump-step="4" class="w-full text-left px-3 py-2 rounded hover:bg-slate-700/50 text-sm text-slate-300 transition-all">
-                                <span class="font-semibold text-blue-400">04</span> - Existing Materials
-                            </button>
-                            <button data-jump-step="5" class="w-full text-left px-3 py-2 rounded hover:bg-slate-700/50 text-sm text-slate-300 transition-all">
-                                <span class="font-semibold text-blue-400">05</span> - Brand & Vibe
-                            </button>
-                            <button data-jump-step="6" class="w-full text-left px-3 py-2 rounded hover:bg-slate-700/50 text-sm text-slate-300 transition-all">
-                                <span class="font-semibold text-blue-400">06</span> - Course Structure
-                            </button>
-                            <button data-jump-step="7" class="w-full text-left px-3 py-2 rounded hover:bg-slate-700/50 text-sm text-slate-300 transition-all">
-                                <span class="font-semibold text-blue-400">07</span> - Media
-                            </button>
-                            <button data-jump-step="8" class="w-full text-left px-3 py-2 rounded hover:bg-slate-700/50 text-sm text-slate-300 transition-all">
-                                <span class="font-semibold text-blue-400">08</span> - Legal & Rights
-                            </button>
-                            <button data-jump-step="9" class="w-full text-left px-3 py-2 rounded hover:bg-slate-700/50 text-sm text-slate-300 transition-all">
-                                <span class="font-semibold text-blue-400">09</span> - Platform & Money
-                            </button>
-                            <button data-jump-step="10" class="w-full text-left px-3 py-2 rounded hover:bg-slate-700/50 text-sm text-slate-300 transition-all">
-                                <span class="font-semibold text-blue-400">10</span> - Timelines
-                            </button>
-                            <button data-jump-step="11" class="w-full text-left px-3 py-2 rounded hover:bg-slate-700/50 text-sm text-slate-300 transition-all">
-                                <span class="font-semibold text-blue-400">11</span> - Reviews
-                            </button>
-                            <button data-jump-step="12" class="w-full text-left px-3 py-2 rounded hover:bg-slate-700/50 text-sm text-slate-300 transition-all">
-                                <span class="font-semibold text-blue-400">12</span> - Final Uploads
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <button id="btn-next-mobile" data-action="next" class="flex-1 px-4 py-3 bg-gradient-to-r from-blue-500 via-violet-500 to-pink-500 hover:from-blue-600 hover:via-violet-600 hover:to-pink-600 rounded-lg text-white font-semibold transition-all">
-                    Next <i class="fas fa-arrow-right ml-2"></i>
-                </button>
-            </div>
-            <button id="btn-save-exit-mobile" class="w-full px-4 py-2 bg-slate-800/50 hover:bg-slate-700/50 border border-slate-600/50 rounded-lg text-slate-300 text-sm transition-all">
-                <i class="fas fa-save mr-2"></i> Save & Exit
+
+        <div>
+            <button class="btn-begin" id="btn-begin" onclick="startWizard()">
+                Start building
+                <span class="arrow">→</span>
             </button>
         </div>
+
+        <p class="time-note" id="time-note">
+            ~15 minutes &nbsp;·&nbsp; Save anytime &nbsp;·&nbsp; 12 guided steps
+        </p>
     </div>
-    <!-- End of Main Onboarding Wizard -->
+</div>
+
+<!-- ═══════════════════════════════════════
+     STEP TRANSITION
+════════════════════════════════════════ -->
+<div id="step-transition">
+    <div class="transition-inner">
+        <div class="orbital">
+            <div class="orbital-inner"></div>
+        </div>
+        <p class="transition-label" id="transition-label">Loading step</p>
+        <p class="transition-step-name" id="transition-step-name">Meet You</p>
     </div>
-    
-    <!-- Inline JavaScript -->
-    <script>
-        (function() {
-            // State management
-            const state = {
-                currentStep: 1,
-                totalSteps: 12,
-                sessionId: null,
-                data: {}
-            };
-            
-            // Get CSRF token
-            function getCookie(name) {
-                let cookieValue = null;
-                if (document.cookie && document.cookie !== '') {
-                    const cookies = document.cookie.split(';');
-                    for (let i = 0; i < cookies.length; i++) {
-                        const cookie = cookies[i].trim();
-                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                            break;
-                        }
-                    }
+</div>
+
+<!-- ═══════════════════════════════════════
+     MAIN ONBOARDING
+════════════════════════════════════════ -->
+<div id="onboarding-main">
+
+    <!-- ── DESKTOP ── -->
+    <div class="layout-desktop" style="height:100vh;width:100%;flex-direction:column;">
+        <div style="display:flex;flex:1;overflow:hidden;">
+
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <div class="sidebar-brand">
+                    <div class="name">KaTek AI</div>
+                    <div class="sub">Course Creator</div>
+                </div>
+
+                <div class="sidebar-steps" id="sidebar-steps">
+                    <!-- JS renders this -->
+                </div>
+
+                <div class="sidebar-footer">
+                    <div class="progress-track">
+                        <div class="progress-fill" id="progress-fill" style="width:8.33%"></div>
+                    </div>
+                    <div class="progress-label">
+                        <span id="progress-label-left">Step 1 of 12</span>
+                        <span id="progress-label-right">8%</span>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Main content -->
+            <main class="main-area" id="main-area">
+                <div class="step-content-wrap">
+                    <div id="steps-container">
+                        <!-- Step 1 -->
+                        <div class="step-panel active" data-step="1">
+                            <div class="step-header">
+                                <div class="step-eyebrow">Step 1 of 12</div>
+                                <h2 class="step-main-title">Let's start with you.</h2>
+                                <p class="step-subtitle">A few basics so we know who we're building with.</p>
+                            </div>
+
+                            <div class="name-row">
+                                <div class="field-group">
+                                    <label class="field-label" for="first_name">First name <span class="req">*</span></label>
+                                    <input class="form-input" id="first_name" name="first_name" placeholder="e.g. Maria" data-required="true">
+                                </div>
+                                <div class="field-group">
+                                    <label class="field-label" for="last_name">Last name</label>
+                                    <input class="form-input" id="last_name" name="last_name" placeholder="e.g. Santos">
+                                </div>
+                            </div>
+
+                            <div class="field-group">
+                                <label class="field-label" for="email">Email address <span class="req">*</span></label>
+                                <input class="form-input" type="email" id="email" name="email" placeholder="you@example.com" data-required="true">
+                            </div>
+
+                            <div class="field-group">
+                                <label class="field-label" for="role">Your role or title</label>
+                                <input class="form-input" id="role" name="role" placeholder="e.g. Fitness Coach, UX Designer, Language Tutor">
+                            </div>
+
+                            <div class="section-divider"></div>
+                            <div class="section-label">Your expertise area</div>
+
+                            <div class="field-group">
+                                <label class="field-label" for="expertise">What subject are you an expert in? <span class="req">*</span></label>
+                                <div class="input-wrap">
+                                    <input class="form-input with-ai" id="expertise" name="expertise" placeholder="e.g. nutrition science, Python programming, watercolour painting" data-required="true">
+                                    <button class="ai-pill" data-ai-field="expertise" data-ai-context="{}">
+                                        <span class="sparkle">✦</span> AI Help
+                                    </button>
+                                </div>
+                                <p class="field-hint">Don't overthink it — a sentence is fine.</p>
+                            </div>
+
+                            <div class="field-group">
+                                <label class="field-label">How long have you been teaching or practising this?</label>
+                                <div class="radio-grid col-3">
+                                    <div class="radio-card">
+                                        <input type="radio" name="experience_years" id="exp_new" value="under_2">
+                                        <label for="exp_new"><span class="radio-dot"></span> Under 2 years</label>
+                                    </div>
+                                    <div class="radio-card">
+                                        <input type="radio" name="experience_years" id="exp_mid" value="2_5">
+                                        <label for="exp_mid"><span class="radio-dot"></span> 2–5 years</label>
+                                    </div>
+                                    <div class="radio-card">
+                                        <input type="radio" name="experience_years" id="exp_senior" value="5_10">
+                                        <label for="exp_senior"><span class="radio-dot"></span> 5–10 years</label>
+                                    </div>
+                                    <div class="radio-card">
+                                        <input type="radio" name="experience_years" id="exp_expert" value="10_plus">
+                                        <label for="exp_expert"><span class="radio-dot"></span> 10+ years</label>
+                                    </div>
+                                    <div class="radio-card">
+                                        <input type="radio" name="experience_years" id="exp_legend" value="veteran">
+                                        <label for="exp_legend"><span class="radio-dot"></span> 20+ years</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 2 -->
+                        <div class="step-panel" data-step="2">
+                            <div class="step-header">
+                                <div class="step-eyebrow">Step 2 of 12</div>
+                                <h2 class="step-main-title">The big idea.</h2>
+                                <p class="step-subtitle">Tell us what this course is really about. Don't be precious — a rough draft beats a blank page.</p>
+                            </div>
+
+                            <div class="field-group">
+                                <label class="field-label" for="course_title">Course title <span class="req">*</span></label>
+                                <div class="input-wrap">
+                                    <input class="form-input with-ai" id="course_title" name="course_title" placeholder="e.g. The Confident Cook" data-required="true">
+                                    <button class="ai-pill" data-ai-field="course_title" data-ai-context="{&quot;expertise&quot;: &quot;#expertise&quot;}">
+                                        <span class="sparkle">✦</span> Suggest
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="field-group">
+                                <label class="field-label" for="course_pitch">One-sentence pitch <span class="req">*</span></label>
+                                <div class="input-wrap textarea-wrap">
+                                    <textarea class="form-textarea with-ai" id="course_pitch" name="course_pitch" placeholder="e.g. A 6-week course helping beginners cook flavourful, healthy meals without the stress." data-required="true" rows="3"></textarea>
+                                    <button class="ai-pill" data-ai-field="pitch" data-ai-context="{&quot;title&quot;: &quot;#course_title&quot;}">
+                                        <span class="sparkle">✦</span> Write it
+                                    </button>
+                                </div>
+                                <p class="field-hint">Imagine saying this to a friend. What would make them say "I need that!"?</p>
+                            </div>
+
+                            <div class="field-group">
+                                <label class="field-label" for="target_audience">Who is this for? <span class="req">*</span></label>
+                                <div class="input-wrap">
+                                    <input class="form-input with-ai" id="target_audience" name="target_audience" placeholder="e.g. Busy parents who want to cook nutritious weeknight dinners" data-required="true">
+                                    <button class="ai-pill" data-ai-field="audience" data-ai-context="{&quot;title&quot;: &quot;#course_title&quot;}">
+                                        <span class="sparkle">✦</span> AI Help
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Steps 3–12: minimal placeholders matching real structure -->
+                        <div class="step-panel" data-step="3">
+                            <div class="step-header">
+                                <div class="step-eyebrow">Step 3 of 12</div>
+                                <h2 class="step-main-title">The transformation.</h2>
+                                <p class="step-subtitle">What does your learner look like after completing this course?</p>
+                            </div>
+                            <div class="field-group">
+                                <label class="field-label" for="main_transformation">The core transformation <span class="req">*</span></label>
+                                <div class="input-wrap textarea-wrap">
+                                    <textarea class="form-textarea with-ai" id="main_transformation" name="main_transformation" placeholder="Before: [state]. After: [state]." data-required="true" rows="3"></textarea>
+                                    <button class="ai-pill" data-ai-field="main_transformation" data-ai-context="{&quot;topic&quot;: &quot;#course_title&quot;}">
+                                        <span class="sparkle">✦</span> Write it
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="field-group">
+                                <label class="field-label" for="learning_outcomes">Key learning outcomes</label>
+                                <div class="input-wrap textarea-wrap">
+                                    <textarea class="form-textarea with-ai" id="learning_outcomes" name="learning_outcomes" placeholder="List 3–5 things learners will be able to do..." rows="4"></textarea>
+                                    <button class="ai-pill" data-ai-field="outcomes" data-ai-context="{&quot;topic&quot;: &quot;#course_title&quot;}">
+                                        <span class="sparkle">✦</span> Generate
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Steps 4–12 placeholder panels -->
+                        <div class="step-panel" data-step="4">
+                            <div class="step-header"><div class="step-eyebrow">Step 4 of 12</div><h2 class="step-main-title">Existing materials.</h2><p class="step-subtitle">What have you already got? Slides, videos, notes, docs — anything counts.</p></div>
+                            <div class="field-group"><label class="field-label" for="existing_content">Describe what you have</label><div class="input-wrap textarea-wrap"><textarea class="form-textarea with-ai" id="existing_content" name="existing_content" rows="4" placeholder="e.g. 10 recorded Zoom sessions, a PDF workbook, 30 Instagram posts..."></textarea><button class="ai-pill" data-ai-field="existing_content"><span class="sparkle">✦</span> Examples</button></div></div>
+                        </div>
+                        <div class="step-panel" data-step="5">
+                            <div class="step-header"><div class="step-eyebrow">Step 5 of 12</div><h2 class="step-main-title">Brand & vibe.</h2><p class="step-subtitle">What personality should this course have?</p></div>
+                            <div class="field-group"><label class="field-label" for="brand_description">Describe your brand voice</label><div class="input-wrap textarea-wrap"><textarea class="form-textarea with-ai" id="brand_description" name="brand_description" rows="3" placeholder="e.g. warm, no-nonsense, scientific but approachable..."></textarea><button class="ai-pill" data-ai-field="brand_description"><span class="sparkle">✦</span> Describe it</button></div></div>
+                        </div>
+                        <div class="step-panel" data-step="6">
+                            <div class="step-header"><div class="step-eyebrow">Step 6 of 12</div><h2 class="step-main-title">Course structure.</h2><p class="step-subtitle">How do you see this content being organised?</p></div>
+                            <div class="field-group"><label class="field-label" for="structure_notes">Structure notes</label><div class="input-wrap textarea-wrap"><textarea class="form-textarea with-ai" id="structure_notes" name="structure_notes" rows="3" placeholder="e.g. 6 modules, 3 lessons each, with a project at the end..."></textarea><button class="ai-pill" data-ai-field="structure_notes"><span class="sparkle">✦</span> Suggest</button></div></div>
+                        </div>
+                        <div class="step-panel" data-step="7">
+                            <div class="step-header"><div class="step-eyebrow">Step 7 of 12</div><h2 class="step-main-title">Face & voice.</h2><p class="step-subtitle">How will you show up in this course?</p></div>
+                            <div class="field-group"><label class="field-label" for="media_notes">Media & delivery notes</label><div class="input-wrap textarea-wrap"><textarea class="form-textarea with-ai" id="media_notes" name="media_notes" rows="3" placeholder="e.g. on camera, screen recordings, voiceover slides..."></textarea><button class="ai-pill" data-ai-field="media_notes"><span class="sparkle">✦</span> Ideas</button></div></div>
+                        </div>
+                        <div class="step-panel" data-step="8">
+                            <div class="step-header"><div class="step-eyebrow">Step 8 of 12</div><h2 class="step-main-title">Legal & rights.</h2><p class="step-subtitle">Who owns this, and is any third-party content involved?</p></div>
+                            <div class="field-group"><label class="field-label" for="legal_notes">Legal notes</label><div class="input-wrap textarea-wrap"><textarea class="form-textarea with-ai" id="legal_notes" name="legal_notes" rows="3" placeholder="e.g. I own all content / Using licensed stock images..."></textarea><button class="ai-pill" data-ai-field="legal_notes"><span class="sparkle">✦</span> Help</button></div></div>
+                        </div>
+                        <div class="step-panel" data-step="9">
+                            <div class="step-header"><div class="step-eyebrow">Step 9 of 12</div><h2 class="step-main-title">Platform & money.</h2><p class="step-subtitle">Where will this live, and what's the pricing model?</p></div>
+                            <div class="field-group"><label class="field-label" for="revenue_goals">Revenue goals</label><div class="input-wrap textarea-wrap"><textarea class="form-textarea with-ai" id="revenue_goals" name="revenue_goals" rows="3" placeholder="e.g. $500/month passive, one-time launch, subscription..."></textarea><button class="ai-pill" data-ai-field="revenue_goals"><span class="sparkle">✦</span> Ideas</button></div></div>
+                        </div>
+                        <div class="step-panel" data-step="10">
+                            <div class="step-header"><div class="step-eyebrow">Step 10 of 12</div><h2 class="step-main-title">Timelines.</h2><p class="step-subtitle">When do you want to launch, and what's standing in your way?</p></div>
+                            <div class="field-group"><label class="field-label" for="timeline_notes">Timeline notes</label><div class="input-wrap textarea-wrap"><textarea class="form-textarea with-ai" id="timeline_notes" name="timeline_notes" rows="3" placeholder="e.g. 3 months, part-time, launch before summer..."></textarea><button class="ai-pill" data-ai-field="timeline_notes"><span class="sparkle">✦</span> Help</button></div></div>
+                        </div>
+                        <div class="step-panel" data-step="11">
+                            <div class="step-header"><div class="step-eyebrow">Step 11 of 12</div><h2 class="step-main-title">Reviews & sign-off.</h2><p class="step-subtitle">Who else needs to review or approve this course?</p></div>
+                            <div class="field-group"><label class="field-label" for="decision_makers">Decision makers</label><div class="input-wrap textarea-wrap"><textarea class="form-textarea with-ai" id="decision_makers" name="decision_makers" rows="3" placeholder="e.g. just me / my manager / compliance team..."></textarea><button class="ai-pill" data-ai-field="decision_makers"><span class="sparkle">✦</span> Help</button></div></div>
+                        </div>
+                        <div class="step-panel" data-step="12">
+                            <div class="step-header"><div class="step-eyebrow">Step 12 of 12</div><h2 class="step-main-title">Final uploads.</h2><p class="step-subtitle">Anything else we should know? Drop files, notes, secrets.</p></div>
+                            <div class="field-group"><label class="field-label" for="secret_notes">Any final notes or requests</label><div class="input-wrap textarea-wrap"><textarea class="form-textarea with-ai" id="secret_notes" name="secret_notes" rows="4" placeholder="Anything you want us to know that didn't fit elsewhere..."></textarea><button class="ai-pill" data-ai-field="secret_notes"><span class="sparkle">✦</span> Inspire</button></div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Nav bar (sticky bottom of main area) -->
+                <div class="nav-bar">
+                    <button class="btn btn-ghost" id="btn-back" disabled>
+                        ← Back
+                    </button>
+                    <div style="display:flex;gap:0.625rem;align-items:center;">
+                        <div class="skip-wrap">
+                            <button class="btn btn-ghost btn-save" id="btn-skip">
+                                ⌂ Jump
+                            </button>
+                            <div class="skip-menu" id="skip-menu"></div>
+                        </div>
+                        <button class="btn btn-ghost btn-save" id="btn-save">
+                            Save &amp; exit
+                        </button>
+                    </div>
+                    <button class="btn btn-primary" id="btn-next">
+                        Continue →
+                    </button>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- ── MOBILE ── -->
+    <div class="layout-mobile">
+        <div class="mobile-header">
+            <div class="mobile-brand">KaTek AI</div>
+            <div class="mobile-step-label" id="mobile-step-label">Step 1 of 12</div>
+            <div class="progress-track">
+                <div class="progress-fill" id="mobile-progress-fill" style="width:8.33%"></div>
+            </div>
+        </div>
+        <div class="mobile-content" id="mobile-content">
+            <!-- Mirrors desktop steps-container (JS populates) -->
+        </div>
+        <div class="mobile-nav">
+            <div class="mobile-nav-row">
+                <button class="btn btn-ghost" id="btn-back-m" disabled>← Back</button>
+                <button class="btn btn-primary" id="btn-next-m">Continue →</button>
+            </div>
+            <div style="display:flex;gap:0.5rem;">
+                <button class="btn btn-ghost btn-save" id="btn-skip-m" style="flex:1;justify-content:center;">⌂ Jump</button>
+                <button class="btn btn-ghost btn-save" id="btn-save-m" style="flex:1;justify-content:center;">Save & exit</button>
+            </div>
+        </div>
+    </div>
+
+</div><!-- end onboarding-main -->
+
+
+<script>
+// ═══════════════════════════════════════
+// PARTICLE CANVAS (intro background)
+// ═══════════════════════════════════════
+(function(){
+    const canvas = document.getElementById('particle-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let W, H, particles = [];
+
+    function resize(){
+        W = canvas.width = window.innerWidth;
+        H = canvas.height = window.innerHeight;
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    // Create grid of dots
+    function buildGrid(){
+        particles = [];
+        const spacing = 50;
+        const cols = Math.ceil(W / spacing) + 1;
+        const rows = Math.ceil(H / spacing) + 1;
+        for(let r = 0; r < rows; r++){
+            for(let c = 0; c < cols; c++){
+                particles.push({
+                    x: c * spacing,
+                    y: r * spacing,
+                    baseX: c * spacing,
+                    baseY: r * spacing,
+                    phase: Math.random() * Math.PI * 2,
+                    amp: Math.random() * 3 + 1
+                });
+            }
+        }
+    }
+    buildGrid();
+
+    let t = 0;
+    function draw(){
+        ctx.clearRect(0,0,W,H);
+        t += 0.008;
+        particles.forEach(p => {
+            const ox = Math.sin(t + p.phase) * p.amp;
+            const oy = Math.cos(t * 0.7 + p.phase) * p.amp;
+            const px = p.baseX + ox;
+            const py = p.baseY + oy;
+            const dist = Math.hypot(px - W/2, py - H/2);
+            const alpha = Math.max(0, 0.35 - dist/(Math.max(W,H)*0.7));
+            ctx.beginPath();
+            ctx.arc(px, py, 1, 0, Math.PI*2);
+            ctx.fillStyle = `rgba(165,148,249,${alpha})`;
+            ctx.fill();
+        });
+        requestAnimationFrame(draw);
+    }
+    draw();
+})();
+
+// ═══════════════════════════════════════
+// TYPEWRITER INTRO
+// ═══════════════════════════════════════
+(function(){
+    const el = document.getElementById('intro-typewriter');
+    const pills = document.getElementById('step-pills');
+    const btn = document.getElementById('btn-begin');
+    const timeNote = document.getElementById('time-note');
+
+    const phrases = [
+        "A guided 12-step journey.",
+        "AI helps when you're stuck.",
+        "Your blueprint. Your voice.",
+    ];
+    let pi = 0, ci = 0, deleting = false;
+    const cursor = '<span class="cursor"></span>';
+
+    function tick(){
+        const phrase = phrases[pi];
+        if(!deleting){
+            ci++;
+            el.innerHTML = phrase.slice(0,ci) + cursor;
+            if(ci === phrase.length){
+                deleting = true;
+                setTimeout(tick, 2200); return;
+            }
+        } else {
+            ci--;
+            el.innerHTML = phrase.slice(0,ci) + cursor;
+            if(ci === 0){
+                deleting = false;
+                pi = (pi+1) % phrases.length;
+                setTimeout(tick, 400); return;
+            }
+        }
+        setTimeout(tick, deleting ? 28 : 52);
+    }
+    setTimeout(tick, 600);
+
+    // Reveal pills and button
+    setTimeout(() => { pills.classList.add('visible'); }, 1000);
+    setTimeout(() => { btn.classList.add('visible'); }, 1400);
+    setTimeout(() => { timeNote.classList.add('visible'); }, 1800);
+})();
+
+// ═══════════════════════════════════════
+// WIZARD STATE & STEPS
+// ═══════════════════════════════════════
+const STEPS = [
+    { title: 'Meet You',          desc: 'Intro & contact' },
+    { title: 'Course Idea',       desc: 'Core concept & vision' },
+    { title: 'Transformation',    desc: 'Outcomes & results' },
+    { title: 'Existing Materials',desc: 'What you already have' },
+    { title: 'Brand & Vibe',      desc: 'Personality & tone' },
+    { title: 'Course Structure',  desc: 'Format & interactivity' },
+    { title: 'Face & Voice',      desc: 'Media preferences' },
+    { title: 'Legal & Rights',    desc: 'Permissions & ownership' },
+    { title: 'Platform & Money',  desc: 'Distribution & pricing' },
+    { title: 'Timelines',         desc: 'Schedule & priorities' },
+    { title: 'Reviews',           desc: 'Decision-makers' },
+    { title: 'Final Uploads',     desc: 'Files & notes' },
+];
+
+const state = { current: 1, total: 12, sessionId: sessionStorage.getItem('katek_session_id') || null };
+
+// Build sidebar
+function buildSidebar(){
+    const container = document.getElementById('sidebar-steps');
+    container.innerHTML = '';
+    STEPS.forEach((s, i) => {
+        const n = i + 1;
+        const isCurrent = n === state.current;
+        const isDone = n < state.current;
+        const div = document.createElement('div');
+        div.className = 'step-item' + (isCurrent ? ' current' : '') + (isDone ? ' done' : '');
+        div.innerHTML = `
+            <div class="step-num">
+                <span class="step-num-text">${String(n).padStart(2,'0')}</span>
+            </div>
+            <div class="step-meta">
+                <div class="step-title">${s.title}</div>
+                <div class="step-desc">${s.desc}</div>
+            </div>`;
+        div.addEventListener('click', () => {
+            if(n <= state.current){ goToStep(n); }
+        });
+        container.appendChild(div);
+        if(n < STEPS.length){
+            const conn = document.createElement('div');
+            conn.className = 'step-connector';
+            container.appendChild(conn);
+        }
+    });
+}
+
+// Build jump menu
+function buildSkipMenu(menuId){
+    const menu = document.getElementById(menuId);
+    if(!menu) return;
+    menu.innerHTML = `<div class="skip-menu-header">Jump to step</div><div class="skip-menu-list" id="${menuId}-list"></div>`;
+    const list = menu.querySelector('.skip-menu-list');
+    STEPS.forEach((s, i) => {
+        const n = i+1;
+        const btn = document.createElement('button');
+        btn.className = 'jump-btn';
+        btn.innerHTML = `<span class="jump-num">${String(n).padStart(2,'0')}</span>${s.title}`;
+        btn.addEventListener('click', () => {
+            menu.classList.remove('open');
+            goToStep(n);
+        });
+        list.appendChild(btn);
+    });
+}
+
+function showTransition(stepNum, cb){
+    const overlay = document.getElementById('step-transition');
+    const lbl = document.getElementById('transition-label');
+    const name = document.getElementById('transition-step-name');
+    if(lbl) lbl.textContent = `Step ${stepNum} of ${state.total}`;
+    if(name) name.textContent = STEPS[stepNum-1].title;
+    overlay.classList.add('active');
+    setTimeout(() => {
+        if(cb) cb();
+        setTimeout(() => overlay.classList.remove('active'), 350);
+    }, 550);
+}
+
+function goToStep(n, animate = true){
+    const panels = document.querySelectorAll('#steps-container .step-panel');
+    const doSwitch = () => {
+        panels.forEach((p, i) => {
+            p.classList.toggle('active', i+1 === n);
+        });
+        state.current = n;
+        buildSidebar();
+        updateProgress();
+        updateNav();
+        // Scroll to top of main area
+        const ma = document.getElementById('main-area');
+        if(ma) ma.scrollTop = 0;
+    };
+
+    if(animate && n !== state.current){
+        showTransition(n, doSwitch);
+    } else {
+        doSwitch();
+    }
+}
+
+function updateProgress(){
+    const pct = (state.current / state.total) * 100;
+    const fill = document.getElementById('progress-fill');
+    const mfill = document.getElementById('mobile-progress-fill');
+    const ll = document.getElementById('progress-label-left');
+    const lr = document.getElementById('progress-label-right');
+    const ml = document.getElementById('mobile-step-label');
+    if(fill) fill.style.width = pct + '%';
+    if(mfill) mfill.style.width = pct + '%';
+    if(ll) ll.textContent = `Step ${state.current} of ${state.total}`;
+    if(lr) lr.textContent = Math.round(pct) + '%';
+    if(ml) ml.textContent = `Step ${state.current} of ${state.total}`;
+}
+
+function updateNav(){
+    const back = document.getElementById('btn-back');
+    const backM = document.getElementById('btn-back-m');
+    const next = document.getElementById('btn-next');
+    const nextM = document.getElementById('btn-next-m');
+    const isLast = state.current === state.total;
+    const nextLabel = isLast ? 'Submit ✓' : 'Continue →';
+    if(back) back.disabled = state.current === 1;
+    if(backM) backM.disabled = state.current === 1;
+    if(next) next.textContent = nextLabel;
+    if(nextM) nextM.textContent = nextLabel;
+}
+
+// ═══════════════════════════════════════
+// SAVE & SUBMIT (API integration)
+// ═══════════════════════════════════════
+function getVal(id){ const el = document.getElementById(id); return el ? (el.value || '').trim() : ''; }
+function getRadio(name){ const r = document.querySelector(`input[name="${name}"]:checked`); return r ? r.value : ''; }
+
+function collectFormData(){
+    const steps = {
+        meet_you: {
+            full_name: [getVal('first_name'), getVal('last_name')].filter(Boolean).join(' '),
+            email: getVal('email'),
+            role: getVal('role'),
+            expertise: getVal('expertise'),
+            experience_years: getRadio('experience_years'),
+        },
+        course_idea: {
+            course_title: getVal('course_title'),
+            course_pitch: getVal('course_pitch'),
+            target_audience: getVal('target_audience'),
+        },
+        transformation_outcomes: {
+            main_transformation: getVal('main_transformation'),
+            learning_outcomes: getVal('learning_outcomes'),
+        },
+        existing_materials: { existing_content: getVal('existing_content') },
+        brand_vibe: { brand_description: getVal('brand_description') },
+        course_structure: { structure_notes: getVal('structure_notes') },
+        media_content: { media_notes: getVal('media_notes') },
+        legal_rights: { legal_notes: getVal('legal_notes') },
+        platform_money: { revenue_goals: getVal('revenue_goals') },
+        timelines_priorities: { timeline_notes: getVal('timeline_notes') },
+        reviews_decision_makers: { decision_makers: getVal('decision_makers') },
+        final_uploads: { secret_notes: getVal('secret_notes') },
+    };
+    return steps;
+}
+
+function setButtonLoading(btn, loading){
+    if(!btn) return;
+    if(loading){
+        btn.disabled = true;
+        btn.dataset.origText = btn.textContent;
+        btn.innerHTML = '<span class="sparkle">↻</span> Saving…';
+    } else {
+        btn.disabled = false;
+        btn.textContent = btn.dataset.origText || btn.textContent;
+    }
+}
+
+function showToast(msg, isError = false){
+    let t = document.getElementById('onboarding-toast');
+    if(!t){
+        t = document.createElement('div');
+        t.id = 'onboarding-toast';
+        t.style.cssText = 'position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);padding:0.75rem 1.25rem;border-radius:8px;font-size:0.9rem;z-index:10000;box-shadow:0 4px 12px rgba(0,0,0,0.3);transition:opacity 0.3s;';
+        document.body.appendChild(t);
+    }
+    t.textContent = msg;
+    t.style.background = isError ? '#dc2626' : '#059669';
+    t.style.color = '#fff';
+    t.style.opacity = '1';
+    setTimeout(() => { t.style.opacity = '0'; }, 3500);
+}
+
+function showSuccessModal(isSubmit){
+    let m = document.getElementById('success-modal');
+    if(!m){
+        m = document.createElement('div');
+        m.id = 'success-modal';
+        m.className = 'success-modal-overlay';
+        m.style.cssText = 'position:fixed;inset:0;z-index:10001;background:rgba(0,0,0,0.7);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;padding:1rem;';
+        m.innerHTML = `
+            <div class="success-modal-card" style="background:var(--surface-2);border:1px solid var(--border-2);border-radius:16px;padding:2rem;max-width:420px;text-align:center;box-shadow:0 20px 40px rgba(0,0,0,0.4);">
+                <div style="font-size:3rem;margin-bottom:1rem;">✓</div>
+                <h3 style="font-size:1.25rem;margin-bottom:0.5rem;color:var(--text);">Success!</h3>
+                <p id="success-modal-msg" style="color:var(--text-2);margin-bottom:1.5rem;font-size:0.95rem;">Your progress has been saved.</p>
+                <div style="display:flex; justify-content:center;">
+                    <button id="success-modal-btn" class="btn btn-primary" style="min-width:140px;">Done</button>
+                </div>
+            </div>`;
+        document.body.appendChild(m);
+        m.querySelector('#success-modal-btn').addEventListener('click', () => {
+            m.style.display = 'none';
+            window.location.href = '/';
+        });
+    }
+    m.querySelector('#success-modal-msg').textContent = isSubmit
+        ? 'Your course blueprint has been submitted. Our team will review it and be in touch soon!'
+        : 'Your progress has been saved. You can return anytime to continue.';
+    m.querySelector('#success-modal-btn').textContent = 'Done';
+    m.style.display = 'flex';
+}
+
+function saveToAPI(isSubmit = false){
+    const nextBtn = document.getElementById('btn-next');
+    const nextMBtn = document.getElementById('btn-next-m');
+    const saveBtn = document.getElementById('btn-save');
+    const saveMBtn = document.getElementById('btn-save-m');
+    const btnsToDisable = isSubmit ? [nextBtn, nextMBtn] : [saveBtn, saveMBtn];
+
+    btnsToDisable.forEach(b => setButtonLoading(b, true));
+
+    const payload = {
+        session_id: state.sessionId,
+        steps: collectFormData(),
+        submit: isSubmit,
+    };
+
+    fetch('/api/onboarding/save/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken') },
+        body: JSON.stringify(payload),
+    })
+    .then(r => r.json().catch(() => ({ success: false, error: 'Invalid server response' })))
+    .then(data => {
+        btnsToDisable.forEach(b => setButtonLoading(b, false));
+        if(!data) data = { success: false, error: 'No response from server' };
+        if(data.session_id) {
+            state.sessionId = data.session_id;
+            sessionStorage.setItem('katek_session_id', data.session_id);
+        }
+        if(data.success){
+            if(isSubmit){
+                showSuccessModal(true);
+            } else {
+                showToast('Progress saved successfully!');
+            }
+        } else {
+            showToast(data.error || 'Something went wrong. Please try again.', true);
+        }
+    })
+    .catch(err => {
+        btnsToDisable.forEach(b => setButtonLoading(b, false));
+        showToast('Failed to save. Check your connection and try again.', true);
+        console.error('Save error:', err);
+    });
+}
+
+// Wire nav buttons
+document.getElementById('btn-next')?.addEventListener('click', () => {
+    if(state.current < state.total) goToStep(state.current + 1);
+    else saveToAPI(true);
+});
+document.getElementById('btn-back')?.addEventListener('click', () => {
+    if(state.current > 1) goToStep(state.current - 1);
+});
+document.getElementById('btn-next-m')?.addEventListener('click', () => {
+    if(state.current < state.total) goToStep(state.current + 1);
+    else saveToAPI(true);
+});
+document.getElementById('btn-back-m')?.addEventListener('click', () => {
+    if(state.current > 1) goToStep(state.current - 1);
+});
+document.getElementById('btn-save')?.addEventListener('click', () => saveToAPI(false));
+document.getElementById('btn-save-m')?.addEventListener('click', () => saveToAPI(false));
+
+// Skip menus
+const skipBtn = document.getElementById('btn-skip');
+const skipMenu = document.getElementById('skip-menu');
+skipBtn?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    skipMenu.classList.toggle('open');
+});
+document.addEventListener('click', () => {
+    skipMenu?.classList.remove('open');
+});
+skipMenu?.addEventListener('click', e => e.stopPropagation());
+buildSkipMenu('skip-menu');
+
+// ═══════════════════════════════════════
+// AI HELP BUTTONS
+// ═══════════════════════════════════════
+function setupAIButtons(){
+    document.querySelectorAll('.ai-pill[data-ai-field]').forEach(btn => {
+        btn.addEventListener('click', function(){
+            const fieldType = this.getAttribute('data-ai-field');
+            const input = this.closest('.input-wrap')?.querySelector('input, textarea');
+            if(!input) return;
+
+            // Loading state
+            const orig = this.innerHTML;
+            this.classList.add('loading');
+            this.innerHTML = '<span class="sparkle">↻</span> Thinking…';
+
+            const payload = {
+                field_type: fieldType,
+                context: {
+                    topic: document.getElementById('course_title')?.value || '',
+                    pitch: document.getElementById('course_pitch')?.value || '',
+                    expertise: document.getElementById('expertise')?.value || '',
                 }
-                return cookieValue;
-            }
-            
-            const csrftoken = getCookie('csrftoken');
-            
-            // Initialize session ID
-            if (!state.sessionId) {
-                state.sessionId = localStorage.getItem('onboarding_session_id') || generateSessionId();
-                localStorage.setItem('onboarding_session_id', state.sessionId);
-            }
-            
-            function generateSessionId() {
-                return 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-            }
-            
-            // Get all step panels
-            function getStepPanels() {
-                const desktop = document.querySelectorAll('#steps-container .step-panel');
-                const mobile = document.querySelectorAll('#mobile-steps-container .step-panel');
-                return { desktop, mobile };
-            }
-            
-            // Step preloader messages
-            const preloaderMessages = {
-                1: "Locking in your creator profile…",
-                2: "Scanning your big idea for magic…",
-                3: "Mapping the transformation your students will experience…",
-                4: "Collecting your existing assets into the KaTek vault…",
-                5: "Tuning the brand frequency to your unique vibe…",
-                6: "Building your course skeleton and engagement loops…",
-                7: "Syncing your face, voice, and presence with the experience…",
-                8: "Securing rights, permissions, and creator protections…",
-                9: "Configuring platforms, pricing, and flow of payments…",
-                10: "Locking in timelines and what matters most right now…",
-                11: "Aligning reviewers, approvers, and feedback flow…",
-                12: "Saving your final files, secrets, and special requests…"
             };
-            
-            // Show preloader
-            function showPreloader(stepNumber) {
-                const message = preloaderMessages[stepNumber] || "Loading your step…";
-                const desktopPreloader = document.getElementById('step-preloader');
-                const mobilePreloader = document.getElementById('step-preloader-mobile');
-                const desktopMessage = document.getElementById('preloader-message');
-                const mobileMessage = document.getElementById('preloader-message-mobile');
-                
-                if (desktopMessage) desktopMessage.textContent = message;
-                if (mobileMessage) mobileMessage.textContent = message;
-                
-                if (desktopPreloader) desktopPreloader.classList.add('active');
-                if (mobilePreloader) mobilePreloader.classList.add('active');
-            }
-            
-            // Hide preloader
-            function hidePreloader() {
-                const desktopPreloader = document.getElementById('step-preloader');
-                const mobilePreloader = document.getElementById('step-preloader-mobile');
-                
-                if (desktopPreloader) desktopPreloader.classList.remove('active');
-                if (mobilePreloader) mobilePreloader.classList.remove('active');
-            }
-            
-            // Track if this is the first load
-            let isFirstLoad = true;
-            
-            // Show step
-            function showStep(stepNumber, skipPreloader = false) {
-                // Show preloader only if not first load and not skipped
-                if (!isFirstLoad && !skipPreloader) {
-                    showPreloader(stepNumber);
-                }
-                
-                // Wait a bit for smooth transition, then load the step
-                const delay = (!isFirstLoad && !skipPreloader) ? 300 : 0;
-                
-                setTimeout(() => {
-                    const { desktop, mobile } = getStepPanels();
-                    
-                    // Hide all steps
-                    desktop.forEach(panel => {
-                        panel.classList.remove('active');
-                    });
-                    mobile.forEach(panel => {
-                        panel.classList.remove('active');
-                    });
-                    
-                    // Show current step
-                    if (desktop[stepNumber - 1]) desktop[stepNumber - 1].classList.add('active');
-                    if (mobile[stepNumber - 1]) mobile[stepNumber - 1].classList.add('active');
-                    
-                    // Update sidebar
-                    updateSidebar(stepNumber);
-                    
-                    // Update progress
-                    updateProgress(stepNumber);
-                    
-                    // Update navigation buttons
-                    updateNavigation(stepNumber);
-                    
-                    // Update radio button visuals after step is shown
-                    setTimeout(setupRadioButtons, 50);
-                    
-                    // Re-setup AI help buttons when step changes
-                    setTimeout(setupAIHelpButtons, 100);
-                    
-                    // Hide preloader after step is loaded
-                    if (!isFirstLoad && !skipPreloader) {
-                        setTimeout(() => {
-                            hidePreloader();
-                        }, 5000); // Show preloader for 5 seconds for awesome experience
-                    }
-                    
-                    // Mark that first load is done
-                    isFirstLoad = false;
-                }, delay);
-            }
-            
-            // Update sidebar highlighting
-            function updateSidebar(stepNumber) {
-                document.querySelectorAll('.step-item').forEach((item, index) => {
-                    const stepNum = index + 1;
-                    const circle = item.querySelector('.w-9.h-9') || item.querySelector('div > div');
-                    const titleText = item.querySelector('.text-sm.font-semibold');
-                    
-                    if (stepNum === stepNumber) {
-                        if (circle) circle.className = 'w-9 h-9 rounded-full bg-blue-500/20 border border-blue-500/50 flex items-center justify-center text-xs font-bold text-blue-400 flex-shrink-0';
-                        if (titleText) titleText.className = 'text-sm font-semibold text-slate-100 leading-snug';
-                    } else if (stepNum < stepNumber) {
-                        if (circle) circle.className = 'w-9 h-9 rounded-full bg-green-500/20 border border-green-500/50 flex items-center justify-center text-xs font-bold text-green-400 flex-shrink-0';
-                        if (titleText) titleText.className = 'text-sm font-semibold text-slate-200 leading-snug';
-                        item.querySelector('.step-complete')?.classList.remove('hidden');
-                    } else {
-                        if (circle) circle.className = 'w-9 h-9 rounded-full bg-slate-700/50 border border-slate-600/50 flex items-center justify-center text-xs font-bold text-slate-400 flex-shrink-0';
-                        if (titleText) titleText.className = 'text-sm font-semibold text-slate-200 leading-snug';
-                        item.querySelector('.step-complete')?.classList.add('hidden');
-                    }
-                });
-            }
-            
-            // Update progress bars
-            function updateProgress(stepNumber) {
-                const percentage = (stepNumber / state.totalSteps) * 100;
-                document.getElementById('sidebar-progress').style.width = percentage + '%';
-                document.getElementById('mobile-progress').style.width = percentage + '%';
-                document.getElementById('progress-text').textContent = `Step ${stepNumber} of ${state.totalSteps}`;
-                document.getElementById('mobile-step-label').textContent = `Step ${stepNumber} of ${state.totalSteps}`;
-            }
-            
-            // Update navigation buttons
-            function updateNavigation(stepNumber) {
-                const backBtns = [document.getElementById('btn-back'), document.getElementById('btn-back-mobile')];
-                const nextBtns = [document.getElementById('btn-next'), document.getElementById('btn-next-mobile')];
-                
-                backBtns.forEach(btn => {
-                    if (btn) btn.disabled = stepNumber === 1;
-                });
-                
-                nextBtns.forEach(btn => {
-                    if (btn) {
-                        if (stepNumber === state.totalSteps) {
-                            btn.innerHTML = 'Finish & Submit <i class="fas fa-check ml-2"></i>';
-                            btn.setAttribute('data-action', 'submit');
-                        } else {
-                            btn.innerHTML = 'Next <i class="fas fa-arrow-right ml-2"></i>';
-                            btn.setAttribute('data-action', 'next');
-                        }
-                    }
-                });
-            }
-            
-            // Unified click handler for next buttons
-            function handleNextClick(event) {
-                const action = event.target.closest('button').getAttribute('data-action');
-                if (action === 'submit') {
-                    handleSubmit();
+
+            fetch('/api/onboarding/ai-help/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken') },
+                body: JSON.stringify(payload)
+            })
+            .then(r => r.json())
+            .then(data => {
+                this.classList.remove('loading');
+                if(data.success && data.suggestions?.length){
+                    const suggestion = data.suggestions.join('\n');
+                    // Show tooltip with accept/dismiss
+                    showAISuggestion(input, suggestion, this);
+                    this.innerHTML = '<span class="sparkle">✓</span> Done';
+                    this.classList.add('success');
+                    setTimeout(() => {
+                        this.innerHTML = orig;
+                        this.classList.remove('success');
+                    }, 2500);
                 } else {
-                    handleNext();
+                    this.innerHTML = '<span class="sparkle">!</span> Try again';
+                    setTimeout(() => { this.innerHTML = orig; }, 2000);
                 }
-            }
-            
-            // Sync data between desktop and mobile panels
-            function syncInputs(sourceInput, targetPanel) {
-                const name = sourceInput.name || sourceInput.id;
-                if (!name) return;
-                
-                if (sourceInput.type === 'checkbox' || sourceInput.type === 'radio') {
-                    // For checkboxes/radios, find the matching one by value
-                    const value = sourceInput.value;
-                    const targetInput = targetPanel.querySelector(`[name="${name}"][value="${value}"], [id="${name}"][value="${value}"]`);
-                    if (targetInput) {
-                        targetInput.checked = sourceInput.checked;
-                        // Update radio button visuals if it's a radio
-                        if (sourceInput.type === 'radio') {
-                            updateRadioButtonVisuals(targetInput);
-                        }
-                    }
-                    // Also update source radio visuals
-                    if (sourceInput.type === 'radio') {
-                        updateRadioButtonVisuals(sourceInput);
-                    }
-                } else {
-                    // For text inputs, textareas, selects
-                    const targetInput = targetPanel.querySelector(`[name="${name}"], [id="${name}"]`);
-                    if (targetInput) {
-                        targetInput.value = sourceInput.value;
-                    }
-                }
-            }
-            
-            // Validate current step (works for both desktop and mobile)
-            function validateStep(stepNumber) {
-                const { desktop, mobile } = getStepPanels();
-                const desktopPanel = desktop[stepNumber - 1];
-                const mobilePanel = mobile[stepNumber - 1];
-                
-                // Use the visible panel (or desktop as fallback)
-                const currentPanel = desktopPanel?.classList.contains('active') ? desktopPanel : 
-                                   (mobilePanel?.classList.contains('active') ? mobilePanel : desktopPanel);
-                
-                if (!currentPanel) return true;
-                
-                const requiredFields = currentPanel.querySelectorAll('[data-required="true"]');
-                let isValid = true;
-                
-                requiredFields.forEach(field => {
-                    const value = field.value ? field.value.trim() : '';
-                    const inputCard = field.closest('.input-card');
-                    
-                    if (!value) {
-                        isValid = false;
-                        // Mark error in both panels
-                        [desktopPanel, mobilePanel].forEach(panel => {
-                            if (panel) {
-                                const name = field.name || field.id;
-                                const panelField = panel.querySelector(`[name="${name}"], [id="${name}"]`);
-                                const panelCard = panelField?.closest('.input-card');
-                                if (panelCard) {
-                                    panelCard.classList.add('border-red-500/50');
-                                    const errorMsg = panelCard.querySelector('.error-message');
-                                    if (!errorMsg) {
-                                        const err = document.createElement('div');
-                                        err.className = 'error-message text-xs text-red-400 mt-1';
-                                        err.textContent = 'This field is required';
-                                        panelCard.appendChild(err);
-                                    }
-                                }
-                            }
-                        });
-                    } else {
-                        // Clear errors in both panels
-                        [desktopPanel, mobilePanel].forEach(panel => {
-                            if (panel) {
-                                const name = field.name || field.id;
-                                const panelField = panel.querySelector(`[name="${name}"], [id="${name}"]`);
-                                const panelCard = panelField?.closest('.input-card');
-                                if (panelCard) {
-                                    panelCard.classList.remove('border-red-500/50');
-                                    const errorMsg = panelCard.querySelector('.error-message');
-                                    if (errorMsg) errorMsg.remove();
-                                }
-                            }
-                        });
-                    }
-                });
-                
-                return isValid;
-            }
-            
-            // Collect data from current step (works for both desktop and mobile)
-            function collectStepData(stepNumber) {
-                const { desktop, mobile } = getStepPanels();
-                const desktopPanel = desktop[stepNumber - 1];
-                const mobilePanel = mobile[stepNumber - 1];
-                
-                // Use desktop panel for data collection (they should be in sync)
-                const currentPanel = desktopPanel || mobilePanel;
-                if (!currentPanel) return {};
-                
-                const data = {};
-                const inputs = currentPanel.querySelectorAll('input, textarea, select');
-                
-                // Track processed radio button groups to avoid duplicates
-                const processedRadioGroups = new Set();
-                
-                inputs.forEach(input => {
-                    const name = input.name || input.id;
-                    if (name) {
-                        if (input.type === 'checkbox') {
-                            // For checkboxes with the same name, collect as array
-                            const checkboxes = currentPanel.querySelectorAll(`input[type="checkbox"][name="${name}"]`);
-                            if (checkboxes.length > 1) {
-                                // Multiple checkboxes with same name - collect as array
-                                if (!data[name]) {
-                                    data[name] = [];
-                                }
-                                if (input.checked) {
-                                    data[name].push(input.value);
-                                }
-                            } else {
-                                // Single checkbox - store as boolean
-                                data[name] = input.checked;
-                            }
-                        } else if (input.type === 'radio') {
-                            // Only collect the checked radio button value, and only once per group
-                            if (input.checked && !processedRadioGroups.has(name)) {
-                                data[name] = input.value;
-                                processedRadioGroups.add(name);
-                            }
-                        } else {
-                            data[name] = input.value;
-                        }
-                    }
-                });
-                
-                return data;
-            }
-            
-            // Save step data
-            function saveStepData(stepNumber, submit = false) {
-                const stepNames = [
-                    'meet_you', 'course_idea', 'transformation_outcomes',
-                    'existing_materials', 'brand_vibe', 'course_structure',
-                    'media_content', 'legal_rights', 'platform_money',
-                    'timelines_priorities', 'reviews_decision_makers', 'final_uploads'
-                ];
-                
-                const stepName = stepNames[stepNumber - 1];
-                const stepData = collectStepData(stepNumber);
-                
-                state.data[stepName] = stepData;
-                
-                const payload = {
-                    session_id: state.sessionId,
-                    steps: {
-                        [stepName]: stepData
-                    },
-                    submit: submit
-                };
-                
-                fetch('/api/onboarding/save/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRFToken': csrftoken
-                    },
-                    body: JSON.stringify(payload)
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        return response.json().then(err => {
-                            throw new Error(err.error || 'Save failed');
-                        });
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    if (data.success && data.session_id) {
-                        state.sessionId = data.session_id;
-                        localStorage.setItem('onboarding_session_id', state.sessionId);
-                    }
-                    if (data.warnings && data.warnings.length > 0) {
-                        console.warn('Save warnings:', data.warnings);
-                    }
-                })
-                .catch(error => {
-                    console.error('Save error:', error);
-                    // Don't show alert for autosave errors, just log them
-                    if (submit) {
-                        alert('Failed to save: ' + error.message);
-                    }
-                });
-            }
-            
-            // Handle Next
-            function handleNext() {
-                if (!validateStep(state.currentStep)) {
-                    return;
-                }
-                
-                saveStepData(state.currentStep);
-                
-                if (state.currentStep < state.totalSteps) {
-                    state.currentStep++;
-                    showStep(state.currentStep);
-                }
-            }
-            
-            // Handle Back
-            function handleBack() {
-                if (state.currentStep > 1) {
-                    state.currentStep--;
-                    showStep(state.currentStep);
-                }
-            }
-            
-            // Handle Submit
-            function handleSubmit() {
-                if (!validateStep(state.currentStep)) {
-                    return;
-                }
-                
-                saveStepData(state.currentStep, true);
-                
-                // Show success message
-                alert('Thank you! Your course blueprint has been submitted successfully.');
-                
-                // Optionally redirect
-                // window.location.href = '/onboarding/thank-you/';
-            }
-            
-            // Handle Save & Exit
-            function handleSaveExit() {
-                saveStepData(state.currentStep);
-                alert('Your progress has been saved. You can continue later.');
-                // Optionally redirect to home
-                // window.location.href = '/';
-            }
-            
-            // Field type to field ID mapping
-            const aiFieldMapping = {
-                'course_title': 'course_title',
-                'pitch': 'course_pitch',
-                'outcomes': 'learning_outcomes',
-                'tone': 'brand_tone',
-                'taglines': 'course_tagline',
-                'visual_style': 'visual_style',  // Radio button group
-                'course_description': 'course_description',
-                'main_transformation': 'main_transformation',
-                'skills_gained': 'skills_gained',
-                'prerequisites': 'prerequisites',
-                'existing_content': 'existing_content',
-                'materials_notes': 'materials_notes',
-                'brand_description': 'brand_description',
-                'structure_notes': 'structure_notes',
-                'media_notes': 'media_notes',
-                'third_party_content': 'third_party_content',
-                'required_permissions': 'required_permissions',
-                'legal_notes': 'legal_notes',
-                'revenue_goals': 'revenue_goals',
-                'priority_features': 'priority_features',
-                'timeline_notes': 'timeline_notes',
-                'decision_makers': 'decision_makers',
-                'review_criteria': 'review_criteria',
-                'approval_notes': 'approval_notes',
-                'file_descriptions': 'file_descriptions',
-                'secret_notes': 'secret_notes'
-            };
-            
-            // AI Help handler with loading state
-            function handleAIHelp(fieldType, context = {}, buttonElement) {
-                // Get the button element if not provided
-                if (!buttonElement) {
-                    buttonElement = event?.target?.closest('.ai-help-btn') || event?.target;
-                }
-                
-                // Show loading state
-                if (buttonElement) {
-                    const originalHTML = buttonElement.innerHTML;
-                    buttonElement.classList.add('ai-loading');
-                    buttonElement.disabled = true;
-                    buttonElement.innerHTML = '<i class="fas fa-spinner mr-1"></i> AI Thinking...';
-                    
-                    // Store original HTML for restoration
-                    buttonElement.dataset.originalHtml = originalHTML;
-                }
-                
-                const payload = {
-                    field_type: fieldType,
-                    context: context
-                };
-                
-                fetch('/api/onboarding/ai-help/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRFToken': csrftoken
-                    },
-                    body: JSON.stringify(payload)
-                })
-                .then(response => response.json())
-                .then(data => {
-                    // Remove loading state
-                    if (buttonElement) {
-                        buttonElement.classList.remove('ai-loading');
-                        buttonElement.disabled = false;
-                        if (buttonElement.dataset.originalHtml) {
-                            buttonElement.innerHTML = buttonElement.dataset.originalHtml;
-                        } else {
-                            buttonElement.innerHTML = '<i class="fas fa-magic mr-1"></i> AI Help';
-                        }
-                    }
-                    
-                    if (data.success && data.suggestions && data.suggestions.length > 0) {
-                        // Get the field ID from mapping
-                        const fieldId = aiFieldMapping[fieldType] || fieldType;
-                        
-                        // Find the target field in both desktop and mobile
-                        const { desktop, mobile } = getStepPanels();
-                        let desktopField = null;
-                        let mobileField = null;
-                        
-                        desktop.forEach(panel => {
-                            const field = panel.querySelector(`#${fieldId}, [name="${fieldId}"]`);
-                            if (field) desktopField = field;
-                        });
-                        
-                        mobile.forEach(panel => {
-                            const field = panel.querySelector(`#${fieldId}, [name="${fieldId}"]`);
-                            if (field) mobileField = field;
-                        });
-                        
-                        // Determine the suggestion value
-                        let suggestion = '';
-                        if (fieldType === 'outcomes' && data.suggestions.length > 1) {
-                            // For outcomes, join multiple suggestions with newlines
-                            suggestion = data.suggestions.join('\n');
-                        } else {
-                            // Use first suggestion for others
-                            suggestion = data.suggestions[0];
-                        }
-                        
-                        // Handle different field types
-                        const fillField = (field) => {
-                            if (!field) return;
-                            
-                            if (field.tagName === 'SELECT') {
-                                // For select dropdowns, try to find matching option
-                                const lowerSuggestion = suggestion.toLowerCase();
-                                const options = Array.from(field.options);
-                                
-                                // Try exact match first
-                                let matchedOption = options.find(opt => 
-                                    opt.value.toLowerCase() === lowerSuggestion ||
-                                    opt.text.toLowerCase() === lowerSuggestion
-                                );
-                                
-                                // Try partial match
-                                if (!matchedOption) {
-                                    matchedOption = options.find(opt => 
-                                        opt.text.toLowerCase().includes(lowerSuggestion) ||
-                                        lowerSuggestion.includes(opt.text.toLowerCase())
-                                    );
-                                }
-                                
-                                if (matchedOption) {
-                                    field.value = matchedOption.value;
-                                } else {
-                                    // If no match, try to set by value directly
-                                    field.value = suggestion;
-                                }
-                                
-                                // Trigger events
-                                field.dispatchEvent(new Event('input', { bubbles: true }));
-                                field.dispatchEvent(new Event('change', { bubbles: true }));
-                            } else if (field.type === 'radio') {
-                                // For radio buttons, find and check the matching one
-                                const fieldName = field.name;
-                                const lowerSuggestion = suggestion.toLowerCase();
-                                
-                                // Find all radio buttons with the same name
-                                const radioButtons = document.querySelectorAll(`input[type="radio"][name="${fieldName}"]`);
-                                
-                                radioButtons.forEach(radio => {
-                                    if (radio.value.toLowerCase() === lowerSuggestion) {
-                                        radio.checked = true;
-                                        radio.dispatchEvent(new Event('change', { bubbles: true }));
-                                        radio.dispatchEvent(new Event('input', { bubbles: true }));
-                                    }
-                                });
-                            } else {
-                                // For text inputs and textareas
-                                field.value = suggestion;
-                                field.dispatchEvent(new Event('input', { bubbles: true }));
-                                field.dispatchEvent(new Event('change', { bubbles: true }));
-                            }
-                        };
-                        
-                        // For radio buttons, we need to find the first radio in the group
-                        if (fieldType === 'visual_style') {
-                            const { desktop, mobile } = getStepPanels();
-                            let desktopRadio = null;
-                            let mobileRadio = null;
-                            
-                            desktop.forEach(panel => {
-                                const radio = panel.querySelector(`input[type="radio"][name="visual_style"]`);
-                                if (radio) desktopRadio = radio;
-                            });
-                            
-                            mobile.forEach(panel => {
-                                const radio = panel.querySelector(`input[type="radio"][name="visual_style"]`);
-                                if (radio) mobileRadio = radio;
-                            });
-                            
-                            fillField(desktopRadio);
-                            fillField(mobileRadio);
-                        } else {
-                            // Fill both desktop and mobile fields for other types
-                            fillField(desktopField);
-                            fillField(mobileField);
-                        }
-                        
-                        // Show success feedback
-                        if (buttonElement) {
-                            const originalBg = buttonElement.style.background;
-                            buttonElement.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
-                            buttonElement.innerHTML = '<i class="fas fa-check mr-1"></i> Done!';
-                            
-                            setTimeout(() => {
-                                buttonElement.style.background = originalBg || '';
-                                if (buttonElement.dataset.originalHtml) {
-                                    buttonElement.innerHTML = buttonElement.dataset.originalHtml;
-                                } else {
-                                    buttonElement.innerHTML = '<i class="fas fa-magic mr-1"></i> AI Help';
-                                }
-                            }, 2000);
-                        }
-                    } else {
-                        // No suggestions available
-                        if (buttonElement) {
-                            buttonElement.style.background = 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)';
-                            buttonElement.innerHTML = '<i class="fas fa-exclamation mr-1"></i> Try again';
-                            
-                            setTimeout(() => {
-                                buttonElement.style.background = '';
-                                if (buttonElement.dataset.originalHtml) {
-                                    buttonElement.innerHTML = buttonElement.dataset.originalHtml;
-                                } else {
-                                    buttonElement.innerHTML = '<i class="fas fa-magic mr-1"></i> AI Help';
-                                }
-                            }, 2000);
-                        }
-                    }
-                })
-                .catch(error => {
-                    console.error('AI help error:', error);
-                    
-                    // Remove loading state
-                    if (buttonElement) {
-                        buttonElement.classList.remove('ai-loading');
-                        buttonElement.disabled = false;
-                        if (buttonElement.dataset.originalHtml) {
-                            buttonElement.innerHTML = buttonElement.dataset.originalHtml;
-                        } else {
-                            buttonElement.innerHTML = '<i class="fas fa-magic mr-1"></i> AI Help';
-                        }
-                        
-                        // Show error feedback
-                        buttonElement.style.background = 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)';
-                        buttonElement.innerHTML = '<i class="fas fa-exclamation-triangle mr-1"></i> Error';
-                        
-                        setTimeout(() => {
-                            buttonElement.style.background = '';
-                            if (buttonElement.dataset.originalHtml) {
-                                buttonElement.innerHTML = buttonElement.dataset.originalHtml;
-                            } else {
-                                buttonElement.innerHTML = '<i class="fas fa-magic mr-1"></i> AI Help';
-                            }
-                        }, 2000);
-                    }
-                });
-            }
-            
-            // Wrapper to pass button element to handleAIHelp
-            window.handleAIHelp = function(fieldType, context = {}, buttonElement) {
-                // If buttonElement not provided, try to get it from event
-                if (!buttonElement && typeof event !== 'undefined') {
-                    buttonElement = event?.target?.closest('.ai-help-btn') || event?.target;
-                }
-                handleAIHelp(fieldType, context, buttonElement);
-            };
-            
-            // Attach event listeners
-            const nextBtn = document.getElementById('btn-next');
-            const nextBtnMobile = document.getElementById('btn-next-mobile');
-            
-            if (nextBtn) {
-                nextBtn.addEventListener('click', handleNextClick);
-            }
-            if (nextBtnMobile) {
-                nextBtnMobile.addEventListener('click', handleNextClick);
-            }
-            
-            document.getElementById('btn-back')?.addEventListener('click', handleBack);
-            document.getElementById('btn-back-mobile')?.addEventListener('click', handleBack);
-            document.getElementById('btn-save-exit')?.addEventListener('click', handleSaveExit);
-            document.getElementById('btn-save-exit-mobile')?.addEventListener('click', handleSaveExit);
-            
-            // Sidebar step click handlers
-            document.querySelectorAll('.step-item').forEach((item, index) => {
-                item.addEventListener('click', () => {
-                    const targetStep = index + 1;
-                    if (targetStep <= state.currentStep) {
-                        state.currentStep = targetStep;
-                        showStep(state.currentStep);
-                    }
-                });
+            })
+            .catch(() => {
+                this.classList.remove('loading');
+                this.innerHTML = orig;
             });
-            
-            // Set up AI help button event listeners
-            function setupAIHelpButtons() {
-                document.querySelectorAll('.ai-help-btn[data-ai-field]').forEach(button => {
-                    // Remove existing listeners
-                    const newButton = button.cloneNode(true);
-                    button.parentNode.replaceChild(newButton, button);
-                    
-                    newButton.addEventListener('click', function() {
-                        const fieldType = this.getAttribute('data-ai-field');
-                        const contextData = this.getAttribute('data-ai-context');
-                        
-                        // Build context object
-                        let context = {};
-                        if (contextData) {
-                            try {
-                                const contextMap = JSON.parse(contextData);
-                                for (const [key, selector] of Object.entries(contextMap)) {
-                                    let value = null;
-                                    if (selector.includes(':checked')) {
-                                        // Radio button or checkbox
-                                        const checked = document.querySelector(selector);
-                                        value = checked ? checked.value : null;
-                                    } else if (selector.startsWith('#')) {
-                                        // ID selector
-                                        const elem = document.getElementById(selector.substring(1));
-                                        value = elem ? elem.value : null;
-                                    } else {
-                                        // Try as ID first, then querySelector
-                                        const elem = document.getElementById(selector) || document.querySelector(selector);
-                                        value = elem ? elem.value : null;
-                                    }
-                                    context[key] = value;
-                                }
-                            } catch (e) {
-                                console.log('Error parsing context:', e);
-                            }
-                        }
-                        
-                        // For specific fields, build context manually (handles missing fields gracefully)
-                        if (fieldType === 'media_notes') {
-                            context = {
-                                topic: (document.getElementById('course_topic')?.value || ''),
-                                on_camera: (document.querySelector('input[name="on_camera"]:checked')?.value || ''),
-                                audio_quality: (document.getElementById('audio_quality')?.value || '')
-                            };
-                        } else if (fieldType === 'structure_notes') {
-                            context = {
-                                topic: (document.getElementById('course_topic')?.value || ''),
-                                format: (document.querySelector('input[name="course_format"]:checked')?.value || ''),
-                                length: (document.getElementById('course_length')?.value || '')
-                            };
-                        } else if (fieldType === 'revenue_goals') {
-                            context = {
-                                topic: (document.getElementById('course_topic')?.value || ''),
-                                pricing: (document.querySelector('input[name="pricing_model"]:checked')?.value || ''),
-                                price: (document.getElementById('target_price')?.value || '')
-                            };
-                        } else if (fieldType === 'priority_features' || fieldType === 'timeline_notes') {
-                            context = {
-                                topic: (document.getElementById('course_topic')?.value || ''),
-                                urgency: (document.querySelector('input[name="urgency"]:checked')?.value || ''),
-                                launch_date: (document.getElementById('target_launch_date')?.value || '')
-                            };
-                        } else if (fieldType === 'approval_notes') {
-                            context = {
-                                topic: (document.getElementById('course_topic')?.value || ''),
-                                review_process: (document.getElementById('review_process')?.value || ''),
-                                criteria: (document.getElementById('review_criteria')?.value || '')
-                            };
-                        } else if (fieldType === 'decision_makers' || fieldType === 'review_criteria') {
-                            context = {
-                                topic: (document.getElementById('course_topic')?.value || ''),
-                                review_process: (document.getElementById('review_process')?.value || '')
-                            };
-                        } else if (fieldType === 'required_permissions') {
-                            context = {
-                                topic: (document.getElementById('course_topic')?.value || ''),
-                                third_party: (document.getElementById('third_party_content')?.value || '')
-                            };
-                        } else if (fieldType === 'legal_notes' || fieldType === 'third_party_content') {
-                            context = {
-                                topic: (document.getElementById('course_topic')?.value || ''),
-                                ownership: (document.querySelector('input[name="content_ownership"]:checked')?.value || '')
-                            };
-                        } else if (fieldType === 'materials_notes') {
-                            context = {
-                                topic: (document.getElementById('course_topic')?.value || ''),
-                                existing_content: (document.getElementById('existing_content')?.value || '')
-                            };
-                        } else if (fieldType === 'brand_description') {
-                            context = {
-                                topic: (document.getElementById('course_topic')?.value || ''),
-                                pitch: (document.getElementById('course_pitch')?.value || '')
-                            };
-                        } else if (fieldType === 'course_description') {
-                            context = {
-                                topic: (document.getElementById('course_topic')?.value || ''),
-                                pitch: (document.getElementById('course_pitch')?.value || ''),
-                                title: (document.getElementById('course_title')?.value || '')
-                            };
-                        } else if (fieldType === 'main_transformation') {
-                            context = {
-                                topic: (document.getElementById('course_topic')?.value || ''),
-                                pitch: (document.getElementById('course_pitch')?.value || ''),
-                                outcomes: (document.getElementById('learning_outcomes')?.value || '')
-                            };
-                        } else if (fieldType === 'skills_gained') {
-                            context = {
-                                topic: (document.getElementById('course_topic')?.value || ''),
-                                outcomes: (document.getElementById('learning_outcomes')?.value || '')
-                            };
-                        } else if (fieldType === 'prerequisites') {
-                            context = {
-                                topic: (document.getElementById('course_topic')?.value || ''),
-                                audience: (document.getElementById('target_audience')?.value || '')
-                            };
-                        } else if (fieldType === 'existing_content') {
-                            context = {
-                                topic: (document.getElementById('course_topic')?.value || '')
-                            };
-                        } else if (fieldType === 'secret_notes') {
-                            context = {
-                                topic: (document.getElementById('course_topic')?.value || ''),
-                                pitch: (document.getElementById('course_pitch')?.value || '')
-                            };
-                        } else if (fieldType === 'file_descriptions') {
-                            context = {
-                                topic: (document.getElementById('course_topic')?.value || '')
-                            };
-                        }
-                        
-                        handleAIHelp(fieldType, context, this);
-                    });
-                });
-            }
-            
-            // Sync inputs between desktop and mobile
-            function setupInputSync() {
-                const { desktop, mobile } = getStepPanels();
-                
-                // Sync from desktop to mobile
-                desktop.forEach((desktopPanel, index) => {
-                    const mobilePanel = mobile[index];
-                    if (!mobilePanel) return;
-                    
-                    const desktopInputs = desktopPanel.querySelectorAll('input, textarea, select');
-                    desktopInputs.forEach(input => {
-                        input.addEventListener('input', () => {
-                            syncInputs(input, mobilePanel);
-                        });
-                        input.addEventListener('change', () => {
-                            syncInputs(input, mobilePanel);
-                        });
-                    });
-                });
-                
-                // Sync from mobile to desktop
-                mobile.forEach((mobilePanel, index) => {
-                    const desktopPanel = desktop[index];
-                    if (!desktopPanel) return;
-                    
-                    const mobileInputs = mobilePanel.querySelectorAll('input, textarea, select');
-                    mobileInputs.forEach(input => {
-                        input.addEventListener('input', () => {
-                            syncInputs(input, desktopPanel);
-                        });
-                        input.addEventListener('change', () => {
-                            syncInputs(input, desktopPanel);
-                        });
-                    });
-                });
-            }
-            
-            // Skip/Jump Menu Functions
-            function toggleSkipMenu() {
-                const menu = document.getElementById('skip-menu');
-                if (menu) {
-                    menu.classList.toggle('hidden');
-                }
-            }
-            
-            function toggleSkipMenuMobile() {
-                const menu = document.getElementById('skip-menu-mobile');
-                if (menu) {
-                    menu.classList.toggle('hidden');
-                }
-            }
-            
-            function jumpToStep(stepNumber) {
-                // Close menus
-                const desktopMenu = document.getElementById('skip-menu');
-                const mobileMenu = document.getElementById('skip-menu-mobile');
-                if (desktopMenu) desktopMenu.classList.add('hidden');
-                if (mobileMenu) mobileMenu.classList.add('hidden');
-                
-                // Save current step data before jumping (without validation)
-                try {
-                    const stepData = collectStepData(state.currentStep);
-                    const stepNames = [
-                        'meet_you', 'course_idea', 'transformation_outcomes',
-                        'existing_materials', 'brand_vibe', 'course_structure',
-                        'media_content', 'legal_rights', 'platform_money',
-                        'timelines_priorities', 'reviews_decision_makers', 'final_uploads'
-                    ];
-                    const stepName = stepNames[state.currentStep - 1];
-                    if (stepName) {
-                        state.data[stepName] = stepData;
-                    }
-                } catch (e) {
-                    console.log('Could not save current step data:', e);
-                }
-                
-                // Jump to the selected step (bypass validation)
-                if (stepNumber >= 1 && stepNumber <= state.totalSteps) {
-                    state.currentStep = stepNumber;
-                    showStep(stepNumber, false); // Show preloader when jumping
-                }
-            }
-            
-            // Set up skip button event listeners
-            const skipBtn = document.getElementById('btn-skip');
-            const skipBtnMobile = document.getElementById('btn-skip-mobile');
-            
-            if (skipBtn) {
-                skipBtn.addEventListener('click', function() {
-                    toggleSkipMenu();
-                });
-            }
-            
-            if (skipBtnMobile) {
-                skipBtnMobile.addEventListener('click', function() {
-                    toggleSkipMenuMobile();
-                });
-            }
-            
-            // Set up jump step button event listeners
-            document.querySelectorAll('[data-jump-step]').forEach(button => {
-                button.addEventListener('click', function() {
-                    const stepNumber = parseInt(this.getAttribute('data-jump-step'));
-                    jumpToStep(stepNumber);
-                });
-            });
-            
-            // Close skip menus when clicking outside
-            document.addEventListener('click', function(event) {
-                const skipMenu = document.getElementById('skip-menu');
-                const skipMenuMobile = document.getElementById('skip-menu-mobile');
-                
-                if (skipBtn && skipMenu && !skipBtn.contains(event.target) && !skipMenu.contains(event.target)) {
-                    skipMenu.classList.add('hidden');
-                }
-                
-                if (skipBtnMobile && skipMenuMobile && !skipBtnMobile.contains(event.target) && !skipMenuMobile.contains(event.target)) {
-                    skipMenuMobile.classList.add('hidden');
-                }
-            });
-            
-            // Set up radio button visual feedback
-            function setupRadioButtons() {
-                // Handle radio button changes
-                document.querySelectorAll('input[type="radio"]').forEach(radio => {
-                    // Remove existing listeners to avoid duplicates
-                    const newRadio = radio.cloneNode(true);
-                    radio.parentNode.replaceChild(newRadio, radio);
-                    
-                    // Update on change
-                    newRadio.addEventListener('change', function() {
-                        updateRadioButtonVisuals(this);
-                    });
-                    
-                    // Update on click (immediate feedback)
-                    newRadio.addEventListener('click', function() {
-                        setTimeout(() => updateRadioButtonVisuals(this), 10);
-                    });
-                    
-                    // Update on load (for existing selections)
-                    updateRadioButtonVisuals(newRadio);
-                });
-            }
-            
-            function updateRadioButtonVisuals(radio) {
-                if (!radio || radio.type !== 'radio') return;
-                
-                const name = radio.name;
-                if (!name) return;
-                
-                // Remove selected class and checked class from all radios in the same group
-                document.querySelectorAll(`input[type="radio"][name="${name}"]`).forEach(r => {
-                    r.classList.remove('radio-checked');
-                    // Reset inline styles
-                    r.style.backgroundColor = '';
-                    r.style.borderColor = '';
-                    r.style.setProperty('background-color', '', 'important');
-                    r.style.setProperty('border-color', '', 'important');
-                    
-                    const lbl = r.closest('label');
-                    if (lbl) {
-                        lbl.classList.remove('radio-selected');
-                        lbl.style.backgroundColor = '';
-                        lbl.style.borderColor = '';
-                    }
-                });
-                
-                // Add selected class to checked radio and its label
-                if (radio.checked) {
-                    radio.classList.add('radio-checked');
-                    // Force style update with !important via setProperty
-                    radio.style.setProperty('background-color', '#3b82f6', 'important');
-                    radio.style.setProperty('border-color', '#3b82f6', 'important');
-                    
-                    // Add white dot via span element
-                    let dot = radio.parentElement.querySelector('.radio-dot');
-                    if (!dot) {
-                        dot = document.createElement('span');
-                        dot.className = 'radio-dot';
-                        dot.style.cssText = 'position: absolute; top: 50%; left: 0.5rem; transform: translateY(-50%); width: 6px; height: 6px; border-radius: 50%; background-color: white; pointer-events: none; z-index: 10;';
-                        const label = radio.closest('label');
-                        if (label) {
-                            label.style.position = 'relative';
-                            label.appendChild(dot);
-                        }
-                    }
-                    dot.style.display = 'block';
-                    
-                    const label = radio.closest('label');
-                    if (label) {
-                        label.classList.add('radio-selected');
-                        label.style.setProperty('background-color', 'rgba(59, 130, 246, 0.2)', 'important');
-                        label.style.setProperty('border-color', 'rgba(59, 130, 246, 0.6)', 'important');
-                    }
-                } else {
-                    // Remove dot if exists
-                    const dot = radio.nextElementSibling;
-                    if (dot && dot.classList.contains('radio-dot')) {
-                        dot.style.display = 'none';
-                    }
-                }
-            }
-            
-            
-            // Auto-save on input changes (debounced)
-            let autosaveTimeout;
-            function setupAutosave() {
-                const { desktop, mobile } = getStepPanels();
-                const allPanels = [...desktop, ...mobile];
-                
-                allPanels.forEach(panel => {
-                    if (!panel) return;
-                    const inputs = panel.querySelectorAll('input, textarea, select');
-                    inputs.forEach(input => {
-                        input.addEventListener('input', function() {
-                            // Clear existing timeout
-                            clearTimeout(autosaveTimeout);
-                            
-                            // Save after 2 seconds of no typing
-                            autosaveTimeout = setTimeout(() => {
-                                const stepPanel = input.closest('.step-panel');
-                                if (stepPanel) {
-                                    const stepNum = parseInt(stepPanel.getAttribute('data-step'));
-                                    if (stepNum) {
-                                        // Silently save without validation
-                                        try {
-                                            const stepData = collectStepData(stepNum);
-                                            const stepNames = [
-                                                'meet_you', 'course_idea', 'transformation_outcomes',
-                                                'existing_materials', 'brand_vibe', 'course_structure',
-                                                'media_content', 'legal_rights', 'platform_money',
-                                                'timelines_priorities', 'reviews_decision_makers', 'final_uploads'
-                                            ];
-                                            const stepName = stepNames[stepNum - 1];
-                                            if (stepName) {
-                                                state.data[stepName] = stepData;
-                                                saveStepData(stepNum, false);
-                                            }
-                                        } catch (e) {
-                                            console.log('Autosave error:', e);
-                                        }
-                                    }
-                                }
-                            }, 2000);
-                        });
-                        
-                        input.addEventListener('change', function() {
-                            // Save immediately on change (for selects, checkboxes, radios)
-                            clearTimeout(autosaveTimeout);
-                            const stepPanel = input.closest('.step-panel');
-                            if (stepPanel) {
-                                const stepNum = parseInt(stepPanel.getAttribute('data-step'));
-                                if (stepNum) {
-                                    setTimeout(() => {
-                                        try {
-                                            const stepData = collectStepData(stepNum);
-                                            const stepNames = [
-                                                'meet_you', 'course_idea', 'transformation_outcomes',
-                                                'existing_materials', 'brand_vibe', 'course_structure',
-                                                'media_content', 'legal_rights', 'platform_money',
-                                                'timelines_priorities', 'reviews_decision_makers', 'final_uploads'
-                                            ];
-                                            const stepName = stepNames[stepNum - 1];
-                                            if (stepName) {
-                                                state.data[stepName] = stepData;
-                                                saveStepData(stepNum, false);
-                                            }
-                                        } catch (e) {
-                                            console.log('Autosave error:', e);
-                                        }
-                                    }, 500);
-                                }
-                            }
-                        });
-                    });
-                });
-            }
-            
-            // Initialize
-            showStep(1);
-            setupInputSync();
-            setupRadioButtons();
-            setupAutosave();
-            setupAIHelpButtons();
-        })();
-    </script>
-    
-    <!-- Preloader JavaScript -->
-    <script>
-        (function() {
-            // Check if user has seen preloader before (using sessionStorage)
-            const hasSeenPreloader = sessionStorage.getItem('katek_preloader_seen');
-            
-            if (hasSeenPreloader) {
-                // Skip preloader if already seen in this session
-                document.getElementById('preloader-overlay').classList.add('hidden');
-                document.getElementById('onboarding-main').classList.remove('hidden');
-                // Initialize wizard
-                if (typeof showStep === 'function') {
-                    showStep(1);
-                }
-                return;
-            }
-            
-            // Preloader Step 1 -> Step 2
-            document.getElementById('preloader-next-1').addEventListener('click', function() {
-                document.getElementById('preloader-step-1').classList.add('hidden');
-                document.getElementById('preloader-step-2').classList.remove('hidden');
-            });
-            
-            // Preloader Step 2 -> Start Wizard
-            document.getElementById('preloader-start-wizard').addEventListener('click', function() {
-                // Show transition
-                document.getElementById('preloader-transition').classList.remove('hidden');
-                
-                // After 500ms, hide preloader and show wizard
-                setTimeout(function() {
-                    document.getElementById('preloader-overlay').classList.add('hidden');
-                    document.getElementById('onboarding-main').classList.remove('hidden');
-                    
-                    // Mark as seen
-                    sessionStorage.setItem('katek_preloader_seen', 'true');
-                    
-                    // Initialize wizard - show step 1
-                    if (typeof showStep === 'function') {
-                        showStep(1);
-                    } else {
-                        // Fallback if showStep isn't defined yet
-                        setTimeout(function() {
-                            if (typeof showStep === 'function') {
-                                showStep(1);
-                            }
-                        }, 100);
-                    }
-                }, 500);
-            });
-        })();
-    </script>
+        });
+    });
+}
+
+function showAISuggestion(inputEl, text, triggerBtn){
+    // Remove any existing tooltip
+    document.querySelectorAll('.ai-tooltip').forEach(t => t.remove());
+
+    const wrap = inputEl.closest('.input-wrap');
+    if(!wrap) return;
+
+    const tooltip = document.createElement('div');
+    tooltip.className = 'ai-tooltip';
+    tooltip.innerHTML = `
+        <div class="ai-tooltip-label">✦ AI suggestion</div>
+        <div class="ai-tooltip-text">${text}</div>
+        <div class="ai-tooltip-actions">
+            <button class="tooltip-accept">Use this</button>
+            <button class="tooltip-dismiss">Dismiss</button>
+        </div>`;
+
+    tooltip.querySelector('.tooltip-accept').addEventListener('click', () => {
+        inputEl.value = text;
+        inputEl.dispatchEvent(new Event('input', {bubbles:true}));
+        tooltip.remove();
+    });
+    tooltip.querySelector('.tooltip-dismiss').addEventListener('click', () => tooltip.remove());
+
+    wrap.style.position = 'relative';
+    wrap.appendChild(tooltip);
+
+    // Auto-dismiss after 12s
+    setTimeout(() => tooltip.remove(), 12000);
+}
+
+// CSRF helper
+function getCookie(name){
+    const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+    return match ? decodeURIComponent(match[2]) : '';
+}
+
+// ═══════════════════════════════════════
+// INTRO → WIZARD TRANSITION
+// ═══════════════════════════════════════
+function startWizard(){
+    const overlay = document.getElementById('intro-overlay');
+    const main = document.getElementById('onboarding-main');
+
+    overlay.classList.add('fade-out');
+    setTimeout(() => {
+        overlay.style.display = 'none';
+        main.style.display = 'block';
+        main.classList.add('visible');
+        buildSidebar();
+        updateProgress();
+        updateNav();
+        setupAIButtons();
+    }, 700);
+}
+
+// Skip intro if already seen this session
+if(sessionStorage.getItem('katek_seen')){
+    const ov = document.getElementById('intro-overlay');
+    if(ov) ov.style.display = 'none';
+    const mn = document.getElementById('onboarding-main');
+    if(mn){ mn.style.display = 'block'; mn.classList.add('visible'); }
+    buildSidebar(); updateProgress(); updateNav(); setupAIButtons();
+} else {
+    sessionStorage.setItem('katek_seen','1');
+}
+</script>
 </body>
 </html>
