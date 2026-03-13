@@ -145,3 +145,40 @@ def upload_to_cloudinary(image_file, folder='katek_ai/uploads', public_id=None, 
         print(f"Cloudinary upload error: {e}")
         raise Exception(f"Failed to upload image: {str(e)}")
 
+
+def upload_file_to_cloudinary(file, folder='katek_ai/onboarding', public_id=None, resource_type='auto'):
+    """
+    Upload any file (image, PDF, ZIP, etc.) to Cloudinary.
+    For images uses upload_to_cloudinary. For others uses raw upload.
+    Returns: dict with secure_url, public_id
+    """
+    if resource_type == 'auto':
+        # Guess from extension - svg uses raw (PIL doesn't handle it well)
+        name = getattr(file, 'name', '') or ''
+        ext = (name.split('.')[-1] or '').lower()
+        image_exts = {'jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp'}
+        resource_type = 'image' if ext in image_exts else 'raw'
+
+    if resource_type == 'image':
+        return upload_to_cloudinary(file, folder=folder, public_id=public_id, resource_type='image')
+
+    # Raw upload for PDF, ZIP, DOCX, etc.
+    import cloudinary.uploader
+    try:
+        file.seek(0)
+        result = cloudinary.uploader.upload(
+            file,
+            folder=folder,
+            public_id=public_id,
+            resource_type='raw',
+            overwrite=True,
+        )
+        return {
+            'secure_url': result.get('secure_url', result.get('url', '')),
+            'public_id': result.get('public_id', ''),
+            'url': result.get('secure_url', result.get('url', '')),
+        }
+    except Exception as e:
+        print(f"Cloudinary raw upload error: {e}")
+        raise Exception(f"Failed to upload file: {str(e)}")
+

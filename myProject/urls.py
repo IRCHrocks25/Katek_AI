@@ -9,6 +9,7 @@ urlpatterns = [
     path('logout/', views.logout_view, name='logout'),
     path('onboarding/', views.onboarding, name='onboarding'),
     path('api/onboarding/save/', views.onboarding_save, name='onboarding_save'),
+    path('api/onboarding/upload/', views.onboarding_upload, name='onboarding_upload'),
     path('api/onboarding/ai-help/', views.onboarding_ai_help, name='onboarding_ai_help'),
     
     # Dashboard routes

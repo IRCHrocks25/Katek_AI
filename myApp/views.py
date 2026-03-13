@@ -11,6 +11,7 @@ from django.db.models import Count, Q, F
 from django.core.paginator import Paginator
 from datetime import datetime, timedelta
 import json
+import re
 import uuid
 import csv
 from .models import OnboardingSession, Client, Tag, SessionTag, InternalNote, Task
@@ -66,10 +67,15 @@ def logout_view(request):
 @require_http_methods(["POST"])
 def onboarding_save(request):
     """API endpoint to save/autosave onboarding data"""
+    import logging
+    logger = logging.getLogger(__name__)
+    logger.info('[KaTek] onboarding_save called')
     try:
         try:
             data = json.loads(request.body)
+            logger.info('[KaTek] Parsed JSON, submit=%s, steps=%s', data.get('submit'), list(data.get('steps', {}).keys()) if data.get('steps') else 'none')
         except json.JSONDecodeError as e:
+            logger.error('[KaTek] JSON decode error: %s', e)
             return JsonResponse({
                 'success': False,
                 'error': f'Invalid JSON: {str(e)}'
@@ -182,15 +188,15 @@ def onboarding_save(request):
                     # Extract denormalized fields for quick access
                     if step_key == 'course_idea' and step_data:
                         session.course_title = step_data.get('course_title', '') or session.course_title
-                        session.audience_summary = step_data.get('target_audience', '') or session.audience_summary
+                        session.audience_summary = step_data.get('target_audience', '') or step_data.get('ideal_student', '') or session.audience_summary
                     elif step_key == 'transformation_outcomes' and step_data:
-                        outcomes = step_data.get('learning_outcomes', '')
+                        outcomes = step_data.get('learning_outcomes', '') or step_data.get('transformation', '')
                         if isinstance(outcomes, str):
                             session.main_outcomes = outcomes or session.main_outcomes
                         elif isinstance(outcomes, list):
                             session.main_outcomes = '\n'.join(outcomes) or session.main_outcomes
                     elif step_key == 'platform_money' and step_data:
-                        session.access_model = step_data.get('pricing_model', '') or session.access_model
+                        session.access_model = step_data.get('pricing_model', '') or step_data.get('price_point', '') or session.access_model
                     
                 else:
                     errors.append(f'Unknown step: {step_key}')
@@ -227,6 +233,7 @@ def onboarding_save(request):
             
             session.save(update_fields=list(dict.fromkeys(update_fields)))  # dedupe while preserving order
         except Exception as save_error:
+            logger.exception('[KaTek] Save failed: %s', save_error)
             return JsonResponse({
                 'success': False,
                 'error': f'Failed to save session: {str(save_error)}',
@@ -235,6 +242,7 @@ def onboarding_save(request):
             }, status=400)
         
         # Return success even if some steps had errors (partial save)
+        logger.info('[KaTek] Save success, session_id=%s, saved_steps=%s', session.session_id, saved_steps)
         response_data = {
             'success': True,
             'session_id': session.session_id,
@@ -244,6 +252,7 @@ def onboarding_save(request):
         
         if errors:
             response_data['warnings'] = errors
+            logger.warning('[KaTek] Save had warnings: %s', errors)
         
         return JsonResponse(response_data)
         
@@ -251,6 +260,8 @@ def onboarding_save(request):
         import traceback
         error_trace = traceback.format_exc()
         error_message = str(e)
+        logger = logging.getLogger(__name__)
+        logger.exception('[KaTek] onboarding_save unhandled: %s', e)
         
         # Check if it's a database table missing error
         if 'does not exist' in error_message or 'relation' in error_message.lower():
@@ -267,23 +278,69 @@ def onboarding_save(request):
 
 @csrf_exempt
 @require_http_methods(["POST"])
+def onboarding_upload(request):
+    """Upload file to Cloudinary, return URL for onboarding form"""
+    import logging
+    logger = logging.getLogger(__name__)
+    try:
+        if 'file' not in request.FILES:
+            return JsonResponse({'success': False, 'error': 'No file provided'}, status=400)
+        file_obj = request.FILES['file']
+        field = request.POST.get('field', 'general')  # bkit, logo, mats
+        from .utils.cloudinary_utils import upload_file_to_cloudinary
+        folder = f'katek_ai/onboarding/{field}'
+        result = upload_file_to_cloudinary(file_obj, folder=folder, resource_type='auto')
+        url = result.get('secure_url') or result.get('url', '')
+        if not url:
+            return JsonResponse({'success': False, 'error': 'Upload succeeded but no URL returned'}, status=500)
+        logger.info('[KaTek] File uploaded to Cloudinary: %s', url[:80])
+        return JsonResponse({'success': True, 'url': url})
+    except Exception as e:
+        logger.exception('[KaTek] onboarding_upload error: %s', e)
+        return JsonResponse({'success': False, 'error': str(e)}, status=400)
+
+
+def _clean_subject(val, max_len=60):
+    """Extract a single-line, trimmed subject from context (avoids multi-line blobs in suggestions)."""
+    if not val or not isinstance(val, str):
+        return ''
+    first_line = val.strip().split('\n')[0].strip()
+    return first_line[:max_len] if first_line else ''
+
+
+@csrf_exempt
+@require_http_methods(["POST"])
 def onboarding_ai_help(request):
     """API endpoint for AI assistance on specific fields"""
     try:
         data = json.loads(request.body)
-        field_type = data.get('field_type')  # e.g., 'course_title', 'pitch', 'outcomes', etc.
-        context = data.get('context', {})  # Existing answers for context
-        
+        field_type = data.get('field_type') or data.get('field') or ''
+        context = data.get('context') or data.get('ctx') or {}
+        if not isinstance(context, dict):
+            context = {}
+
+        def _ideal_student_fallback(ctx):
+            what = (ctx.get('what_you_do') or '').strip()
+            aliases = (ctx.get('aliases') or '').strip()
+            trans = (ctx.get('transformation') or '').strip()
+            if what or aliases:
+                hint = aliases or _clean_subject(what)[:50] or 'your niche'
+                return f"People who want to build confidence and clarity in their goals — often overwhelmed, ready for change, and looking for a clear path. Based on your focus ({hint}), they may be professionals, entrepreneurs, or anyone seeking practical, jargon-free guidance."
+            if trans:
+                return f"Learners who want to {trans}. They're motivated, ready to take action, and looking for step-by-step support."
+            return "People who want to learn and grow — motivated, ready for change, and looking for clear, practical guidance. Be specific about age, profession, and pain points when you customize this."
+
         # Check if OpenAI API key is configured
         if not hasattr(settings, 'OPENAI_API_KEY') or not settings.OPENAI_API_KEY:
             # Fallback to placeholder suggestions if OpenAI is not configured
+            subject = _clean_subject(context.get('expertise') or context.get('topic')) or 'Your Subject'
             suggestions = {
                 'course_title': [
-                    f"Master {context.get('topic', 'Your Subject')}: A Complete Guide",
-                    f"The Ultimate {context.get('topic', 'Course')} Course",
-                    f"Transform Your {context.get('topic', 'Skills')} in 30 Days"
+                    f"Master {subject}: A Complete Guide",
+                    f"The Ultimate {subject} Course",
+                    f"Transform Your {subject} Skills in 30 Days"
                 ],
-                'pitch': f"This course helps {context.get('audience', 'learners')} to {context.get('outcome', 'achieve their goals')} without {context.get('pain_point', 'struggling').lower()}.",
+                'pitch': f"This course helps {context.get('audience') or 'learners'} to {context.get('outcome') or 'achieve their goals'} without {str(context.get('pain_point') or 'struggling').lower()}.",
                 'outcomes': [
                     f"Understand the fundamentals of {context.get('topic', 'the subject')}",
                     f"Apply {context.get('topic', 'key concepts')} in real-world scenarios",
@@ -317,13 +374,33 @@ def onboarding_ai_help(request):
                 'file_descriptions': f"Uploaded files for this course may include course outlines, supplementary materials, reference documents, and resources that support the learning objectives and enhance the student experience.",
                 'secret_notes': f"Additional context for this course on {context.get('topic', 'your subject')}: {context.get('pitch', 'This course aims to provide comprehensive learning')}. Special considerations include maintaining high quality standards and ensuring student engagement throughout."
             }
+            # Welcome Kit field fallbacks
+            topic = context.get('course_title') or context.get('topic') or 'your course'
+            aliases = (context.get('aliases') or '').strip()
+            brand = (context.get('brand_name') or '').strip()
+            hint = aliases or brand
+            if hint:
+                suggestions['what_you_do'] = [f"As {hint}, I help people build confidence, clarity, and real results in their goals — in plain language, no jargon."]
+            else:
+                suggestions['what_you_do'] = [f"I help {context.get('ideal_student', 'learners')} to {context.get('transformation', 'achieve their goals')}."]
+            suggestions['ideal_student'] = [_ideal_student_fallback(context)]
+            suggestions['audience'] = [f"Email list, social following, and community aligned with {topic}."]
+            suggestions['transformation'] = [f"Before: overwhelmed and unsure where to start. After: confident, clear on next steps, and equipped with practical tools to take action."]
+            suggestions['modules'] = [f"1. Foundations\n2. Core concepts\n3. Practice\n4. Advanced\n5. Next steps"]
+            suggestions['logo_brief'] = [f"Professional, clean, aligned with {topic}."]
+            suggestions['must_include'] = [f"Key frameworks, signature stories, and practical exercises."]
+            suggestions['video_setup'] = [f"Clear audio, good lighting, comfortable recording environment."]
+            suggestions['feature_notes'] = [f"Analytics, certificates, and engagement features."]
+            suggestions['success'] = [f"50+ enrolled students in the first launch, $25k+ revenue, positive feedback, and a growing email list. Establishing authority in the niche and creating a repeatable launch system."]
+            suggestions['concerns'] = [f"I want it to feel authentic to my voice. Worried about the tech being overwhelming. Concerned I won't have enough time to review everything. Want to make sure students actually get results."]
+            suggestions['prev_notes'] = [f"Learned from past launches; iterating on what worked."]
+            suggestions['anything_else'] = [f"Ready to collaborate and create something valuable."]
             # Add missing field types used by the onboarding form
             suggestions['expertise'] = [
                 f"{context.get('topic', 'Your subject')} fundamentals and practical applications",
                 f"Professional {context.get('topic', 'expertise')} with real-world experience",
                 f"Advanced {context.get('topic', 'skills')} and best practices"
             ]
-            suggestions['audience'] = f"{context.get('audience', 'Learners')} who want to {context.get('outcome', 'improve their skills')} in {context.get('topic', 'this area')}."
             
             result = suggestions.get(field_type, [f"Enter your {field_type.replace('_', ' ')} here."])
             return JsonResponse({
@@ -334,8 +411,9 @@ def onboarding_ai_help(request):
         
         # Helper to get fallback suggestions when OpenAI fails
         def get_fallback_suggestions():
+            subject = _clean_subject(context.get('expertise') or context.get('topic')) or 'Your Subject'
             fallback = {
-                'course_title': [f"Master {context.get('topic', 'Your Subject')}: A Complete Guide", f"The Ultimate {context.get('topic', 'Course')} Course"],
+                'course_title': [f"Master {subject}: A Complete Guide", f"The Ultimate {subject} Course", f"Transform Your {subject} Skills"],
                 'pitch': f"This course helps {context.get('audience', 'learners')} to {context.get('outcome', 'achieve their goals')}.",
                 'outcomes': [f"Understand {context.get('topic', 'the subject')}", f"Apply key concepts in practice", f"Build confidence in your skills"],
                 'expertise': [f"{context.get('topic', 'Your subject')} fundamentals", f"Professional expertise in {context.get('topic', 'this area')}"],
@@ -350,6 +428,18 @@ def onboarding_ai_help(request):
                 'timeline_notes': f"Balanced development pace. Target launch aligned with quality for {context.get('topic', 'the course')}.",
                 'decision_makers': f"Course creator, subject experts, stakeholders review before launch.",
                 'secret_notes': f"Additional context for {context.get('topic', 'this course')}. Special considerations for quality and engagement.",
+                'what_you_do': [f"As {(context.get('aliases') or context.get('brand_name') or '').strip() or 'a coach'}, I help people build confidence, clarity, and real results — in plain language, no jargon."],
+                'ideal_student': [_ideal_student_fallback(context)],
+                'transformation': [f"Before: overwhelmed and unsure where to start. After: confident, clear on next steps, and equipped with practical tools to take action."],
+                'modules': [f"1. Foundations\n2. Core concepts\n3. Practice\n4. Advanced\n5. Next steps"],
+                'logo_brief': [f"Professional, clean, aligned with {context.get('course_title', 'your course')}."],
+                'must_include': [f"Key frameworks, signature stories, and practical exercises."],
+                'video_setup': [f"Clear audio, good lighting, comfortable recording environment."],
+                'feature_notes': [f"Analytics, certificates, and engagement features."],
+                'success': [f"50+ enrolled students in the first launch, $25k+ revenue, positive feedback, and a growing email list. Establishing authority in the niche and creating a repeatable launch system."],
+                'concerns': [f"I want it to feel authentic to my voice. Worried about the tech being overwhelming. Concerned I won't have enough time to review everything. Want to make sure students actually get results."],
+                'prev_notes': [f"Learned from past launches; iterating on what worked."],
+                'anything_else': [f"Ready to collaborate and create something valuable."],
             }
             result = fallback.get(field_type, [f"Enter your {field_type.replace('_', ' ')}."])
             return result if isinstance(result, list) else [result]
@@ -361,7 +451,7 @@ def onboarding_ai_help(request):
         prompts = {
             'expertise': f"Suggest 3 brief expertise descriptions for someone teaching: {context.get('topic', 'a subject')}. Return only the descriptions, one per line. Each should be 5-10 words.",
             'audience': f"Write a one-sentence target audience description for a course about: {context.get('topic', 'a subject')} titled '{context.get('title', '')}'. Be specific about who would benefit.",
-            'course_title': f"Generate 3 compelling course title suggestions for a course about: {context.get('topic', 'a subject')}. Target audience: {context.get('audience', 'learners')}. Make them engaging and clear. Return only the titles, one per line.",
+            'course_title': f"Generate exactly 3 compelling course title suggestions. The creator's expertise/subject: {_clean_subject(context.get('expertise') or context.get('topic')) or 'their field'}. Their role: {_clean_subject(context.get('role')) or 'educator'}. Target audience: {_clean_subject(context.get('audience')) or 'learners'}. IMPORTANT: Return ONLY 3 titles, one per line, no numbers or bullets. Each title must be a complete, standalone course name.",
             'pitch': f"Write a compelling one-sentence course pitch. Course topic: {context.get('topic', 'a subject')}. Target audience: {context.get('audience', 'learners')}. Format: 'This course helps [who] to [result] without [pain].'",
             'outcomes': f"Generate 3 specific, measurable learning outcomes for a course about: {context.get('topic', 'a subject')}. Course description: {context.get('pitch', '')}. Return only the outcomes, one per line.",
             'tone': f"Based on this brand description: {context.get('brand', '')}, suggest 4 appropriate tone words for the course content. Return only the words, comma-separated.",
@@ -386,23 +476,55 @@ def onboarding_ai_help(request):
             'review_criteria': f"Suggest review criteria for a course about {context.get('topic', 'a subject')} with review process: {context.get('review_process', '')}. Write 2-3 sentences about what aspects reviewers will check.",
             'approval_notes': f"Write approval notes for a course about {context.get('topic', 'a subject')} with review process: {context.get('review_process', '')} and criteria: {context.get('criteria', '')}. Write 2-3 sentences about approval requirements.",
             'file_descriptions': f"Suggest file descriptions for a course about {context.get('topic', 'a subject')}. Write 2-3 sentences describing what files might be uploaded and how they should be used.",
-            'secret_notes': f"Write additional context notes for a course about {context.get('topic', 'a subject')} with pitch: {context.get('pitch', '')}. Write 3-4 sentences with any additional context, concerns, or special instructions."
+            'secret_notes': f"Write additional context notes for a course about {context.get('topic', 'a subject')} with pitch: {context.get('pitch', '')}. Write 3-4 sentences with any additional context, concerns, or special instructions.",
+            # Welcome Kit / 7-section onboarding fields (use full context for consistency)
+            'what_you_do': f"""Write a clear, confident 2-3 sentence description of what this course creator does. Use this context:
+- Name/brand: {context.get('brand_name', '') or context.get('full_name', '')}
+- Other names/aliases: {context.get('aliases', '')}
+- Course title (if known): {context.get('course_title', '')}
+If aliases hint at their niche (e.g. "The Money Mentor" = finance/coaching), use that. Format: "I help [who] to [what]..." — conversational, no jargon. Write a COMPLETE 2-3 sentences. Never end mid-sentence.""",
+            'ideal_student': f"""Describe the ideal student/client in 3-4 complete sentences. Use this context:
+- What the creator does: {context.get('what_you_do', '')}
+- Aliases/brand: {context.get('aliases', '')} {context.get('brand_name', '')}
+- Course: {context.get('course_title', '')}
+Include: who they are (age, profession), their biggest struggles, what they want to achieve. Write a FULL, actionable description. Never end with "who want to" or "who need to" — always finish the thought. Example: "Female entrepreneurs 28-45, overwhelmed by systems, want clarity and confidence." """,
+            'audience': f"List this creator's existing audience/channels. Based on: brand {context.get('brand_name', '')}, course {context.get('course_title', '')}, platforms {context.get('platforms', '')}. Format: Email list: X · Instagram: X · etc. Return a concise list.",
+            'transformation': f"""Describe the core transformation in 2-3 complete sentences. Creator does: {context.get('what_you_do', '')}. Ideal student: {context.get('ideal_student', '')}. Course: {context.get('course_title', '')}.
+Format: "Before: [specific struggle]. After: [specific outcome]." Be concrete — no vague endings. Always complete every sentence.""",
+            'modules': f"Generate 5-7 module/pillar topics for course '{context.get('course_title', '')}'. Transformation: {context.get('transformation', '')}. Ideal student: {context.get('ideal_student', '')}. Content formats they want: {context.get('content_formats', '')}. Return as a numbered list, one per line. Logical progression from foundation to advanced.",
+            'logo_brief': f"Write a brand/logo brief. Brand: {context.get('brand_name', '')}. Course: {context.get('course_title', '')}. Colours: {context.get('brand_colors', '')}. Visual style: {context.get('visual_style', '')}. References: {context.get('inspiration', '')}. Fonts: {context.get('font_heading', '')} / {context.get('font_body', '')}. Describe tone, colours, feel. 3-4 sentences.",
+            'must_include': f"For course '{context.get('course_title', '')}' (transformation: {context.get('transformation', '')}), suggest key content that must be included. What they do: {context.get('what_you_do', '')}. Materials they have: {context.get('materials_providing', '')}. List 3-5 specific items: frameworks, stories, techniques.",
+            'video_setup': f"Suggest video production notes. Course: {context.get('course_title', '')}. Creator style: {context.get('what_you_do', '')}. Content formats: {context.get('content_formats', '')}. Materials: {context.get('materials_providing', '')}. Describe equipment, environment, support needed. 2-3 sentences.",
+            'feature_notes': f"For course '{context.get('course_title', '')}' targeting {context.get('ideal_student', '')}, suggest platform features. Price: {context.get('price_point', '')}. Features they enabled: {context.get('features_enabled', '')}. Deliverables needed: {context.get('deliverables', '')}. List 3-5 specific feature needs.",
+            'success': f"Define success for course '{context.get('course_title', '')}'. Transformation: {context.get('transformation', '')}. Be specific: enrolments, revenue, timeline. 2-3 sentences.",
+            'concerns': f"Anticipate concerns for a creator building '{context.get('course_title', '')}'. Based on: {context.get('what_you_do', '')}, {context.get('ideal_student', '')}. List 2-4 common anxieties, empathetically.",
+            'prev_notes': f"Reflect on past course experience. Context: {context.get('course_title', '')}, {context.get('what_you_do', '')}. Have they created a course before? {context.get('prev_course', '')}. Suggest what might have worked/didn't work. 2-3 sentences.",
+            'anything_else': f"Suggest additional context for course '{context.get('course_title', '')}'. Creator: {context.get('brand_name', '')}. Response time: {context.get('response_time', '')}. Involvement: {context.get('involvement', '')}. Revision preferences: {context.get('revisions', '')}. So far: transformation={context.get('transformation', '')}, success={context.get('success', '')}, concerns={context.get('concerns', '')}. What else might matter? 2-3 sentences.",
         }
         
-        prompt = prompts.get(field_type, f"Help me with: {field_type}")
+        prompt = prompts.get(field_type, f"Based on this course context — title: {context.get('course_title', '')}, creator: {context.get('brand_name', '')}, ideal student: {context.get('ideal_student', '')} — help with: {field_type}. Keep it consistent with the overall vision. Return 2-4 sentences.")
         
         try:
             # Call OpenAI API
             response = client.chat.completions.create(
                 model="gpt-4o-mini",
                 messages=[
-                    {"role": "system", "content": "You are a helpful course creation assistant. Provide concise, actionable suggestions."},
+                    {"role": "system", "content": "You are a helpful course creation assistant. Always return complete, usable suggestions. Never truncate or end mid-sentence."},
                     {"role": "user", "content": prompt}
                 ],
-                max_tokens=200,
-                temperature=0.7
+                max_tokens=400,
+                temperature=0.5
             )
             ai_response = response.choices[0].message.content.strip()
+            # Reject obviously incomplete or generic responses
+            r = ai_response.rstrip()
+            incomplete_endings = (' to.', ' to ', ' want to.', ' who want to.', ' who need to.')
+            is_incomplete = (len(r) < 40 or
+                            any(r.endswith(e) for e in incomplete_endings) or
+                            (len(r) < 80 and r.count('.') == 0))
+            if is_incomplete:
+                suggestions = get_fallback_suggestions()
+                return JsonResponse({'success': True, 'suggestions': suggestions, 'field_type': field_type})
         except (openai.OpenAIError, Exception) as e:
             # Fall back to placeholder suggestions when API fails (invalid key, rate limit, network, etc.)
             suggestions = get_fallback_suggestions()
@@ -414,7 +536,12 @@ def onboarding_ai_help(request):
         
         # Format suggestions based on field type
         if field_type in ['course_title', 'outcomes', 'taglines', 'expertise']:
-            suggestions = [line.strip() for line in ai_response.split('\n') if line.strip()][:3]
+            lines = [line.strip() for line in ai_response.split('\n') if line.strip()]
+            # Strip numbered prefixes (1. 2. 1) 2) etc.)
+            suggestions = [re.sub(r'^\d+[\.\)]\s*', '', line).strip() for line in lines[:3]]
+            suggestions = [s for s in suggestions if len(s) > 2]
+            if not suggestions:
+                suggestions = [ai_response.strip()[:200]]  # fallback to first 200 chars
         elif field_type == 'tone':
             suggestions = [word.strip() for word in ai_response.split(',') if word.strip()][:4]
         elif field_type == 'visual_style':
